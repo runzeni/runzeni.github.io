@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-monochrome="false" data-section="{{ page.url | split: '/' | slice: 1 | first | default: 'home' }}">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>{{ page.title | default: site.title }}</title>
+    
+    <link rel="preload" href="/assets/css/style.css" as="style">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    
+    <meta name="description" content="{{ page.description | default: 'Runze Ni - Researcher in renal physiology and photographer.' }}">
+    <meta name="keywords" content="runze ni, renal physiology, kidney research, photography, portfolio, USF, Case Western">
+    <meta name="author" content="Runze Ni">
+    <meta name="robots" content="index, follow">
+    
+    <meta property="og:title" content="{{ page.title | default: site.title }}">
+    <meta property="og:description" content="{{ page.description | default: site.description }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ page.url | absolute_url }}">
+    <meta property="og:site_name" content="Runze Ni">
+    {% if page.image %}
+    <meta property="og:image" content="{{ page.image | absolute_url }}">
+    <meta property="og:image:alt" content="{{ page.title }}">
+    {% endif %}
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ page.title | default: site.title }}">
+    <meta name="twitter:description" content="{{ page.description | default: site.description }}">
+    
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    
+    <meta name="theme-color" content="#fefefe" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0f0f0f" media="(prefers-color-scheme: dark)">
+    
+    <link rel="canonical" href="{{ page.url | absolute_url }}">
+
+    <!-- Hammer.js for touch gestures - must load before lightbox code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- MathJax for mathematical notation in articles -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$']],
+          displayMath: [['$$', '$$']],
+          processEscapes: true
+        }
+      };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  </head>
+  <body>
+    
+    <div class="scroll-progress" id="scroll-progress" role="progressbar" aria-label="Page scroll progress" aria-valuemin="0" aria-valuemax="100"></div>
+    
+    <header class="site-header" id="site-header">
+      
+      <div class="header-left">
+        <button id="menu-toggle" class="menu-toggle header-button" aria-label="Toggle navigation menu" aria-expanded="false" title="Menu">
+          <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+        
+        <button id="theme-toggle" class="theme-toggle header-button" aria-label="Toggle dark mode" title="Toggle dark mode (D)">
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        
+        <button id="monochrome-toggle" class="monochrome-toggle header-button" aria-label="Toggle monochrome mode" title="Toggle B&W mode (M)">
+          <svg class="icon-color" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2v20"></path>
+            <path d="M12 2a10 10 0 0 1 0 20" fill="url(#colorGradient)"></path>
+            <defs>
+             <linearGradient id="colorGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+            </linearGradient>
+  </defs>
+</svg>
+          <svg class="icon-bw" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2v20"></path>
+            <path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" opacity="0.3"></path>
+          </svg>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="site-title">
+        <a href="/" class="site-title-link">RUNZE FOTOS</a>
+      </div>
+
+      <a href="#hero-section" class="readme-link" id="readme-scroll-link">README</a>
+    
+    </header>
+    
+    <nav id="site-menu" class="site-menu-dropdown">
+      <a href="/">README</a>
+      <a href="/fotos/">PORTFOLIO</a>
+      <a href="/cine/">CINE</a>
+      <a href="/protocols/">PROTOCOL</a>
+      <a href="/misc/">MISC</a>
+    </nav>
+    
+    <main id="main-content">
+      {{ content }}
+    </main>
+    
+    <div class="sticky-nav" id="sticky-nav">
+      <button class="sticky-nav-button" id="scroll-top" aria-label="Scroll to top" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </button>
+      
+      <a href="/archive/" class="sticky-nav-button" id="section-nav-button" aria-label="View photo archive" title="Archive">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+      </a>
+      
+      <button class="sticky-nav-button" id="scroll-bottom" aria-label="Scroll to bottom" title="Go to bottom">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+    </div>
+    
+    <footer class="site-footer">
+      <div class="footer-content">
+        <div class="footer-grid">
+          <div class="footer-section">
+            <h3>Navigation</h3>
+            <ul>
+              <li><a href="/">Readme</a></li>
+              <li><a href="/fotos/">Portfolio</a></li>
+              <li><a href="/archive/">Archive</a></li>
+              <li><a href="/cine/">Cine</a></li>
+              <li><a href="#" id="shortcuts-trigger">Keyboard Shortcuts</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h3>Connect</h3>
+            <ul>
+              <li><a href="mailto:runzeni2001@gmail.com">Email</a></li>
+              <li><a href="https://scholar.google.com/citations?user=-Azv6CYAAAAJ&hl" target="_blank" rel="noopener noreferrer">Google Scholar</a></li>
+              <li><a href="https://github.com/runzeni" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+              <li><a href="https://www.linkedin.com/in/runze233" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; {{ 'now' | date: "%Y" }} Runze Ni. All rights reserved.</p>
+          <p>Tampa, FL</p>
+          <p style="margin-top: 1rem; font-size: 0.75rem; opacity: 0.7;">Powered by <a href="https://pages.github.com" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline;">GitHub Pages</a></p>
+        </div>
+      </div>
+    </footer>
+    
+    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+      <div id="lightbox-overlay" class="lightbox-overlay" aria-label="Close lightbox"></div>
+      
+      <div class="lightbox-image-container" id="lightbox-container">
+        <img id="lightbox-image" class="lightbox-image no-filter" src="" alt="Full size image" loading="lazy">
+      </div>
+      
+      <div class="lightbox-controls">
+        <button id="lightbox-prev" class="lightbox-nav prev" aria-label="Previous image" title="Previous (←)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        
+        <button id="lightbox-next" class="lightbox-nav next" aria-label="Next image" title="Next (→)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+        
+        <button id="lightbox-fullscreen" class="lightbox-fullscreen" aria-label="Toggle fullscreen" title="Fullscreen (F)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+        </button>
+        
+        <button id="lightbox-close" class="lightbox-close" aria-label="Close lightbox" title="Close (ESC)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      
+      <div class="lightbox-counter" id="lightbox-counter" aria-live="polite">1 / 1</div>
+      <div class="swipe-hint" id="swipe-hint" aria-hidden="true">Swipe to navigate</div>
+    </div>
+    
+    <div class="shortcuts-overlay" id="shortcuts-overlay" role="dialog" aria-labelledby="shortcuts-title">
+      <h3 id="shortcuts-title">Keyboard Shortcuts</h3>
+      <div class="shortcut-item">
+        <span>Next image</span>
+        <kbd class="shortcut-key">→</kbd>
+      </div>
+      <div class="shortcut-item">
+        <span>Previous image</span>
+        <kbd class="shortcut-key">←</kbd>
+      </div>
+      <div class="shortcut-item">
+        <span>Close lightbox</span>
+        <kbd class="shortcut-key">ESC</kbd>
+      </div>
+      <div class="shortcut-item">
+        <span>Toggle fullscreen</span>
+        <kbd class="shortcut-key">F</kbd>
+      </div>
+      <div class="shortcut-item">
+        <span>Toggle dark mode</span>
+        <kbd class="shortcut-key">D</kbd>
+      </div>
+      <div class="shortcut-item">
+        <span>Toggle B&W mode</span>
+        <kbd class="shortcut-key">M</kbd>
+      </div>
+      <div class="shortcut-item">
+        <span>Show shortcuts</span>
+        <kbd class="shortcut-key">?</kbd>
+      </div>
+    </div>
+    
+    <script>
+      /* ===============================================
+       * JAVASCRIPT
+       * ===============================================
+       */
+      
+      // Utility functions
+      const debounce = (func, wait) => {
+        let timeout;
+        return function executedFunction(...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func(...args), wait);
+        };
+      };
+      
+      const throttle = (func, limit) => {
+        let inThrottle;
+        return function(...args) {
+          if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+          }
+        };
+      };
+      
+      /* ===============================================
+       * DARK MODE TOGGLE
+       * =============================================== */
+      const themeToggle = document.getElementById('theme-toggle');
+      const htmlElement = document.documentElement;
+      
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+      const currentTheme = localStorage.getItem('theme') || (prefersDark.matches ? 'dark' : 'light');
+      htmlElement.setAttribute('data-theme', currentTheme);
+      
+      themeToggle.addEventListener('click', () => {
+        const current = htmlElement.getAttribute('data-theme');
+        const newTheme = current === 'light' ? 'dark' : 'light';
+        htmlElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      });
+      
+      prefersDark.addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+          htmlElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        }
+      });
+      
+      /* ===============================================
+       * MONOCHROME MODE TOGGLE
+       * =============================================== */
+      const monochromeToggle = document.getElementById('monochrome-toggle');
+      const currentMonochrome = localStorage.getItem('monochrome') || 'false';
+      htmlElement.setAttribute('data-monochrome', currentMonochrome);
+      
+      monochromeToggle.addEventListener('click', () => {
+        const current = htmlElement.getAttribute('data-monochrome');
+        const newMode = current === 'false' ? 'true' : 'false';
+        htmlElement.setAttribute('data-monochrome', newMode);
+        localStorage.setItem('monochrome', newMode);
+      });
+      
+      /* ===============================================
+       * SCROLL PROGRESS INDICATOR
+       * =============================================== */
+      const scrollProgress = document.getElementById('scroll-progress');
+      
+      const updateScrollProgress = throttle(() => {
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight - windowHeight;
+        const scrolled = window.scrollY;
+        const progress = documentHeight > 0 ? (scrolled / documentHeight) * 100 : 0;
+        
+        requestAnimationFrame(() => {
+          scrollProgress.style.width = `${Math.min(Math.max(progress, 0), 100)}%`;
+          scrollProgress.setAttribute('aria-valuenow', Math.round(progress));
+        });
+      }, 16);
+      
+      window.addEventListener('scroll', updateScrollProgress, { passive: true });
+      window.addEventListener('resize', updateScrollProgress, { passive: true });
+      updateScrollProgress();
+      
+      /* ===============================================
+       * STICKY NAVIGATION (Archive + Scroll)
+       * =============================================== */
+      const stickyNav = document.getElementById('sticky-nav');
+      const scrollTop = document.getElementById('scroll-top');
+      const scrollBottom = document.getElementById('scroll-bottom');
+      
+      const updateStickyNav = throttle(() => {
+        const scrolled = window.scrollY;
+        const threshold = window.innerHeight * 0.5;
+        
+        if (stickyNav) {
+          if (scrolled > threshold) {
+            stickyNav.classList.add('visible');
+          } else {
+            stickyNav.classList.remove('visible');
+          }
+        }
+      }, 100);
+      
+      window.addEventListener('scroll', updateStickyNav, { passive: true });
+      
+      if (scrollTop) {
+        scrollTop.addEventListener('click', () => {
+          window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+          });
+        });
+      }
+      
+      if (scrollBottom) {
+        scrollBottom.addEventListener('click', () => {
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+          });
+        });
+      }
+
+      /* ===============================================
+       * SECTION-AWARE NAVIGATION BUTTON
+       * =============================================== */
+      (function() {
+        const sectionNavButton = document.getElementById('section-nav-button');
+        if (!sectionNavButton) return;
+
+        const section = document.documentElement.getAttribute('data-section');
+
+        // Section configuration: { href, title, ariaLabel, show }
+        const sectionConfig = {
+          'home': {
+            show: false
+          },
+          'fotos': {
+            href: '/archive/',
+            title: 'Archive',
+            ariaLabel: 'View photo archive',
+            show: true
+          },
+          'archive': {
+            href: '/archive/',
+            title: 'Archive',
+            ariaLabel: 'View photo archive',
+            show: true
+          },
+          'misc': {
+            href: '/misc/',
+            title: 'Misc',
+            ariaLabel: 'Back to Misc',
+            show: true
+          },
+          'cine': {
+            show: false
+          },
+          'protocols': {
+            show: false
+          }
+        };
+
+        const config = sectionConfig[section];
+
+        if (config && config.show) {
+          sectionNavButton.setAttribute('href', config.href);
+          sectionNavButton.setAttribute('title', config.title);
+          sectionNavButton.setAttribute('aria-label', config.ariaLabel);
+          sectionNavButton.style.display = '';
+        } else {
+          sectionNavButton.style.display = 'none';
+        }
+      })();
+
+      /* ===============================================
+       * MENU TOGGLE
+       * =============================================== */
+      const menuToggle = document.getElementById('menu-toggle');
+      const siteMenu = document.getElementById('site-menu');
+      const siteHeader = document.getElementById('site-header');
+      
+      const closeMenu = () => {
+        siteMenu.classList.remove('menu-open');
+        menuToggle.classList.remove('menu-open');
+        siteHeader.classList.remove('menu-active');
+        menuToggle.setAttribute('aria-expanded', 'false');
+      };
+      
+      const openMenu = () => {
+        siteMenu.classList.add('menu-open');
+        menuToggle.classList.add('menu-open');
+        siteHeader.classList.add('menu-active');
+        menuToggle.setAttribute('aria-expanded', 'true');
+      };
+      
+      menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = siteMenu.classList.contains('menu-open');
+        isOpen ? closeMenu() : openMenu();
+      });
+      
+      document.addEventListener('click', (e) => {
+        if (!menuToggle.contains(e.target) && !siteMenu.contains(e.target)) {
+          if (siteMenu.classList.contains('menu-open')) {
+            closeMenu();
+          }
+        }
+      });
+      
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && siteMenu.classList.contains('menu-open')) {
+          closeMenu();
+        }
+      });
+
+      /* ===============================================
+       * README SMOOTH SCROLL
+       * =============================================== */
+
+      // Function to handle README scroll
+      function handleReadmeScroll(e) {
+        e.preventDefault();
+        const heroSection = document.getElementById('hero-section');
+        // If on homepage, smooth scroll to hero section
+        if (heroSection && window.location.pathname === '/') {
+          const offset = 80; // Header height
+          const targetPosition = heroSection.getBoundingClientRect().top + window.pageYOffset - offset;
+          window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+          closeMenu();
+        } else {
+          // If on other pages, store intent and navigate
+          sessionStorage.setItem('scrollToHero', 'true');
+          window.location.href = '/';
+        }
+      }
+
+      // Check if we should scroll on page load
+      window.addEventListener('DOMContentLoaded', () => {
+        if (sessionStorage.getItem('scrollToHero') === 'true') {
+          sessionStorage.removeItem('scrollToHero');
+          setTimeout(() => {
+            const heroSection = document.getElementById('hero-section');
+            if (heroSection) {
+              const offset = 80;
+              const targetPosition = heroSection.getBoundingClientRect().top + window.pageYOffset - offset;
+              window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+            }
+          }, 100);
+        }
+      });
+
+      // Attach to header README link
+      const readmeLink = document.getElementById('readme-scroll-link');
+      if (readmeLink) {
+        readmeLink.addEventListener('click', handleReadmeScroll);
+      }
+
+      // Attach to menu README link
+      const menuReadmeLinks = document.querySelectorAll('.site-menu-dropdown a[href="/"]');
+      menuReadmeLinks.forEach(link => {
+        link.addEventListener('click', handleReadmeScroll);
+      });
+
+      // Attach to footer README/About link
+      const footerReadmeLinks = document.querySelectorAll('.footer-section a[href="/"]');
+      footerReadmeLinks.forEach(link => {
+        link.addEventListener('click', handleReadmeScroll);
+      });
+      
+      /* ===============================================
+       * LAZY LOADING
+       * =============================================== */
+      if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const img = entry.target;
+              if (img.dataset.src) {
+                img.src = img.dataset.src;
+                img.removeAttribute('data-src');
+              }
+              imageObserver.unobserve(img);
+            }
+          });
+        }, {
+          rootMargin: '100px 0px',
+          threshold: 0.01
+        });
+        
+        document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
+      }
+      
+      /* ===============================================
+       * LIGHTBOX
+       * =============================================== */
+      const portfolioThumbs = document.querySelectorAll('.portfolio-thumb');
+      const contactSheetThumbs = document.querySelectorAll('.contact-sheet-thumb');
+      
+      let thumbnails = [];
+      if (portfolioThumbs.length > 0) {
+        thumbnails = portfolioThumbs;
+      } else if (contactSheetThumbs.length > 0) {
+        thumbnails = contactSheetThumbs;
+      }
+      
+      if (thumbnails.length > 0) {
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightbox-image');
+        const lightboxContainer = document.getElementById('lightbox-container');
+        const lightboxOverlay = document.getElementById('lightbox-overlay');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const lightboxPrev = document.getElementById('lightbox-prev');
+        const lightboxNext = document.getElementById('lightbox-next');
+        const lightboxFullscreen = document.getElementById('lightbox-fullscreen');
+        const lightboxCounter = document.getElementById('lightbox-counter');
+        const swipeHint = document.getElementById('swipe-hint');
+        
+        const imageUrls = Array.from(thumbnails).map(thumb => thumb.src || thumb.dataset.src);
+        let currentIndex = 0;
+        let isZoomed = false;
+        let scale = 1;
+        let translateX = 0;
+        let translateY = 0;
+        let isDragging = false;
+        let startX, startY;
+        
+        // Touch handling
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+        let lastTapTime = 0;
+        let isSwiping = false;
+        
+        const preloadImage = (index) => {
+          if (index >= 0 && index < imageUrls.length) {
+            const img = new Image();
+            img.src = imageUrls[index];
+          }
+        };
+        
+        const updateCounter = () => {
+          lightboxCounter.textContent = `${currentIndex + 1} / ${imageUrls.length}`;
+        };
+        
+        const resetZoom = () => {
+          scale = 1;
+          translateX = 0;
+          translateY = 0;
+          isZoomed = false;
+          lightboxContainer.classList.remove('zoomed');
+          updateImageTransform();
+        };
+        
+        const updateImageTransform = () => {
+          requestAnimationFrame(() => {
+            lightboxImage.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+          });
+        };
+        
+        const openLightbox = (index) => {
+          if (index < 0 || index >= imageUrls.length) return;
+          
+          currentIndex = index;
+          lightboxImage.style.opacity = '0.5';
+          lightboxImage.src = imageUrls[currentIndex];
+          
+          lightboxImage.onload = () => {
+            lightboxImage.style.opacity = '1';
+          };
+          
+          lightbox.classList.add('open');
+          document.body.style.overflow = 'hidden';
+          
+          closeMenu();
+          resetZoom();
+          updateNavButtons();
+          updateCounter();
+          
+          preloadImage(currentIndex + 1);
+          preloadImage(currentIndex - 1);
+          
+          if (!localStorage.getItem('swipeHintShown')) {
+            swipeHint.style.display = 'block';
+            localStorage.setItem('swipeHintShown', 'true');
+          } else {
+            swipeHint.style.display = 'none';
+          }
+        };
+        
+        const closeLightbox = () => {
+          lightbox.classList.remove('open');
+          document.body.style.overflow = '';
+          resetZoom();
+          if (document.fullscreenElement) {
+            document.exitFullscreen().catch(() => {});
+          }
+        };
+        
+        const showNextImage = () => {
+          if (currentIndex + 1 < imageUrls.length) {
+            openLightbox(currentIndex + 1);
+          }
+        };
+        
+        const showPrevImage = () => {
+          if (currentIndex - 1 >= 0) {
+            openLightbox(currentIndex - 1);
+          }
+        };
+        
+        const updateNavButtons = () => {
+          lightboxPrev.classList.toggle('disabled', currentIndex === 0);
+          lightboxNext.classList.toggle('disabled', currentIndex === imageUrls.length - 1);
+        };
+        
+        // Zoom functionality
+        const toggleZoom = (e) => {
+          if (!isZoomed) {
+            scale = 2.5;
+            isZoomed = true;
+            lightboxContainer.classList.add('zoomed');
+            
+            const rect = lightboxImage.getBoundingClientRect();
+            const x = e.clientX || rect.left + rect.width / 2;
+            const y = e.clientY || rect.top + rect.height / 2;
+            
+            translateX = (rect.width / 2 - (x - rect.left)) * 0.4;
+            translateY = (rect.height / 2 - (y - rect.top)) * 0.4;
+          } else {
+            resetZoom();
+          }
+          updateImageTransform();
+        };
+        
+        // Mouse drag for zoomed image
+        lightboxContainer.addEventListener('mousedown', (e) => {
+          if (!isZoomed) return;
+          e.preventDefault();
+          isDragging = true;
+          startX = e.clientX - translateX;
+          startY = e.clientY - translateY;
+          lightboxContainer.style.cursor = 'grabbing';
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+          if (!isDragging) return;
+          e.preventDefault();
+          translateX = e.clientX - startX;
+          translateY = e.clientY - startY;
+          updateImageTransform();
+        });
+        
+        document.addEventListener('mouseup', () => {
+          if (isDragging) {
+            isDragging = false;
+            lightboxContainer.style.cursor = isZoomed ? 'zoom-out' : 'zoom-in';
+          }
+        });
+        
+        // Click to zoom (desktop only)
+        lightboxContainer.addEventListener('click', (e) => {
+          if (!isDragging && e.target === lightboxImage && !('ontouchstart' in window)) {
+            toggleZoom(e);
+          }
+        });
+        
+        // Modern touch gestures with Hammer.js
+        const hammerLightbox = new Hammer(lightbox);
+        const hammerContainer = new Hammer(lightboxContainer);
+
+        // Configure gestures
+        hammerLightbox.get('swipe').set({
+          direction: Hammer.DIRECTION_HORIZONTAL,
+          threshold: 50,
+          velocity: 0.3
+        });
+        hammerContainer.get('pinch').set({ enable: true });
+        hammerContainer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+
+        // Swipe to navigate (left/right)
+        hammerLightbox.on('swipeleft', () => {
+          if (currentIndex < imageUrls.length - 1 && !isZoomed) {
+            showNextImage();
+          }
+        });
+
+        hammerLightbox.on('swiperight', () => {
+          if (currentIndex > 0 && !isZoomed) {
+            showPrevImage();
+          }
+        });
+
+        // Pinch to zoom
+        let startScale = 1;
+        hammerContainer.on('pinchstart', (e) => {
+          startScale = scale;
+        });
+
+        hammerContainer.on('pinchmove', (e) => {
+          scale = Math.max(1, Math.min(5, startScale * e.scale));  // 1x to 5x zoom
+          isZoomed = scale > 1;
+          lightboxContainer.classList.toggle('zoomed', isZoomed);
+          updateImageTransform();
+        });
+
+        hammerContainer.on('pinchend', (e) => {
+          if (scale < 1.1) {
+            // Reset if barely zoomed
+            scale = 1;
+            isZoomed = false;
+            translateX = 0;
+            translateY = 0;
+            lightboxContainer.classList.remove('zoomed');
+            updateImageTransform();
+          }
+        });
+
+        // Pan when zoomed
+        hammerContainer.on('panstart', (e) => {
+          if (isZoomed) {
+            e.preventDefault();
+          }
+        });
+
+        hammerContainer.on('panmove', (e) => {
+          if (isZoomed) {
+            e.preventDefault();
+            translateX += e.deltaX / scale;
+            translateY += e.deltaY / scale;
+            updateImageTransform();
+          }
+        });
+
+        // Double-tap to zoom in/out
+        hammerContainer.on('doubletap', (e) => {
+          if (isZoomed) {
+            // Reset zoom
+            scale = 1;
+            isZoomed = false;
+            translateX = 0;
+            translateY = 0;
+            lightboxContainer.classList.remove('zoomed');
+          } else {
+            // Zoom in to 2x at tap location
+            scale = 2;
+            isZoomed = true;
+            lightboxContainer.classList.add('zoomed');
+
+            // Center zoom on tap point
+            const rect = lightboxContainer.getBoundingClientRect();
+            const tapX = e.center.x - rect.left;
+            const tapY = e.center.y - rect.top;
+            translateX = (rect.width / 2 - tapX) / scale;
+            translateY = (rect.height / 2 - tapY) / scale;
+          }
+          updateImageTransform();
+        });
+        
+        // Fullscreen with iOS fallback
+        lightboxFullscreen.addEventListener('click', async () => {
+          // Detect fullscreen capability
+          const isFullscreenSupported = document.fullscreenEnabled ||
+                                       document.webkitFullscreenEnabled ||
+                                       false;
+
+          if (!isFullscreenSupported) {
+            // iOS fallback: Use pseudo-fullscreen with CSS
+            lightbox.classList.toggle('pseudo-fullscreen');
+
+            // Optionally hide browser UI on iOS
+            if (window.navigator.standalone !== undefined) {
+              window.scrollTo(0, 1);
+            }
+            return;
+          }
+
+          // Desktop/Android: Use real fullscreen API
+          try {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+              if (lightbox.requestFullscreen) {
+                await lightbox.requestFullscreen();
+              } else if (lightbox.webkitRequestFullscreen) {
+                await lightbox.webkitRequestFullscreen();
+              }
+              lightbox.classList.add('fullscreen');
+            } else {
+              if (document.exitFullscreen) {
+                await document.exitFullscreen();
+              } else if (document.webkitExitFullscreen) {
+                await document.webkitExitFullscreen();
+              }
+              lightbox.classList.remove('fullscreen');
+            }
+          } catch (err) {
+            // Fallback if fullscreen fails
+            console.warn('Fullscreen failed, using pseudo-fullscreen:', err);
+            lightbox.classList.toggle('pseudo-fullscreen');
+          }
+        });
+        
+        // Auto-hide controls in fullscreen
+        let controlsTimeout;
+        lightbox.addEventListener('mousemove', () => {
+          if (lightbox.classList.contains('fullscreen')) {
+            lightbox.classList.add('show-controls');
+            clearTimeout(controlsTimeout);
+            controlsTimeout = setTimeout(() => {
+              lightbox.classList.remove('show-controls');
+            }, 2500);
+          }
+        });
+        
+        // Thumbnail clicks
+        thumbnails.forEach((thumb, index) => {
+          thumb.addEventListener('click', (e) => {
+            e.preventDefault();
+            openLightbox(index);
+          });
+        });
+        
+        // Navigation buttons with tap protection
+        lightboxNext.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          
+          const currentTime = Date.now();
+          if (currentTime - lastTapTime < 300) return;
+          lastTapTime = currentTime;
+          
+          if (!lightboxNext.classList.contains('disabled')) {
+            showNextImage();
+          }
+        });
+        
+        lightboxPrev.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          
+          const currentTime = Date.now();
+          if (currentTime - lastTapTime < 300) return;
+          lastTapTime = currentTime;
+          
+          if (!lightboxPrev.classList.contains('disabled')) {
+            showPrevImage();
+          }
+        });
+        
+        lightboxClose.addEventListener('click', closeLightbox);
+        lightboxOverlay.addEventListener('click', closeLightbox);
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+          // Global shortcuts
+          if (!lightbox.classList.contains('open')) {
+            switch(e.key) {
+              case 'd':
+              case 'D':
+                themeToggle.click();
+                break;
+              case 'm':
+              case 'M':
+                monochromeToggle.click();
+                break;
+              case '?':
+                document.getElementById('shortcuts-overlay').classList.toggle('visible');
+                break;
+            }
+            return;
+          }
+          
+          // Lightbox shortcuts
+          switch(e.key) {
+            case 'ArrowRight':
+              if (!lightboxNext.classList.contains('disabled')) showNextImage();
+              break;
+            case 'ArrowLeft':
+              if (!lightboxPrev.classList.contains('disabled')) showPrevImage();
+              break;
+            case 'Escape':
+              closeLightbox();
+              break;
+            case 'f':
+            case 'F':
+              lightboxFullscreen.click();
+              break;
+            case ' ':
+              e.preventDefault();
+              if (!('ontouchstart' in window)) {
+                toggleZoom({ clientX: window.innerWidth / 2, clientY: window.innerHeight / 2 });
+              }
+              break;
+          }
+        });
+      }
+      
+      /* ===============================================
+       * KEYBOARD SHORTCUTS OVERLAY
+       * =============================================== */
+      const shortcutsOverlay = document.getElementById('shortcuts-overlay');
+      const shortcutsTrigger = document.getElementById('shortcuts-trigger');
+      
+      if (shortcutsTrigger) {
+        shortcutsTrigger.addEventListener('click', (e) => {
+          e.preventDefault();
+          shortcutsOverlay.classList.toggle('visible');
+        });
+      }
+      
+      document.addEventListener('click', (e) => {
+        if (shortcutsOverlay && shortcutsOverlay.classList.contains('visible') && 
+            !shortcutsOverlay.contains(e.target) && 
+            e.target !== shortcutsTrigger) {
+          shortcutsOverlay.classList.remove('visible');
+        }
+      });
+      
+      /* ===============================================
+       * EMAIL COPY TO CLIPBOARD
+       * =============================================== */
+      // Find all email links and add click-to-copy functionality
+      document.addEventListener('DOMContentLoaded', () => {
+        const emailLinks = document.querySelectorAll('a[href^="mailto:"]');
+        emailLinks.forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const email = 'runzeni2001@gmail.com';
+
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(email).then(() => {
+                showCopyNotification(link, 'Email copied!');
+              }).catch(() => {
+                // Fallback for older browsers
+                fallbackCopyToClipboard(email, link);
+              });
+            } else {
+              fallbackCopyToClipboard(email, link);
+            }
+          });
+        });
+      });
+
+      function fallbackCopyToClipboard(text, element) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          showCopyNotification(element, 'Email copied!');
+        } catch (err) {
+          showCopyNotification(element, 'Copy failed');
+        }
+        document.body.removeChild(textarea);
+      }
+
+      function showCopyNotification(element, message) {
+        const notification = document.createElement('div');
+        notification.textContent = message;
+        notification.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: var(--color-accent);
+          color: var(--color-bg);
+          padding: 1rem 2rem;
+          border-radius: 8px;
+          font-family: var(--font-sans);
+          font-weight: 600;
+          font-size: 0.95rem;
+          z-index: 10000;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+          animation: fadeInOut 2s ease forwards;
+        `;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+          notification.remove();
+        }, 2000);
+      }
+
+      // Add animation for notification
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes fadeInOut {
+          0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+          10% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          90% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+          100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+        }
+      `;
+      document.head.appendChild(style);
+
+      /* ===============================================
+       * ACCESSIBILITY
+       * =============================================== */
+
+    </script>
+    <script>
+      /* Optimized FLIP animation - detects column changes to prevent jarring transitions */
+(function() {
+  let firstRects = null;
+  let isAnimating = false;
+
+  const captureFirst = () => {
+    const grids = document.querySelectorAll('.gallery-grid, .contact-sheet-grid, .cocktails-grid');
+    if (!grids.length) return;
+
+    firstRects = Array.from(grids).map(grid => {
+      const items = grid.querySelectorAll('.gallery-item, .contact-sheet-thumb, .cocktail-card');
+      return Array.from(items).map(el => {
+        const r = el.getBoundingClientRect();
+        return { left: r.left, top: r.top, width: r.width, height: r.height, el };
+      });
+    });
+  };
+
+  const animateFLIP = () => {
+    if (isAnimating || !firstRects) return;
+    isAnimating = true;
+
+    const grids = document.querySelectorAll('.gallery-grid, .contact-sheet-grid, .cocktails-grid');
+    const lastRects = Array.from(grids).map(grid => {
+      const items = grid.querySelectorAll('.gallery-item, .contact-sheet-thumb, .cocktail-card');
+      return Array.from(items).map(el => ({ rect: el.getBoundingClientRect(), el }));
+    });
+
+    requestAnimationFrame(() => {
+      grids.forEach((grid, gi) => {
+        const first = firstRects[gi] || [];
+        const last = lastRects[gi] || [];
+
+        // Detect column count change: if many items changed size, skip all animations for this grid
+        let sizeChangedCount = 0;
+        last.forEach((item, i) => {
+          const f = first[i];
+          if (f && Math.abs(f.width - item.rect.width) / f.width > 0.02) {
+            sizeChangedCount++;
+          }
+        });
+
+        // If >50% of items changed size, this is likely a column change - skip animation
+        if (sizeChangedCount > last.length * 0.5) return;
+
+        // Animate individual items that only moved (didn't resize)
+        last.forEach((item, i) => {
+          const f = first[i];
+          if (!f) return;
+
+          const dx = f.left - item.rect.left;
+          const dy = f.top - item.rect.top;
+          const sizeChange = Math.abs(f.width - item.rect.width) / f.width;
+
+          // Skip if: no significant movement OR item resized
+          if ((Math.abs(dx) < 5 && Math.abs(dy) < 5) || sizeChange > 0.02) return;
+
+          item.el.style.transition = 'none';
+          item.el.style.transform = `translate(${dx}px, ${dy}px)`;
+          item.el.setAttribute('data-flip', 'true');
+        });
+      });
+
+      const animated = document.querySelectorAll('[data-flip="true"]');
+      if (!animated.length) {
+        isAnimating = false;
+        firstRects = null;
+        return;
+      }
+
+      void grids[0]?.offsetHeight;
+
+      requestAnimationFrame(() => {
+        animated.forEach(el => {
+          el.style.transition = '';
+          el.style.transform = '';
+          el.addEventListener('transitionend', () => el.removeAttribute('data-flip'), { once: true });
+        });
+        isAnimating = false;
+      });
+    });
+
+    firstRects = null;
+  };
+
+  let resizeTimer = null;
+  const onResize = () => {
+    if (!resizeTimer) captureFirst();
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      animateFLIP();
+      resizeTimer = null;
+    }, 200);
+  };
+
+  window.addEventListener('resize', onResize, { passive: true });
+})();
+    </script>
+  </body>
+</html>
