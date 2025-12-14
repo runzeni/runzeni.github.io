@@ -8,7 +8,7 @@ prev_module: null
 next_module: /misc/colorimetry/module-2/
 reading_time: 15
 date: 2025-12-10
-description: "The eye is not a camera—it's a brain peripheral. Understanding the biological signal chain of color before diving into ACES, LUTs, and digital grading workflows."
+description: "The eye is not a camera. It is a brain peripheral. Understanding the biological signal chain of color before diving into ACES, LUTs, and digital grading workflows."
 ---
 
 <div class="site-breadcrumb">
@@ -77,7 +77,7 @@ description: "The eye is not a camera—it's a brain peripheral. Understanding t
     </p>
 
     <p>
-      When we talk about a light source on set, we usually describe it with a single number: <strong>Correlated Color Temperature (CCT)</strong>, like "3200K". This is a dangerous oversimplification. CCT only tells you the <em>color</em> of the light, not the <em>quality</em> of the spectrum. To see the quality, we need the <strong>Spectral Power Distribution (SPD)</strong>.
+      When we talk about a light source on set, we usually describe it with a single number: <mark>Correlated Color Temperature (CCT)</mark>, like "3200K". This is a dangerous oversimplification. CCT only tells you the <em>color</em> of the light, not the <em>quality</em> of the spectrum. To see the quality, we need the <strong>Spectral Power Distribution (SPD)</strong>.
     </p>
 
     <h3>The LED Problem: Continuous vs. Discontinuous</h3>
@@ -90,12 +90,8 @@ description: "The eye is not a camera—it's a brain peripheral. Understanding t
       <strong>LED (Discontinuous):</strong> A sharp blue spike (the pump) and a broad yellow/green hump (the phosphor).
     </p>
 
-    <figure class="diagram-placeholder">
-      <div class="diagram-container">
-        <div class="placeholder-text">
-          [Future Interactive: SPD Comparison Tool - Overlay Tungsten vs LED curves showing the cyan valley and red drop-off in typical LED sources]
-        </div>
-      </div>
+    <figure class="content-figure">
+      <img src="/assets/figures/colorimetry/png/fig-1-1.png" alt="SPD comparison showing Tungsten continuous spectrum vs LED discontinuous spectrum" loading="lazy">
       <figcaption>Figure 1.1: SPD comparison—Tungsten (continuous) vs LED (discontinuous). Notice the missing data in cyan and deep red regions.</figcaption>
     </figure>
 
@@ -123,11 +119,11 @@ description: "The eye is not a camera—it's a brain peripheral. Understanding t
     </p>
 
     <blockquote>
-      <strong>The Trap:</strong> An LED can have a CRI of 95+ and still make skin look dead because it fails at R9 (Saturated Red).
+      <mark class="highlight-term">The Trap:</mark> An LED can have a CRI of 95+ and still make skin look dead because it fails at R9 (Saturated Red).
     </blockquote>
 
     <p>
-      <strong>The Solution:</strong> For cinematography, always verify <strong>R9</strong>, <strong>R13</strong> (Skin Tone), and <strong>R15</strong> (Asian Skin Tone).
+      <strong>The Solution:</strong> For cinematography, always verify <mark>R9</mark>, <mark>R13</mark> (Skin Tone), and <mark>R15</mark> (Asian Skin Tone).
     </p>
 
   </section>
@@ -178,17 +174,13 @@ description: "The eye is not a camera—it's a brain peripheral. Understanding t
     </p>
 
     <ul>
-      <li><strong>L (Long):</strong> ~565nm (Red-Yellow)</li>
-      <li><strong>M (Medium):</strong> ~540nm (Green)</li>
-      <li><strong>S (Short):</strong> ~445nm (Blue-Violet)</li>
+      <li><strong>L (Long):</strong> <mark>~565nm</mark> (Red-Yellow)</li>
+      <li><strong>M (Medium):</strong> <mark>~540nm</mark> (Green)</li>
+      <li><strong>S (Short):</strong> <mark>~445nm</mark> (Blue-Violet)</li>
     </ul>
 
-    <figure class="diagram-placeholder">
-      <div class="diagram-container">
-        <div class="placeholder-text">
-          [Future Interactive: LMS Cone Response Curves - Overlay showing L/M overlap and opponent process channels (L-M, S-(L+M))]
-        </div>
-      </div>
+    <figure class="content-figure">
+      <img src="/assets/figures/colorimetry/png/fig-1-4.png" alt="LMS cone spectral sensitivities showing L, M, and S cone response curves with significant overlap" loading="lazy">
       <figcaption>Figure 1.4: LMS cone spectral sensitivities showing significant overlap, especially between L and M</figcaption>
     </figure>
 
@@ -255,7 +247,7 @@ description: "The eye is not a camera—it's a brain peripheral. Understanding t
     </ul>
 
     <p>
-      <strong>Invariant Wavelengths:</strong> Only a few specific hues (~478nm Blue, ~503nm Green, ~572nm Yellow) remain stable as you brighten them.
+      <mark class="highlight-term">Invariant Wavelengths:</mark> Only a few specific hues (<mark>~478nm</mark> Blue, <mark>~503nm</mark> Green, <mark>~572nm</mark> Yellow) remain stable as you brighten them.
     </p>
 
     <h3>D. Weber-Fechner Law (Logarithmic Vision)</h3>
@@ -311,12 +303,8 @@ description: "The eye is not a camera—it's a brain peripheral. Understanding t
       Color, ultimately, is a simulation.
     </p>
 
-    <figure class="diagram-placeholder">
-      <div class="diagram-container">
-        <div class="placeholder-text">
-          [Future Interactive: Sensor vs Eye Comparison - Overlay camera sensor spectral response (e.g., ARRI ALEXA) vs CIE 1931 Standard Observer curves]
-        </div>
-      </div>
+    <figure class="content-figure">
+      <img src="/assets/figures/colorimetry/png/fig-1-6.png" alt="Camera sensor spectral sensitivity compared to CIE 1931 human observer curves" loading="lazy">
       <figcaption>Figure 1.6: Camera sensor spectral sensitivity vs human observer—the fundamental mismatch ACES attempts to correct</figcaption>
     </figure>
 

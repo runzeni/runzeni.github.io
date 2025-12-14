@@ -28,6 +28,16 @@ permalink: /misc/
         </p>
       </a>
 
+      <a href="/misc/linux-notes/" class="misc-card misc-card-link">
+        <div class="misc-card-header">
+          <h3>Linux command line notes</h3>
+          <span class="misc-date">Dec 2025</span>
+        </div>
+        <p class="misc-excerpt">
+          For beginners like me.
+        </p>
+      </a>
+
       <!-- Future articles here -->
 
     </div>
