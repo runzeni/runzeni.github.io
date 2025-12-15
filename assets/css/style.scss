@@ -846,6 +846,32 @@ a {
   }
 }
 
+/* Loading indicator for slow image loads */
+.lightbox-image-container.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  z-index: 10;
+  pointer-events: none;
+}
+
+[data-theme="dark"] .lightbox-image-container.loading::after {
+  border-color: rgba(255, 255, 255, 0.2);
+  border-top-color: rgba(255, 255, 255, 0.7);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* IMPROVED: Minimal glass counter */
 .lightbox-counter {
   position: fixed;
@@ -1178,24 +1204,32 @@ body:has(.quick-nav-buttons) #section-nav-button {
 
 .quick-nav-btn {
   padding: clamp(0.65rem, calc(2.2vw + 0.3rem), 1.5rem) clamp(1rem, calc(3vw + 0.75rem), 2.25rem);
-  border: clamp(1.5px, 0.15vw, 2px) solid var(--color-border);
+  border: clamp(1.5px, 0.15vw, 2px) solid rgba(0, 0, 0, 0.09);
   border-radius: clamp(6px, 1.2vw, 10px);
-  background: var(--color-bg);
+
+  /* Glassmorphism background */
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   color: var(--color-text);
   text-decoration: none;
   font-family: var(--font-sans);
   font-weight: 700;
-  font-size: clamp(0.75rem, calc(1.8vw + 0.25rem), 1.25rem);
+  font-size: clamp(0.95rem, calc(1.2vw + 0.5rem), 1.25rem);
   letter-spacing: clamp(0.02em, 0.3vw, 0.06em);
   text-transform: uppercase;
 
-  transition: background-color 0.25s ease,
+  /* Enhanced text contrast for glassmorphism */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+  transition: background 0.25s ease,
               border-color 0.25s ease,
               transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
               box-shadow 0.3s ease,
-              color 0.25s ease;
+              color 0.25s ease,
+              backdrop-filter 0.25s ease;
 
-  box-shadow: 0 clamp(1px, 0.15vw, 2px) clamp(2px, 0.4vw, 4px) rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
 
   flex: 1 1 0;
   min-width: 0;
@@ -1213,24 +1247,51 @@ body:has(.quick-nav-buttons) #section-nav-button {
 
   position: relative;
   isolation: isolate;
+
+  /* Touch optimization */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Dark mode glassmorphism */
+[data-theme="dark"] .quick-nav-btn {
+  background: rgba(0, 0, 0, 0.3);
+  border: clamp(1.5px, 0.15vw, 2px) solid rgba(255, 255, 255, 0.18);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
 .quick-nav-btn:hover {
-  background-color: var(--color-accent);
+  background: linear-gradient(135deg,
+    rgba(26, 26, 26, 0.85) 0%,
+    rgba(26, 26, 26, 0.95) 100%
+  );
+  backdrop-filter: blur(20px) saturate(200%);
+  -webkit-backdrop-filter: blur(20px) saturate(200%);
   color: var(--color-bg);
-  border-color: var(--color-accent);
+  border-color: rgba(26, 26, 26, 0.95);
   transform: scale(1.05);
-  box-shadow: 0 clamp(4px, 0.8vw, 8px) clamp(12px, 2vw, 24px) rgba(0, 0, 0, 0.18);
-  transition: background-color 0.2s ease,
+  box-shadow: 0 clamp(4px, 0.8vw, 8px) clamp(12px, 2vw, 24px) rgba(0, 0, 0, 0.06);
+  transition: background 0.2s ease,
               border-color 0.2s ease,
               transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
               box-shadow 0.3s ease,
-              color 0.2s ease;
+              color 0.2s ease,
+              backdrop-filter 0.2s ease;
+}
+
+[data-theme="dark"] .quick-nav-btn:hover {
+  background: linear-gradient(135deg,
+    rgba(232, 232, 232, 0.85) 0%,
+    rgba(232, 232, 232, 0.95) 100%
+  );
+  color: var(--color-bg);
+  border-color: rgba(232, 232, 232, 0.95);
 }
 
 .quick-nav-btn:active {
   transform: scale(1.02);
-  box-shadow: 0 clamp(2px, 0.4vw, 4px) clamp(6px, 1vw, 12px) rgba(0, 0, 0, 0.14);
+  box-shadow: 0 clamp(2px, 0.4vw, 4px) clamp(6px, 1vw, 12px) rgba(0, 0, 0, 0.04);
   transition: transform 0.1s ease,
               box-shadow 0.1s ease;
 }
@@ -1244,18 +1305,28 @@ body:has(.quick-nav-buttons) #section-nav-button {
 /* Mobile optimization */
 @media (max-width: 600px) {
   .quick-nav-buttons {
-    gap: clamp(0.4rem, 1.2vw, 0.7rem);
+    /* CSS Grid for cleaner 2x2 layout */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(0.4rem, 2vw, 0.7rem);
     margin: clamp(8vh, 10vh, 12vh) 0 clamp(24vh, 28vh, 32vh);
     padding: 0 clamp(0.5rem, 2vw, 1rem);
-    justify-content: center;
+    justify-items: stretch;
   }
 
   .quick-nav-btn {
-    padding: clamp(0.65rem, calc(1.8vw + 0.2rem), 1rem) clamp(0.85rem, calc(2.8vw + 0.4rem), 1.8rem);
-    font-size: clamp(0.75rem, calc(1.6vw + 0.2rem), 1rem);
-    /* Force two buttons per row on small screens */
-    flex: 0 0 calc(50% - 0.5rem);
-    max-width: calc(50% - 0.5rem);
+    /* Increased minimum font size */
+    font-size: clamp(0.95rem, calc(2.5vw + 0.3rem), 1rem);
+
+    /* Enhanced padding for 44px touch target */
+    padding: clamp(0.8rem, calc(2.2vw + 0.3rem), 1.15rem) clamp(0.95rem, calc(3vw + 0.5rem), 1.9rem);
+
+    /* Enforce minimum touch target */
+    min-height: 44px;
+
+    /* Grid handles sizing - remove flex properties */
+    flex: none;
+    max-width: none;
     box-sizing: border-box;
   }
 }

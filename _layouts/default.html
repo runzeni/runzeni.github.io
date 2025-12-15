@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light" data-monochrome="false" data-section="{{ page.url | split: '/' | slice: 1 | first | default: 'home' }}">
   <head>
+    <!-- Blocking script to prevent FOUC - must run before CSS loads -->
+    <script>
+    (function() {
+      const stored = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = stored || (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+    </script>
+    <script>
+    (function() {
+      const stored = localStorage.getItem('monochrome') || 'false';
+      document.documentElement.setAttribute('data-monochrome', stored);
+    })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>{{ page.title | default: site.title }}</title>
@@ -278,18 +293,17 @@
        * =============================================== */
       const themeToggle = document.getElementById('theme-toggle');
       const htmlElement = document.documentElement;
-      
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-      const currentTheme = localStorage.getItem('theme') || (prefersDark.matches ? 'dark' : 'light');
-      htmlElement.setAttribute('data-theme', currentTheme);
-      
+
+      // Toggle button click handler
       themeToggle.addEventListener('click', () => {
         const current = htmlElement.getAttribute('data-theme');
         const newTheme = current === 'light' ? 'dark' : 'light';
         htmlElement.setAttribute('data-theme', newTheme);
         localStorage.setItem('theme', newTheme);
       });
-      
+
+      // Listen for system preference changes (only applies if no user override)
       prefersDark.addEventListener('change', (e) => {
         if (!localStorage.getItem('theme')) {
           htmlElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
@@ -300,9 +314,7 @@
        * MONOCHROME MODE TOGGLE
        * =============================================== */
       const monochromeToggle = document.getElementById('monochrome-toggle');
-      const currentMonochrome = localStorage.getItem('monochrome') || 'false';
-      htmlElement.setAttribute('data-monochrome', currentMonochrome);
-      
+
       monochromeToggle.addEventListener('click', () => {
         const current = htmlElement.getAttribute('data-monochrome');
         const newMode = current === 'false' ? 'true' : 'false';
@@ -581,7 +593,11 @@
         let touchStartTime = 0;
         let lastTapTime = 0;
         let isSwiping = false;
-        
+
+        // Image loading state
+        let pendingImageLoad = null;
+        let loadingTimeout = null;
+
         const preloadImage = (index) => {
           if (index >= 0 && index < imageUrls.length) {
             const img = new Image();
@@ -610,26 +626,78 @@
         
         const openLightbox = (index) => {
           if (index < 0 || index >= imageUrls.length) return;
-          
+
+          // Cancel any pending image load to handle fast navigation
+          if (pendingImageLoad) {
+            pendingImageLoad.onload = null;
+            pendingImageLoad.onerror = null;
+            pendingImageLoad = null;
+          }
+          clearTimeout(loadingTimeout);
+
+          const isInitialOpen = !lightbox.classList.contains('open');
           currentIndex = index;
-          lightboxImage.style.opacity = '0.5';
-          lightboxImage.src = imageUrls[currentIndex];
-          
-          lightboxImage.onload = () => {
-            lightboxImage.style.opacity = '1';
+
+          // Reset zoom before loading new image (avoid visual confusion)
+          if (!isInitialOpen) {
+            resetZoom();
+          }
+
+          // Show loading indicator after 200ms if image still loading
+          loadingTimeout = setTimeout(() => {
+            lightboxContainer.classList.add('loading');
+          }, 200);
+
+          // Preload image completely before swapping
+          const newImage = new Image();
+          pendingImageLoad = newImage;
+          newImage.src = imageUrls[currentIndex];
+
+          newImage.onload = () => {
+            clearTimeout(loadingTimeout);
+            lightboxContainer.classList.remove('loading');
+
+            // Verify this is still the current request (user might have navigated away)
+            if (newImage !== pendingImageLoad) return;
+
+            // Instant swap - no flash because image is fully loaded
+            lightboxImage.src = imageUrls[currentIndex];
+            pendingImageLoad = null;
+
+            // Re-trigger animation only on initial lightbox open
+            if (isInitialOpen) {
+              lightboxImage.style.animation = 'none';
+              void lightboxImage.offsetHeight; // Force reflow
+              lightboxImage.style.animation = '';
+            }
           };
-          
-          lightbox.classList.add('open');
-          document.body.style.overflow = 'hidden';
-          
+
+          newImage.onerror = () => {
+            clearTimeout(loadingTimeout);
+            lightboxContainer.classList.remove('loading');
+
+            if (newImage !== pendingImageLoad) return;
+
+            // Fallback: show image anyway (browser will display error state)
+            lightboxImage.src = imageUrls[currentIndex];
+            pendingImageLoad = null;
+          };
+
+          // Open lightbox UI if this is initial open
+          if (isInitialOpen) {
+            lightbox.classList.add('open');
+            document.body.style.overflow = 'hidden';
+          }
+
           closeMenu();
-          resetZoom();
           updateNavButtons();
           updateCounter();
-          
+
+          // Preload adjacent images for smoother navigation
           preloadImage(currentIndex + 1);
           preloadImage(currentIndex - 1);
-          
+
+          // Show swipe hint on first use
           if (!localStorage.getItem('swipeHintShown')) {
             swipeHint.style.display = 'block';
             localStorage.setItem('swipeHintShown', 'true');
