@@ -1978,31 +1978,462 @@ body:has(.quick-nav-buttons) #section-nav-button {
 }
 
 /*
- * PRINT STYLES
- * ------------
+ * =====================================================
+ * COMPREHENSIVE PRINT STYLES
+ * =====================================================
+ * Optimized for A4/Letter paper documentation printing
+ * Ensures black text, clean layout, and ink efficiency
  */
+
 @media print {
+
+  /* ===== 1. CRITICAL COLOR OVERRIDES ===== */
+  /* Force all CSS variables to black/white for print */
+  /* This prevents gray text from dark mode variables */
+  :root,
+  [data-theme="dark"],
+  [data-theme="light"] {
+    --color-bg: #ffffff !important;
+    --color-text: #000000 !important;
+    --color-text-medium: #000000 !important;
+    --color-text-light: #333333 !important;
+    --color-border: #cccccc !important;
+    --color-accent: #000000 !important;
+    --color-header-bg: #ffffff !important;
+    --color-lightbox-bg: #ffffff !important;
+    --color-progress: #000000 !important;
+  }
+
+  /* Force black text on white background globally */
+  * {
+    color: #000000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  body {
+    padding-top: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
+    margin: 0 !important;
+  }
+
+  main {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* ===== 2. HIDE NON-PRINTABLE ELEMENTS ===== */
+  /* Navigation, UI controls, and interactive elements */
   .site-header,
   .site-menu-dropdown,
   .lightbox,
   .scroll-progress,
   .site-footer,
-  .sticky-nav {
+  .sticky-nav,
+  .no-print,
+  .module-navigation,
+  .shortcuts-overlay,
+  button,
+  .theme-toggle,
+  .monochrome-toggle,
+  .menu-toggle,
+  .lightbox-controls,
+  .lightbox-nav,
+  .readme-link,
+  .header-button {
     display: none !important;
   }
 
-  body {
-    padding-top: 0;
-    background: white;
-    color: black;
+  /* ===== 3. TYPOGRAPHY SCALE FOR PRINT ===== */
+  /* Optimized for readability on paper with clear hierarchy */
+
+  /* Headings - maintain hierarchy with appropriate sizes */
+  h1, .article-header h1 {
+    font-size: 18pt !important;
+    font-weight: 700 !important;
+    margin: 0 0 12pt 0 !important;
+    page-break-after: avoid !important;
+    color: #000000 !important;
   }
 
-  main {
-    max-width: 100%;
+  h2, .article-content h2 {
+    font-size: 16pt !important;
+    font-weight: 600 !important;
+    margin: 18pt 0 10pt 0 !important;
+    page-break-after: avoid !important;
+    color: #000000 !important;
   }
 
-  .portfolio-grid {
-    column-count: 2;
+  h3, .article-content h3 {
+    font-size: 14pt !important;
+    font-weight: 600 !important;
+    margin: 14pt 0 8pt 0 !important;
+    page-break-after: avoid !important;
+    color: #000000 !important;
+  }
+
+  h4, h5, h6 {
+    font-size: 12pt !important;
+    font-weight: 600 !important;
+    margin: 12pt 0 6pt 0 !important;
+    page-break-after: avoid !important;
+    color: #000000 !important;
+  }
+
+  /* Body text */
+  p, .article-content p {
+    font-size: 11pt !important;
+    line-height: 1.5 !important;
+    margin: 0 0 8pt 0 !important;
+    color: #000000 !important;
+    orphans: 3 !important;
+    widows: 3 !important;
+  }
+
+  /* ===== 4. BREADCRUMB NAVIGATION (KEEP VISIBLE) ===== */
+  /* Provides context for printed documentation */
+  .site-breadcrumb,
+  .breadcrumb-nav {
+    display: block !important;
+    background: transparent !important;
+    border-bottom: 1px solid #cccccc !important;
+    padding: 0 0 8pt 0 !important;
+    margin: 0 0 16pt 0 !important;
+  }
+
+  .breadcrumb-container {
+    display: flex !important;
+    gap: 0.4rem !important;
+    font-size: 9pt !important;
+    color: #333333 !important;
+  }
+
+  .breadcrumb-item,
+  .breadcrumb-link,
+  .breadcrumb-current {
+    color: #333333 !important;
+    text-decoration: none !important;
+    font-weight: 400 !important;
+  }
+
+  .breadcrumb-separator {
+    opacity: 0.7 !important;
+    color: #666666 !important;
+  }
+
+  /* Remove breadcrumb link underline animation artifacts */
+  .breadcrumb-item::after {
+    display: none !important;
+  }
+
+  /* ===== 5. HIGHLIGHTING & EMPHASIS ===== */
+  /* Convert yellow marker highlighting to print-friendly format */
+
+  mark,
+  .highlight-term {
+    background: transparent !important;
+    color: #000000 !important;
+    font-weight: 700 !important;
+    text-decoration: underline !important;
+    text-decoration-thickness: 2px !important;
+    text-underline-offset: 2px !important;
+    padding: 0 !important;
+  }
+
+  /* Strong/bold text */
+  strong, b, .article-content strong, .article-content b {
+    font-weight: 700 !important;
+    color: #000000 !important;
+  }
+
+  /* Emphasis/italic */
+  em, i, .article-content em, .article-content i {
+    font-style: italic !important;
+    color: #000000 !important;
+  }
+
+  /* ===== 6. LISTS ===== */
+  /* Preserve indentation and hierarchy */
+
+  ul, ol, .article-content ul, .article-content ol {
+    margin: 8pt 0 8pt 0 !important;
+    padding-left: 20pt !important;
+    page-break-inside: avoid !important;
+  }
+
+  li, .article-content ul li, .article-content ol li {
+    margin-bottom: 4pt !important;
+    line-height: 1.5 !important;
+    color: #000000 !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Nested lists */
+  ul ul, ol ol, ul ol, ol ul {
+    margin: 4pt 0 4pt 0 !important;
+    padding-left: 18pt !important;
+  }
+
+  /* ===== 7. CODE BLOCKS ===== */
+  /* Preserve formatting with minimal backgrounds */
+
+  code, .article-content code {
+    font-family: 'Courier New', 'Monaco', monospace !important;
+    font-size: 9pt !important;
+    background: #f5f5f5 !important;
+    border: 1px solid #dddddd !important;
+    padding: 1pt 3pt !important;
+    color: #000000 !important;
+  }
+
+  pre, .article-content pre {
+    background: #f5f5f5 !important;
+    border: 1px solid #cccccc !important;
+    padding: 8pt !important;
+    margin: 10pt 0 !important;
+    overflow: visible !important;
+    white-space: pre-wrap !important;
+    word-wrap: break-word !important;
+    page-break-inside: avoid !important;
+    font-size: 9pt !important;
+  }
+
+  pre code, .article-content pre code {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+  }
+
+  /* ===== 8. TABLES ===== */
+  /* Clean, readable table formatting */
+
+  table, .article-content table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 10pt 0 !important;
+    font-size: 10pt !important;
+    page-break-inside: avoid !important;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
+  tbody {
+    display: table-row-group !important;
+  }
+
+  th, .article-content th {
+    background: #f0f0f0 !important;
+    color: #000000 !important;
+    font-weight: 700 !important;
+    padding: 6pt 8pt !important;
+    border: 1pt solid #cccccc !important;
+    text-align: left !important;
+  }
+
+  td, .article-content td {
+    padding: 6pt 8pt !important;
+    border: 1pt solid #cccccc !important;
+    color: #000000 !important;
+  }
+
+  /* Avoid breaking table rows across pages */
+  tr {
+    page-break-inside: avoid !important;
+  }
+
+  /* ===== 9. MODULE TOC ===== */
+  /* Keep table of contents with minimal styling */
+
+  .module-toc {
+    background: #f9f9f9 !important;
+    border: 1px solid #cccccc !important;
+    padding: 12pt !important;
+    margin: 12pt 0 !important;
+    page-break-inside: avoid !important;
+  }
+
+  .module-toc-title {
+    font-size: 12pt !important;
+    font-weight: 700 !important;
+    margin: 0 0 8pt 0 !important;
+    color: #000000 !important;
+  }
+
+  .module-toc ul {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .module-toc li {
+    margin-bottom: 4pt !important;
+    color: #000000 !important;
+  }
+
+  .module-toc a {
+    color: #000000 !important;
+    text-decoration: none !important;
+    font-size: 10pt !important;
+  }
+
+  /* Display URLs after links in TOC */
+  .module-toc a::after {
+    content: " (" attr(href) ")" !important;
+    font-size: 8pt !important;
+    color: #666666 !important;
+  }
+
+  /* ===== 10. BLOCKQUOTES ===== */
+
+  blockquote, .article-content blockquote {
+    border-left: 3pt solid #000000 !important;
+    padding-left: 12pt !important;
+    margin: 10pt 0 10pt 12pt !important;
+    font-style: italic !important;
+    color: #000000 !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* ===== 11. IMAGES ===== */
+  /* Optimize image display for print */
+
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    page-break-inside: avoid !important;
+    margin: 10pt auto !important;
+  }
+
+  /* Hide decorative images, keep content images */
+  .portfolio-grid,
+  .portfolio-thumb,
+  .contact-sheet-grid,
+  .gallery-grid {
+    display: none !important;
+  }
+
+  /* ===== 12. LINKS ===== */
+  /* Show URLs for reference */
+
+  a, .article-content a {
+    color: #000000 !important;
+    text-decoration: underline !important;
+  }
+
+  /* Display URLs after links for external references */
+  .article-content a[href^="http"]::after {
+    content: " (" attr(href) ")" !important;
+    font-size: 9pt !important;
+    color: #666666 !important;
+    word-break: break-all !important;
+  }
+
+  /* Don't show URLs for anchor links */
+  a[href^="#"]::after {
+    content: "" !important;
+  }
+
+  /* ===== 13. HORIZONTAL RULES ===== */
+
+  hr, .article-content hr {
+    border: none !important;
+    border-top: 1pt solid #cccccc !important;
+    margin: 16pt 0 !important;
+    page-break-after: avoid !important;
+  }
+
+  /* ===== 14. PAGE BREAK CONTROL ===== */
+  /* Strategic page break management */
+
+  .content-section,
+  .article-content section,
+  article {
+    page-break-inside: avoid !important;
+  }
+
+  /* Avoid breaking after headings */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Keep figure with caption */
+  figure {
+    page-break-inside: avoid !important;
+  }
+
+  /* ===== 15. ARTICLE METADATA ===== */
+
+  .article-meta,
+  .article-date {
+    font-size: 10pt !important;
+    color: #666666 !important;
+    margin: 0 0 12pt 0 !important;
+  }
+
+  /* ===== 16. SPECIAL SECTIONS ===== */
+
+  /* Article header spacing */
+  .article-header {
+    margin: 0 0 20pt 0 !important;
+    page-break-after: avoid !important;
+  }
+
+  /* Article content container */
+  .article-content {
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* ===== 17. ACCESSIBILITY ===== */
+  /* Ensure abbr titles are visible */
+
+  abbr[title]::after {
+    content: " (" attr(title) ")" !important;
+    font-size: 9pt !important;
+    color: #666666 !important;
+  }
+
+  /* ===== 18. INK OPTIMIZATION ===== */
+  /* Remove unnecessary visual elements */
+
+  /* Remove all shadows */
+  *,
+  *::before,
+  *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Remove border-radius for cleaner print */
+  * {
+    border-radius: 0 !important;
+  }
+
+  /* ===== 19. FINAL LAYOUT ADJUSTMENTS ===== */
+
+  /* Ensure proper margins for page */
+  @page {
+    margin: 2cm 1.5cm;
+    size: A4;
+  }
+
+  /* Alternative for Letter size */
+  @page :first {
+    margin-top: 2.5cm;
+  }
+
+  /* Avoid widows and orphans globally */
+  * {
+    orphans: 3 !important;
+    widows: 3 !important;
   }
 }
 
@@ -2508,18 +2939,6 @@ a.breadcrumb-item:hover::after {
   -webkit-backdrop-filter: blur(8px);
 }
 
-/* Print styles */
-@media print {
-  .site-breadcrumb {
-    border-bottom: 1px solid #ccc;
-    background: transparent;
-    padding: 0.5rem 0;
-  }
-
-  .breadcrumb-separator {
-    opacity: 0.7;
-  }
-}
 
 /*
  * ==============================================
