@@ -1535,6 +1535,44 @@ body:has(.quick-nav-buttons) #section-nav-button {
   border-color: var(--color-accent);
 }
 
+.results-count {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  margin-bottom: 0.5rem;
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-text-light);
+  
+  p {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.clear-search-btn {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all var(--duration-med) ease;
+  
+  &:hover {
+    background: var(--color-border);
+  }
+}
+
 .cocktails-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

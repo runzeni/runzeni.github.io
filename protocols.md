@@ -16,14 +16,14 @@ permalink: /protocols/
   <button id="shuffle-btn" class="shuffle-btn" aria-label="Shuffle random cocktail" title="Random cocktail">
     🎲
   </button>
-  <div class="filter-buttons" id="filter-buttons">
-    <button class="filter-btn active" data-base="all">All</button>
-    <button class="filter-btn" data-base="whiskey">Whiskey</button>
-    <button class="filter-btn" data-base="gin">Gin</button>
-    <button class="filter-btn" data-base="tequila">Tequila</button>
-    <button class="filter-btn" data-base="rum">Rum</button>
-    <button class="filter-btn" data-base="cognac">Cognac</button>
-    <button class="filter-btn" data-base="misc">Misc</button>
+  <div class="filter-buttons" id="filter-buttons" role="group" aria-label="Filter by spirit">
+    <button class="filter-btn active" data-base="all" aria-pressed="true">All</button>
+    <button class="filter-btn" data-base="whiskey" aria-pressed="false">Whiskey</button>
+    <button class="filter-btn" data-base="gin" aria-pressed="false">Gin</button>
+    <button class="filter-btn" data-base="tequila" aria-pressed="false">Tequila</button>
+    <button class="filter-btn" data-base="rum" aria-pressed="false">Rum</button>
+    <button class="filter-btn" data-base="cognac" aria-pressed="false">Cognac</button>
+    <button class="filter-btn" data-base="misc" aria-pressed="false">Misc</button>
   </div>
 </div>
 
@@ -37,8 +37,8 @@ async function loadCocktails() {
     const response = await fetch('/cocktails.json');
     const data = await response.json();
     window.cocktailsData = data.cocktails;
-    displayCocktails(window.cocktailsData);
     setupFilters();
+    restoreFromURL();
   } catch (error) {
     console.error('Error loading cocktails:', error);
     document.getElementById('cocktails-grid').innerHTML = 
@@ -46,36 +46,76 @@ async function loadCocktails() {
   }
 }
 
-function displayCocktails(cocktails) {
+// URL state management
+function updateURL(base, searchTerm) {
+  const url = new URL(window.location);
+  if (base && base !== 'all') {
+    url.searchParams.set('base', base);
+  } else {
+    url.searchParams.delete('base');
+  }
+  if (searchTerm) {
+    url.searchParams.set('q', searchTerm);
+  } else {
+    url.searchParams.delete('q');
+  }
+  window.history.replaceState({}, '', url);
+}
+
+function restoreFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  const base = params.get('base') || 'all';
+  const searchTerm = params.get('q') || '';
+  document.getElementById('search-box').value = searchTerm;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    const isActive = b.dataset.base === base;
+    b.classList.toggle('active', isActive);
+    b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+  filterCocktails(base, normalizeText(searchTerm));
+}
+
+function displayCocktails(cocktails, total, searchTerm = '') {
   const grid = document.getElementById('cocktails-grid');
   
   if (cocktails.length === 0) {
-    grid.innerHTML = '<p style="text-align: center; color: var(--color-text-light); margin: 3rem 0;">No cocktails found</p>';
+    grid.innerHTML = `
+      <div class="no-results">
+        <p>No cocktails found</p>
+        <button class="clear-search-btn" onclick="clearFilters()">Clear search</button>
+      </div>`;
     return;
   }
   
-  grid.innerHTML = cocktails.map(cocktail => `
+  const countDisplay = total && cocktails.length < total 
+    ? `<div class="results-count">Showing ${cocktails.length} of ${total} cocktails</div>`
+    : `<div class="results-count">${cocktails.length} cocktails</div>`;
+  
+  grid.innerHTML = countDisplay + cocktails.map(cocktail => {
+    const metaParts = [cocktail.year, cocktail.creator].filter(Boolean);
+    const metaStr = metaParts.join(' · ');
+    
+    return `
     <div class="cocktail-card">
       <div class="cocktail-header">
-        <h3 class="cocktail-name">${cocktail.name}</h3>
-        <div class="cocktail-meta">${cocktail.year || ''} ${cocktail.creator ? ', ' + cocktail.creator : ''}</div>
+        <h3 class="cocktail-name">${highlightName(cocktail.name, searchTerm)}</h3>
+        ${metaStr ? `<div class="cocktail-meta">${metaStr}</div>` : ''}
         <div class="cocktail-base">${capitalizeFirst(cocktail.base)}</div>
       </div>
       <div class="cocktail-ingredients">
         ${cocktail.ingredients.map(ing => `
           <div class="ingredient-line">
-            ${formatAmount(ing.amount)} ${ing.unit} ${ing.ingredient}
+            ${formatAmount(ing.amount)} ${ing.unit} ${highlightIngredient(ing.ingredient, searchTerm)}
           </div>
         `).join('')}
       </div>
       <div class="cocktail-instructions">${cocktail.instructions}</div>
     </div>
-  `).join('');
+  `}).join('');
 }
 
 function formatAmount(amount) {
   if (typeof amount === 'string') return amount;
-  // Convert decimals to fractions for display
   const fractions = {
     0.25: '¼',
     0.33: '⅓',
@@ -95,89 +135,106 @@ function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-/**
- * Normalize text for search.
- * - Strips diacritics (é→e, ñ→n, ü→u, etc.) via Unicode NFD normalization
- * - Removes hyphens, apostrophes...
- * - Converts to lowercase
- */
 function normalizeText(str) {
-  return str
-    .normalize('NFD')                      // Decompose: é → e + combining accent
-    .replace(/[\u0300-\u036f]/g, '')       // Strip combining diacritical marks
-    .replace(/[-''`]/g, ' ')               // Replace hyphens/apostrophes with space
-    .replace(/[^\w\s]/g, '')               // Remove remaining punctuation
-    .toLowerCase()
-    .replace(/\s+/g, ' ')                  // Collapse multiple spaces
-    .trim();
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[-''`]/g, ' ').replace(/[^\w\s]/g, '')
+    .toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function matchesWordStart(text, searchTerms) {
+  const words = normalizeText(text).split(' ');
+  const terms = searchTerms.split(' ').filter(t => t.length > 0);
+  return terms.every(term => words.some(w => w.startsWith(term)));
+}
+
+function highlightName(name, searchTerms) {
+  if (!searchTerms || searchTerms.length < 2) return name;
+  return matchesWordStart(name, searchTerms) ? `<mark>${name}</mark>` : name;
+}
+
+function highlightIngredient(text, searchTerms) {
+  if (!searchTerms || searchTerms.length < 2) return text;
+  const terms = searchTerms.split(' ').filter(t => t.length > 0);
+  let result = text;
+  terms.forEach(term => {
+    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // Match accented chars by normalizing during match
+    result = result.replace(new RegExp(`(\\b)([^\\s]*${escaped}[^\\s]*)`, 'gi'), (match, boundary, word) => {
+      if (normalizeText(word).startsWith(term)) return boundary + '<mark>' + word + '</mark>';
+      return match;
+    });
+  });
+  return result;
 }
 
 function setupFilters() {
-  // Filter buttons
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       btn.classList.add('active');
-      
+      btn.setAttribute('aria-pressed', 'true');
       const base = btn.dataset.base;
       const searchTerm = normalizeText(document.getElementById('search-box').value);
       filterCocktails(base, searchTerm);
+      updateURL(base, document.getElementById('search-box').value);
     });
   });
-  
-  // Search box
+
   document.getElementById('search-box').addEventListener('input', (e) => {
     const searchTerm = normalizeText(e.target.value);
     const activeBase = document.querySelector('.filter-btn.active').dataset.base;
     filterCocktails(activeBase, searchTerm);
+    updateURL(activeBase, e.target.value);
   });
 
-  // Shuffle button
   document.getElementById('shuffle-btn').addEventListener('click', shuffleCocktail);
 }
 
 function filterCocktails(base, searchTerm) {
   let filtered = window.cocktailsData;
+  const total = filtered.length;
 
-  // Filter by base
-  if (base !== 'all') {
-    filtered = filtered.filter(c => c.base === base);
-  }
+  if (base !== 'all') filtered = filtered.filter(c => c.base === base);
 
-  // Filter by search term (name or ingredients)
-  if (searchTerm) {
+  if (searchTerm && searchTerm.length >= 2) {
     filtered = filtered.filter(c => {
-      const nameMatch = normalizeText(c.name).includes(searchTerm);
-      const ingredientMatch = c.ingredients.some(ing =>
-        normalizeText(ing.ingredient).includes(searchTerm)
-      );
+      const nameMatch = matchesWordStart(c.name, searchTerm);
+      const ingredientMatch = c.ingredients.some(ing => matchesWordStart(ing.ingredient, searchTerm));
       return nameMatch || ingredientMatch;
+    });
+    filtered.sort((a, b) => {
+      const aName = matchesWordStart(a.name, searchTerm);
+      const bName = matchesWordStart(b.name, searchTerm);
+      return (bName ? 1 : 0) - (aName ? 1 : 0);
     });
   }
 
-  displayCocktails(filtered);
+  displayCocktails(filtered, total, searchTerm);
+}
+
+function clearFilters() {
+  document.getElementById('search-box').value = '';
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-pressed', 'false');
+  });
+  const allBtn = document.querySelector('.filter-btn[data-base="all"]');
+  allBtn.classList.add('active');
+  allBtn.setAttribute('aria-pressed', 'true');
+  displayCocktails(window.cocktailsData, window.cocktailsData.length, '');
+  updateURL('all', '');
 }
 
 function shuffleCocktail() {
-  // Reset search box
   document.getElementById('search-box').value = '';
-
-  // Reset filter to "All"
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('.filter-btn[data-base="all"]').classList.add('active');
-
-  // Pick random cocktail
-  const randomIndex = Math.floor(Math.random() * window.cocktailsData.length);
-  const randomCocktail = window.cocktailsData[randomIndex];
-
-  // Display only the random cocktail
-  displayCocktails([randomCocktail]);
-
-  // Smooth scroll to show results (just past the subtitle)
-  document.getElementById('cocktails-grid').scrollIntoView({
-    behavior: 'smooth',
-    block: 'nearest'
-  });
+  const randomCocktail = window.cocktailsData[Math.floor(Math.random() * window.cocktailsData.length)];
+  displayCocktails([randomCocktail], null, '');
+  document.getElementById('cocktails-grid').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 // Initialize on page load
