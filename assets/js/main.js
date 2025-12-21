@@ -71,6 +71,15 @@ setupPreferenceToggle('monochrome-toggle', 'data-monochrome', 'monochrome', {
   }
 });
 
+// Glass effect toggle
+setupPreferenceToggle('glass-toggle', 'data-glass', 'glass', {
+  toggle: (current) => current === 'on' ? 'off' : 'on',
+  labels: {
+    on: { aria: 'Disable glass effect', title: 'Disable glass effect (G)' },
+    off: { aria: 'Enable glass effect', title: 'Enable glass effect (G)' }
+  }
+});
+
 // System preference listener for dark mode
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 prefersDark.addEventListener('change', (e) => {
@@ -735,6 +744,7 @@ if (thumbnails.length > 0) {
   document.addEventListener('keydown', (e) => {
     // Global shortcuts
     if (!lightbox.classList.contains('open')) {
+      const glassToggle = document.getElementById('glass-toggle');
       switch(e.key) {
         case 'd':
         case 'D':
@@ -743,6 +753,10 @@ if (thumbnails.length > 0) {
         case 'm':
         case 'M':
           if (monochromeToggle) monochromeToggle.click();
+          break;
+        case 'g':
+        case 'G':
+          if (glassToggle) glassToggle.click();
           break;
         case '?':
           const shortcutsOverlay = document.getElementById('shortcuts-overlay');

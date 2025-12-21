@@ -1,6 +1,6 @@
 {% assign section = page.url | split: '/' | slice: 1 | first | default: 'home' %}
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-monochrome="false" data-section="{{ section }}">
+<html lang="en" data-theme="light" data-monochrome="false" data-glass="on" data-section="{{ section }}">
   <head>
     <!-- ========================================
          BLOCKING SCRIPT (Must run before CSS)
@@ -16,6 +16,12 @@
       // Monochrome mode (localStorage only)
       const storedMonochrome = localStorage.getItem('monochrome') || 'false';
       document.documentElement.setAttribute('data-monochrome', storedMonochrome);
+
+      // Glass effect (check support + localStorage)
+      const supportsGlass = CSS.supports('backdrop-filter', 'blur(1px)') || CSS.supports('-webkit-backdrop-filter', 'blur(1px)');
+      const storedGlass = localStorage.getItem('glass');
+      const glass = supportsGlass ? (storedGlass || 'on') : 'off';
+      document.documentElement.setAttribute('data-glass', glass);
     })();
     </script>
 
@@ -151,6 +157,21 @@
             <circle cx="12" cy="12" r="10"></circle>
             <path d="M12 2v20"></path>
             <path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" opacity="0.3"></path>
+          </svg>
+        </button>
+
+        <button id="glass-toggle" class="glass-toggle header-button" aria-label="Toggle glass effect" title="Toggle glass effect (G)">
+          <!-- Glass ON: split square with transparent right half -->
+          <svg class="icon-glass-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            <line x1="12" y1="3" x2="12" y2="21"></line>
+            <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" fill="currentColor" opacity="0.3"></path>
+          </svg>
+          <!-- Glass OFF: split square with solid right half -->
+          <svg class="icon-glass-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+            <line x1="12" y1="3" x2="12" y2="21"></line>
+            <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" fill="currentColor"></path>
           </svg>
         </button>
       </div>

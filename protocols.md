@@ -95,6 +95,23 @@ function capitalizeFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+/**
+ * Normalize text for search.
+ * - Strips diacritics (é→e, ñ→n, ü→u, etc.) via Unicode NFD normalization
+ * - Removes hyphens, apostrophes...
+ * - Converts to lowercase
+ */
+function normalizeText(str) {
+  return str
+    .normalize('NFD')                      // Decompose: é → e + combining accent
+    .replace(/[\u0300-\u036f]/g, '')       // Strip combining diacritical marks
+    .replace(/[-''`]/g, ' ')               // Replace hyphens/apostrophes with space
+    .replace(/[^\w\s]/g, '')               // Remove remaining punctuation
+    .toLowerCase()
+    .replace(/\s+/g, ' ')                  // Collapse multiple spaces
+    .trim();
+}
+
 function setupFilters() {
   // Filter buttons
   document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -103,14 +120,14 @@ function setupFilters() {
       btn.classList.add('active');
       
       const base = btn.dataset.base;
-      const searchTerm = document.getElementById('search-box').value.toLowerCase();
+      const searchTerm = normalizeText(document.getElementById('search-box').value);
       filterCocktails(base, searchTerm);
     });
   });
   
   // Search box
   document.getElementById('search-box').addEventListener('input', (e) => {
-    const searchTerm = e.target.value.toLowerCase();
+    const searchTerm = normalizeText(e.target.value);
     const activeBase = document.querySelector('.filter-btn.active').dataset.base;
     filterCocktails(activeBase, searchTerm);
   });
@@ -130,9 +147,9 @@ function filterCocktails(base, searchTerm) {
   // Filter by search term (name or ingredients)
   if (searchTerm) {
     filtered = filtered.filter(c => {
-      const nameMatch = c.name.toLowerCase().includes(searchTerm);
+      const nameMatch = normalizeText(c.name).includes(searchTerm);
       const ingredientMatch = c.ingredients.some(ing =>
-        ing.ingredient.toLowerCase().includes(searchTerm)
+        normalizeText(ing.ingredient).includes(searchTerm)
       );
       return nameMatch || ingredientMatch;
     });
