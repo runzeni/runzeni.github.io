@@ -27,7 +27,7 @@ permalink: /fotos/2023/fuji-xtra-400-mn/
   {% assign roll_files = site.static_files | where_exp: "item", "item.path contains 'assets/img/2023/2023_XTRA400_MN_Export_Web/'" | sort: "name" %}
   
   {% for image in roll_files %}
-    <img data-src="{{ image.path | relative_url }}" alt="Fuji Xtra 400: {{ image.name }}" class="contact-sheet-thumb">
+    <img src="{{ image.path | relative_url }}" alt="Fuji Xtra 400: {{ image.name }}" class="contact-sheet-thumb" loading="lazy">
   {% endfor %}
 
 </div>

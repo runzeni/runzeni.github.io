@@ -17,7 +17,7 @@ permalink: /fotos/
   {% assign portfolio_files = site.static_files | where_exp: "item", "item.path contains 'assets/img/portfolio/'" | sort: "name" %}
   
   {% for image in portfolio_files %}
-    <img data-src="{{ image.path | relative_url }}" alt="Selected Work: {{ image.name }}" class="portfolio-thumb">
+    <img src="{{ image.path | relative_url }}" alt="Selected Work: {{ image.name }}" class="portfolio-thumb" loading="lazy">
   {% endfor %}
 
 </div>

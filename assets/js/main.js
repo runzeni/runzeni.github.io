@@ -1,12 +1,13 @@
 /* ===============================================
  * JAVASCRIPT - Main Site Interactions
- * ===============================================
- */
-
-/* ===============================================
- * UTILITY FUNCTIONS
  * =============================================== */
-const throttle = (func, limit) => {
+(function() {
+  'use strict';
+
+  /* ===============================================
+   * UTILITY FUNCTIONS
+   * =============================================== */
+  const throttle = (func, limit) => {
   let inThrottle;
   return function(...args) {
     if (!inThrottle) {
@@ -18,76 +19,65 @@ const throttle = (func, limit) => {
 };
 
 /* ===============================================
- * DARK MODE TOGGLE
+ * PREFERENCE TOGGLES (Dark Mode & Monochrome)
  * =============================================== */
-const themeToggle = document.getElementById('theme-toggle');
 const htmlElement = document.documentElement;
+
+/**
+ * Generic preference toggle handler
+ * @param {string} toggleId - Element ID of toggle button
+ * @param {string} attribute - HTML attribute to toggle (e.g., 'data-theme')
+ * @param {string} storageKey - localStorage key
+ * @param {Object} config - Toggle configuration
+ */
+const setupPreferenceToggle = (toggleId, attribute, storageKey, config) => {
+  const toggle = document.getElementById(toggleId);
+  if (!toggle) return;
+
+  const updateLabels = (value) => {
+    const labels = config.labels[value] || config.labels.default;
+    toggle.setAttribute('aria-label', labels.aria);
+    toggle.setAttribute('title', labels.title);
+  };
+
+  // Initialize
+  updateLabels(htmlElement.getAttribute(attribute));
+
+  // Click handler
+  toggle.addEventListener('click', () => {
+    const current = htmlElement.getAttribute(attribute);
+    const newValue = config.toggle(current);
+    htmlElement.setAttribute(attribute, newValue);
+    localStorage.setItem(storageKey, newValue);
+    updateLabels(newValue);
+  });
+};
+
+// Dark mode toggle
+setupPreferenceToggle('theme-toggle', 'data-theme', 'theme', {
+  toggle: (current) => current === 'light' ? 'dark' : 'light',
+  labels: {
+    dark: { aria: 'Switch to light mode', title: 'Switch to light mode (D)' },
+    light: { aria: 'Switch to dark mode', title: 'Switch to dark mode (D)' }
+  }
+});
+
+// Monochrome toggle
+setupPreferenceToggle('monochrome-toggle', 'data-monochrome', 'monochrome', {
+  toggle: (current) => current === 'false' ? 'true' : 'false',
+  labels: {
+    true: { aria: 'Switch to color mode', title: 'Switch to color mode (M)' },
+    false: { aria: 'Switch to monochrome mode', title: 'Switch to B&W mode (M)' }
+  }
+});
+
+// System preference listener for dark mode
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-
-if (themeToggle) {
-  // Initialize aria-label based on current state
-  const initTheme = htmlElement.getAttribute('data-theme');
-  themeToggle.setAttribute('aria-label',
-    initTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
-  );
-  themeToggle.setAttribute('title',
-    initTheme === 'dark' ? 'Switch to light mode (D)' : 'Switch to dark mode (D)'
-  );
-
-  // Toggle button click handler
-  themeToggle.addEventListener('click', () => {
-    const current = htmlElement.getAttribute('data-theme');
-    const newTheme = current === 'light' ? 'dark' : 'light';
-    htmlElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-
-    // Update accessibility attributes
-    themeToggle.setAttribute('aria-label',
-      newTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
-    );
-    themeToggle.setAttribute('title',
-      newTheme === 'dark' ? 'Switch to light mode (D)' : 'Switch to dark mode (D)'
-    );
-  });
-
-  // Listen for system preference changes (only applies if no user override)
-  prefersDark.addEventListener('change', (e) => {
-    if (!localStorage.getItem('theme')) {
-      htmlElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
-    }
-  });
-}
-
-/* ===============================================
- * MONOCHROME MODE TOGGLE
- * =============================================== */
-const monochromeToggle = document.getElementById('monochrome-toggle');
-
-if (monochromeToggle) {
-  // Initialize aria-label based on current state
-  const initMonochrome = htmlElement.getAttribute('data-monochrome');
-  monochromeToggle.setAttribute('aria-label',
-    initMonochrome === 'true' ? 'Switch to color mode' : 'Switch to monochrome mode'
-  );
-  monochromeToggle.setAttribute('title',
-    initMonochrome === 'true' ? 'Switch to color mode (M)' : 'Switch to B&W mode (M)'
-  );
-
-  monochromeToggle.addEventListener('click', () => {
-    const current = htmlElement.getAttribute('data-monochrome');
-    const newMode = current === 'false' ? 'true' : 'false';
-    htmlElement.setAttribute('data-monochrome', newMode);
-    localStorage.setItem('monochrome', newMode);
-
-    // Update accessibility attributes
-    monochromeToggle.setAttribute('aria-label',
-      newMode === 'true' ? 'Switch to color mode' : 'Switch to monochrome mode'
-    );
-    monochromeToggle.setAttribute('title',
-      newMode === 'true' ? 'Switch to color mode (M)' : 'Switch to B&W mode (M)'
-    );
-  });
-}
+prefersDark.addEventListener('change', (e) => {
+  if (!localStorage.getItem('theme')) {
+    htmlElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+  }
+});
 
 /* ===============================================
  * SCROLL PROGRESS INDICATOR
@@ -127,8 +117,8 @@ if (stickyNav) {
       stickyNav.classList.toggle('visible', !entry.isIntersecting);
     });
   }, {
-    // Trigger when element is at 50% viewport
-    rootMargin: '0px 0px -50% 0px',
+    // Trigger when header leaves viewport
+    rootMargin: '0px',
     threshold: 0
   });
 
@@ -314,27 +304,94 @@ footerReadmeLinks.forEach(link => {
 });
 
 /* ===============================================
- * LAZY LOADING
+ * LIGHTBOX GESTURE HANDLER
  * =============================================== */
-if ('IntersectionObserver' in window) {
-  const imageObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target;
-        if (img.dataset.src) {
-          img.src = img.dataset.src;
-          img.removeAttribute('data-src');
-        }
-        imageObserver.unobserve(img);
-      }
-    });
-  }, {
-    rootMargin: '100px 0px',
-    threshold: 0.01
+const setupLightboxGestures = (lightbox, container, state, handlers) => {
+  const hammerLightbox = new Hammer(lightbox);
+  const hammerContainer = new Hammer(container);
+
+  // Configure gestures
+  hammerLightbox.get('swipe').set({
+    direction: Hammer.DIRECTION_HORIZONTAL,
+    threshold: 50,
+    velocity: 0.3
+  });
+  hammerContainer.get('pinch').set({ enable: true });
+  hammerContainer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+
+  // Swipe to navigate
+  hammerLightbox.on('swipeleft', () => {
+    if (state.currentIndex < state.imageUrls.length - 1 && !state.isZoomed) {
+      handlers.showNext();
+    }
   });
 
-  document.querySelectorAll('img[data-src]').forEach(img => imageObserver.observe(img));
-}
+  hammerLightbox.on('swiperight', () => {
+    if (state.currentIndex > 0 && !state.isZoomed) {
+      handlers.showPrev();
+    }
+  });
+
+  // Pinch to zoom
+  let startScale = 1;
+  hammerContainer.on('pinchstart', () => {
+    startScale = state.scale;
+  });
+
+  hammerContainer.on('pinchmove', (e) => {
+    state.scale = Math.max(1, Math.min(5, startScale * e.scale));
+    state.isZoomed = state.scale > 1;
+    container.classList.toggle('zoomed', state.isZoomed);
+    handlers.updateTransform();
+  });
+
+  hammerContainer.on('pinchend', () => {
+    if (state.scale < 1.1) {
+      state.scale = 1;
+      state.isZoomed = false;
+      state.translateX = 0;
+      state.translateY = 0;
+      container.classList.remove('zoomed');
+      handlers.updateTransform();
+    }
+  });
+
+  // Pan when zoomed
+  hammerContainer.on('panstart', (e) => {
+    if (state.isZoomed) e.preventDefault();
+  });
+
+  hammerContainer.on('panmove', (e) => {
+    if (state.isZoomed) {
+      e.preventDefault();
+      state.translateX += e.deltaX / state.scale;
+      state.translateY += e.deltaY / state.scale;
+      handlers.updateTransform();
+    }
+  });
+
+  // Double-tap to zoom
+  hammerContainer.on('doubletap', (e) => {
+    if (state.isZoomed) {
+      state.scale = 1;
+      state.isZoomed = false;
+      state.translateX = 0;
+      state.translateY = 0;
+      container.classList.remove('zoomed');
+    } else {
+      state.scale = 2;
+      state.isZoomed = true;
+      container.classList.add('zoomed');
+
+      const rect = container.getBoundingClientRect();
+      const tapX = e.center.x - rect.left;
+      const tapY = e.center.y - rect.top;
+      state.translateX = (rect.width / 2 - tapX) / state.scale;
+      state.translateY = (rect.height / 2 - tapY) / state.scale;
+    }
+    handlers.updateTransform();
+  });
+};
 
 /* ===============================================
  * LIGHTBOX
@@ -568,96 +625,22 @@ if (thumbnails.length > 0) {
     }
   });
 
-  // Modern touch gestures with Hammer.js
-  const hammerLightbox = new Hammer(lightbox);
-  const hammerContainer = new Hammer(lightboxContainer);
-
-  // Configure gestures
-  hammerLightbox.get('swipe').set({
-    direction: Hammer.DIRECTION_HORIZONTAL,
-    threshold: 50,
-    velocity: 0.3
-  });
-  hammerContainer.get('pinch').set({ enable: true });
-  hammerContainer.get('pan').set({ direction: Hammer.DIRECTION_ALL });
-
-  // Swipe to navigate (left/right)
-  hammerLightbox.on('swipeleft', () => {
-    if (currentIndex < imageUrls.length - 1 && !isZoomed) {
-      showNextImage();
-    }
-  });
-
-  hammerLightbox.on('swiperight', () => {
-    if (currentIndex > 0 && !isZoomed) {
-      showPrevImage();
-    }
-  });
-
-  // Pinch to zoom
-  let startScale = 1;
-  hammerContainer.on('pinchstart', (e) => {
-    startScale = scale;
-  });
-
-  hammerContainer.on('pinchmove', (e) => {
-    scale = Math.max(1, Math.min(5, startScale * e.scale));  // 1x to 5x zoom
-    isZoomed = scale > 1;
-    lightboxContainer.classList.toggle('zoomed', isZoomed);
-    updateImageTransform();
-  });
-
-  hammerContainer.on('pinchend', (e) => {
-    if (scale < 1.1) {
-      // Reset if barely zoomed
-      scale = 1;
-      isZoomed = false;
-      translateX = 0;
-      translateY = 0;
-      lightboxContainer.classList.remove('zoomed');
-      updateImageTransform();
-    }
-  });
-
-  // Pan when zoomed
-  hammerContainer.on('panstart', (e) => {
-    if (isZoomed) {
-      e.preventDefault();
-    }
-  });
-
-  hammerContainer.on('panmove', (e) => {
-    if (isZoomed) {
-      e.preventDefault();
-      translateX += e.deltaX / scale;
-      translateY += e.deltaY / scale;
-      updateImageTransform();
-    }
-  });
-
-  // Double-tap to zoom in/out
-  hammerContainer.on('doubletap', (e) => {
-    if (isZoomed) {
-      // Reset zoom
-      scale = 1;
-      isZoomed = false;
-      translateX = 0;
-      translateY = 0;
-      lightboxContainer.classList.remove('zoomed');
-    } else {
-      // Zoom in to 2x at tap location
-      scale = 2;
-      isZoomed = true;
-      lightboxContainer.classList.add('zoomed');
-
-      // Center zoom on tap point
-      const rect = lightboxContainer.getBoundingClientRect();
-      const tapX = e.center.x - rect.left;
-      const tapY = e.center.y - rect.top;
-      translateX = (rect.width / 2 - tapX) / scale;
-      translateY = (rect.height / 2 - tapY) / scale;
-    }
-    updateImageTransform();
+  // Touch gestures with Hammer.js
+  setupLightboxGestures(lightbox, lightboxContainer, {
+    currentIndex,
+    imageUrls,
+    get isZoomed() { return isZoomed; },
+    set isZoomed(val) { isZoomed = val; },
+    get scale() { return scale; },
+    set scale(val) { scale = val; },
+    get translateX() { return translateX; },
+    set translateX(val) { translateX = val; },
+    get translateY() { return translateY; },
+    set translateY(val) { translateY = val; }
+  }, {
+    showNext: showNextImage,
+    showPrev: showPrevImage,
+    updateTransform: updateImageTransform
   });
 
   // Fullscreen with iOS fallback
@@ -714,16 +697,21 @@ if (thumbnails.length > 0) {
     }
   });
 
-  // Thumbnail clicks
-  thumbnails.forEach((thumb, index) => {
-    thumb.addEventListener('click', (e) => {
+  // Event delegation: Single listener on container
+  const portfolioGrid = document.querySelector('.portfolio-grid, .contact-sheet-grid');
+  if (portfolioGrid) {
+    portfolioGrid.addEventListener('click', (e) => {
+      const thumb = e.target.closest('.portfolio-thumb, .contact-sheet-thumb');
+      if (!thumb) return;
+
       e.preventDefault();
-      openLightbox(index);
+      const index = Array.from(thumbnails).indexOf(thumb);
+      if (index !== -1) openLightbox(index);
     });
-  });
+  }
 
   // Navigation buttons with tap protection
-  lightboxNext.addEventListener('click', (e) => {
+  const handleNavClick = (e, direction) => {
     e.stopPropagation();
     e.preventDefault();
 
@@ -731,23 +719,14 @@ if (thumbnails.length > 0) {
     if (currentTime - lastTapTime < 300) return;
     lastTapTime = currentTime;
 
-    if (!lightboxNext.classList.contains('disabled')) {
-      showNextImage();
+    const button = e.currentTarget;
+    if (!button.classList.contains('disabled')) {
+      direction === 'next' ? showNextImage() : showPrevImage();
     }
-  });
+  };
 
-  lightboxPrev.addEventListener('click', (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-
-    const currentTime = Date.now();
-    if (currentTime - lastTapTime < 300) return;
-    lastTapTime = currentTime;
-
-    if (!lightboxPrev.classList.contains('disabled')) {
-      showPrevImage();
-    }
-  });
+  lightboxNext.addEventListener('click', (e) => handleNavClick(e, 'next'));
+  lightboxPrev.addEventListener('click', (e) => handleNavClick(e, 'prev'));
 
   lightboxClose.addEventListener('click', closeLightbox);
   lightboxOverlay.addEventListener('click', closeLightbox);
@@ -865,140 +844,20 @@ function fallbackCopyToClipboard(text, element) {
 
 function showCopyNotification(element, message) {
   const notification = document.createElement('div');
+  notification.className = 'copy-notification';
   notification.textContent = message;
-  notification.style.cssText = `
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--color-accent);
-    color: var(--color-bg);
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    font-family: var(--font-sans);
-    font-weight: 600;
-    font-size: 0.95rem;
-    z-index: 10000;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    animation: fadeInOut 2s ease forwards;
-  `;
-
   document.body.appendChild(notification);
 
+  requestAnimationFrame(() => {
+    notification.classList.add('show');
+  });
+
   setTimeout(() => {
-    notification.remove();
+    notification.classList.add('hide');
+    setTimeout(() => notification.remove(), 300);
   }, 2000);
 }
 
-// Add animation for notification
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes fadeInOut {
-    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
-    10% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    90% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
-  }
-`;
-document.head.appendChild(style);
-
-/* ===============================================
- * FLIP ANIMATION
- * =============================================== */
-/* Optimized FLIP animation - detects column changes to prevent jarring transitions */
-(function() {
-  let firstRects = null;
-  let isAnimating = false;
-
-  const captureFirst = () => {
-    const grids = document.querySelectorAll('.gallery-grid, .contact-sheet-grid, .cocktails-grid');
-    if (!grids.length) return;
-
-    firstRects = Array.from(grids).map(grid => {
-      const items = grid.querySelectorAll('.gallery-item, .contact-sheet-thumb, .cocktail-card');
-      return Array.from(items).map(el => {
-        const r = el.getBoundingClientRect();
-        return { left: r.left, top: r.top, width: r.width, height: r.height, el };
-      });
-    });
-  };
-
-  const animateFLIP = () => {
-    if (isAnimating || !firstRects) return;
-    isAnimating = true;
-
-    const grids = document.querySelectorAll('.gallery-grid, .contact-sheet-grid, .cocktails-grid');
-    const lastRects = Array.from(grids).map(grid => {
-      const items = grid.querySelectorAll('.gallery-item, .contact-sheet-thumb, .cocktail-card');
-      return Array.from(items).map(el => ({ rect: el.getBoundingClientRect(), el }));
-    });
-
-    requestAnimationFrame(() => {
-      grids.forEach((grid, gi) => {
-        const first = firstRects[gi] || [];
-        const last = lastRects[gi] || [];
-
-        // Detect column count change: if many items changed size, skip all animations for this grid
-        let sizeChangedCount = 0;
-        last.forEach((item, i) => {
-          const f = first[i];
-          if (f && Math.abs(f.width - item.rect.width) / f.width > 0.02) {
-            sizeChangedCount++;
-          }
-        });
-
-        // If >50% of items changed size, this is likely a column change - skip animation
-        if (sizeChangedCount > last.length * 0.5) return;
-
-        // Animate individual items that only moved (didn't resize)
-        last.forEach((item, i) => {
-          const f = first[i];
-          if (!f) return;
-
-          const dx = f.left - item.rect.left;
-          const dy = f.top - item.rect.top;
-          const sizeChange = Math.abs(f.width - item.rect.width) / f.width;
-
-          // Skip if: no significant movement OR item resized
-          if ((Math.abs(dx) < 5 && Math.abs(dy) < 5) || sizeChange > 0.02) return;
-
-          item.el.style.transition = 'none';
-          item.el.style.transform = `translate(${dx}px, ${dy}px)`;
-          item.el.setAttribute('data-flip', 'true');
-        });
-      });
-
-      const animated = document.querySelectorAll('[data-flip="true"]');
-      if (!animated.length) {
-        isAnimating = false;
-        firstRects = null;
-        return;
-      }
-
-      void grids[0]?.offsetHeight;
-
-      requestAnimationFrame(() => {
-        animated.forEach(el => {
-          el.style.transition = '';
-          el.style.transform = '';
-          el.addEventListener('transitionend', () => el.removeAttribute('data-flip'), { once: true });
-        });
-        isAnimating = false;
-      });
-    });
-
-    firstRects = null;
-  };
-
-  let resizeTimer = null;
-  const onResize = () => {
-    if (!resizeTimer) captureFirst();
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      animateFLIP();
-      resizeTimer = null;
-    }, 200);
-  };
-
-  window.addEventListener('resize', onResize, { passive: true });
+  // Export to global scope (needed by menu)
+  window.closeMenu = closeMenu;
 })();

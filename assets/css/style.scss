@@ -75,6 +75,31 @@ img:not(.no-filter) {
 }
 
 /*
+ * SKIP TO CONTENT LINK (Accessibility)
+ * -------------------------------------
+ */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  z-index: 9999;
+  border-radius: 0 0 4px 0;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+/*
  * ROOT & TYPOGRAPHY
  * -----------------
  */
@@ -1733,6 +1758,39 @@ body:has(.quick-nav-buttons) #section-nav-button {
 
 [data-theme="dark"] .shortcut-key {
   border-color: rgba(255, 255, 255, 0.1);
+}
+
+/*
+ * COPY NOTIFICATION
+ * -----------------
+ */
+.copy-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: var(--color-accent);
+  color: var(--color-bg);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.95rem;
+  z-index: 10000;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: all 0.3s var(--transition-smooth);
+  pointer-events: none;
+}
+
+.copy-notification.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.copy-notification.hide {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
 }
 
 /*

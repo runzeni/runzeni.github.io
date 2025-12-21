@@ -27,7 +27,7 @@ permalink: /fotos/2024/kodak-ultramax-400/
   {% assign roll_files = site.static_files | where_exp: "item", "item.path contains 'assets/img/2024/2024_FUJI400_CLE+CHI_Export_Web/'" | sort: "name" %}
   
   {% for image in roll_files %}
-    <img data-src="{{ image.path | relative_url }}" alt="Kodak Ultramax 400: {{ image.name }}" class="contact-sheet-thumb">
+    <img src="{{ image.path | relative_url }}" alt="Kodak Ultramax 400: {{ image.name }}" class="contact-sheet-thumb" loading="lazy">
   {% endfor %}
 
 </div>

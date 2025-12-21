@@ -1,5 +1,6 @@
+{% assign section = page.url | split: '/' | slice: 1 | first | default: 'home' %}
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-monochrome="false" data-section="{{ page.url | split: '/' | slice: 1 | first | default: 'home' }}">
+<html lang="en" data-theme="light" data-monochrome="false" data-section="{{ section }}">
   <head>
     <!-- ========================================
          BLOCKING SCRIPT (Must run before CSS)
@@ -17,6 +18,14 @@
       document.documentElement.setAttribute('data-monochrome', storedMonochrome);
     })();
     </script>
+
+    <!-- Fallback for users with JavaScript disabled -->
+    <noscript>
+      <style>
+        .sticky-nav, .lightbox { display: none !important; }
+        body::before { content: "JavaScript disabled."; display: block; background: #fff3cd; color: #856404; padding: 1rem; text-align: center; font-family: -apple-system, sans-serif; border-bottom: 1px solid #ffeaa7; }
+      </style>
+    </noscript>
 
     <!-- ========================================
          ESSENTIAL META TAGS
@@ -83,27 +92,18 @@
     <!-- ========================================
          EXTERNAL DEPENDENCIES
          ======================================== -->
-    <!-- Hammer.js for touch gestures (required before lightbox) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <!-- MathJax for mathematical notation -->
-    <script>
-      MathJax = {
-        tex: {
-          inlineMath: [['$', '$']],
-          displayMath: [['$$', '$$']],
-          processEscapes: true
-        }
-      };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <!-- Hammer.js for touch gestures (deferred to prevent render blocking) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
   </head>
   
   <!-- ========================================
        BODY CONTENT
        ======================================== -->
   <body>
-    
+
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
     <div class="scroll-progress" id="scroll-progress" role="progressbar" aria-label="Page scroll progress" aria-valuemin="0" aria-valuemax="100"></div>
     
     <header class="site-header" id="site-header">
@@ -296,5 +296,14 @@
          MAIN JAVASCRIPT
          ======================================== -->
     <script src="/assets/js/main.js" defer></script>
+
+    <!-- ========================================
+         MATHJAX (Mathematical Notation)
+         ======================================== -->
+    <!-- MathJax for rendering mathematical equations -->
+    <script>
+      MathJax = { tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']], processEscapes: true } };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
   </body>
 </html>
