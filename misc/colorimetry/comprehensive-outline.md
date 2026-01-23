@@ -25,7 +25,7 @@ description: "Complete outline of the colorimetry series"
   </nav>
 </div>
 <div class="no-print" style="text-align: right; margin: 1rem 0;">
-  <button onclick="window.print()" style="padding: 0.5rem 1.5rem; background: transparent; color: var(--color-text); border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 0.9rem; transition: all 0.2s ease;">
+  <button onclick="window.print()" style="padding: 0.5rem 1.5rem; background: transparent; color: var(--color-text); border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer; font-weight: 500; font-size: var(--text-sm); transition: all 0.2s ease;">
     Print
   </button>
 </div>
@@ -34,7 +34,7 @@ description: "Complete outline of the colorimetry series"
 
 <header style="text-align: center; margin: 2rem 0 3rem;">
   <h1 style="margin-bottom: 0.5rem;">Regarding Colorimetry</h1>
-  <p style="font-size: 1.1rem; color: var(--color-text-light);">Comprehensive Outline</p>
+  <p style="font-size: var(--text-lg); color: var(--color-text-light);">Comprehensive Outline</p>
 </header>
 
 * * *
@@ -229,7 +229,7 @@ Color science is the intersection of:
 
 </article>
 
-<footer style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border); color: var(--color-text-light); font-size: 0.9rem;">
+<footer style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border); color: var(--color-text-light); font-size: var(--text-sm);">
   <p><strong>Regarding Colorimetry</strong></p>
   <p>By Runze Ni • December 2025</p>
   <p><a href="/misc/colorimetry/">runzeni.github.io/misc/colorimetry</a></p>

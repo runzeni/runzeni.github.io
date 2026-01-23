@@ -112,30 +112,25 @@ if (scrollProgress) {
 }
 
 /* ===============================================
- * STICKY NAVIGATION (IntersectionObserver)
+ * STICKY NAVIGATION (Scroll-based)
  * =============================================== */
 const stickyNav = document.getElementById('sticky-nav');
 const scrollTop = document.getElementById('scroll-top');
 const scrollBottom = document.getElementById('scroll-bottom');
 
 if (stickyNav) {
-  // Use IntersectionObserver for better performance
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      // When the header is NOT intersecting (scrolled past), show sticky nav
-      stickyNav.classList.toggle('visible', !entry.isIntersecting);
-    });
-  }, {
-    // Trigger when header leaves viewport
-    rootMargin: '0px',
-    threshold: 0
-  });
+  // Show sticky nav after scrolling past the header height
+  // Using scroll position since the header is position:fixed and never leaves viewport
+  const headerHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-height')) || 50;
+  const showThreshold = headerHeight * 2; // Show after scrolling 2x header height
 
-  // Observe the header
-  const header = document.getElementById('site-header');
-  if (header) {
-    observer.observe(header);
-  }
+  const updateStickyNav = throttle(() => {
+    const scrolled = window.scrollY;
+    stickyNav.classList.toggle('visible', scrolled > showThreshold);
+  }, 16);
+
+  window.addEventListener('scroll', updateStickyNav, { passive: true });
+  updateStickyNav(); // Initial check
 }
 
 if (scrollTop) {

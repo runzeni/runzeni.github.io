@@ -9,6 +9,8 @@ permalink: /fotos/2023/
     <span class="breadcrumb-separator" aria-hidden="true">/</span>
     <a href="/fotos/" class="breadcrumb-item">Portfolio</a>
     <span class="breadcrumb-separator" aria-hidden="true">/</span>
+    <a href="/archive/" class="breadcrumb-item">Archive</a>
+    <span class="breadcrumb-separator" aria-hidden="true">/</span>
     <span class="breadcrumb-item breadcrumb-current" aria-current="page">2023</span>
   </nav>
 </div>

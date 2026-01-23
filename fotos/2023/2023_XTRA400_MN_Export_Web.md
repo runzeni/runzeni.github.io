@@ -9,6 +9,8 @@ permalink: /fotos/2023/fuji-xtra-400-mn/
     <span class="breadcrumb-separator" aria-hidden="true">/</span>
     <a href="/fotos/" class="breadcrumb-item">Portfolio</a>
     <span class="breadcrumb-separator" aria-hidden="true">/</span>
+    <a href="/archive/" class="breadcrumb-item">Archive</a>
+    <span class="breadcrumb-separator" aria-hidden="true">/</span>
     <a href="/fotos/2023/" class="breadcrumb-item">2023</a>
     <span class="breadcrumb-separator" aria-hidden="true">/</span>
     <span class="breadcrumb-item breadcrumb-current" aria-current="page">Fujifilm Superia X-tra 400</span>

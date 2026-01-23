@@ -9,6 +9,8 @@ permalink: /fotos/2024/kodak-gold-200/
     <span class="breadcrumb-separator" aria-hidden="true">/</span>
     <a href="/fotos/" class="breadcrumb-item">Portfolio</a>
     <span class="breadcrumb-separator" aria-hidden="true">/</span>
+    <a href="/archive/" class="breadcrumb-item">Archive</a>
+    <span class="breadcrumb-separator" aria-hidden="true">/</span>
     <a href="/fotos/2024/" class="breadcrumb-item">2024</a>
     <span class="breadcrumb-separator" aria-hidden="true">/</span>
     <span class="breadcrumb-item breadcrumb-current" aria-current="page">Kodak Gold 200</span>

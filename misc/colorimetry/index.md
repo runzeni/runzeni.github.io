@@ -30,13 +30,13 @@ description: A comprehensive technical guide to colorimetry, ACES, HDR, and came
 <div style="max-width: 800px; margin: 2rem auto; padding: 1.5rem; background: var(--color-background-secondary); border: 1px solid var(--color-border); border-radius: 8px;">
   <div style="display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;">
     <div style="flex: 1; min-width: 250px;">
-      <h3 style="margin: 0 0 0.5rem 0; font-size: 1.1rem;">Comprehensive Outline</h3>
-      <p style="margin: 0; color: var(--color-text-light); font-size: 0.95rem;">
+      <h3 style="margin: 0 0 0.5rem 0; font-size: var(--text-lg);">Comprehensive Outline</h3>
+      <p style="margin: 0; color: var(--color-text-light); font-size: var(--text-base);">
         Complete series outline—optimized for printing or saving as PDF.
       </p>
     </div>
     <div style="display: flex; gap: 0.75rem;">
-      <a href="/misc/colorimetry/comprehensive-outline/" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.25rem; background: var(--color-accent); color: var(--color-bg); text-decoration: none; border-radius: 6px; font-weight: 500; font-size: 0.95rem; transition: opacity 0.2s;">
+      <a href="/misc/colorimetry/comprehensive-outline/" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.25rem; background: var(--color-accent); color: var(--color-bg); text-decoration: none; border-radius: 6px; font-weight: 500; font-size: var(--text-base); transition: opacity 0.2s;">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="6 9 6 2 18 2 18 9"></polyline>
           <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
@@ -44,7 +44,7 @@ description: A comprehensive technical guide to colorimetry, ACES, HDR, and came
         </svg>
         <span>Print</span>
       </a>
-      <a href="/misc/colorimetry/appendix-mathematics/" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.25rem; background: transparent; color: var(--color-text); text-decoration: none; border: 1px solid var(--color-border); border-radius: 6px; font-weight: 500; font-size: 0.95rem; transition: background 0.2s;">
+      <a href="/misc/colorimetry/appendix-mathematics/" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.25rem; background: transparent; color: var(--color-text); text-decoration: none; border: 1px solid var(--color-border); border-radius: 6px; font-weight: 500; font-size: var(--text-base); transition: background 0.2s;">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="4" y1="9" x2="20" y2="9"></line>
           <line x1="4" y1="15" x2="20" y2="15"></line>
