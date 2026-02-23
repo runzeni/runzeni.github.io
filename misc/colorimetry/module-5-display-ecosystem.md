@@ -1,5 +1,6 @@
 ---
 title: "Module 5: The Display Ecosystem"
+breadcrumb_title: Module 5
 permalink: /misc/colorimetry/module-5/
 layout: default
 series: colorimetry
@@ -10,18 +11,6 @@ reading_time: 10
 date: 2025-12-10
 description: "The image does not exist until it hits the screen. Understanding HDR standards (PQ/HLG), viewing environment effects, and system color management."
 ---
-
-<div class="site-breadcrumb">
-  <nav class="breadcrumb-container" aria-label="Breadcrumb">
-    <a href="/" class="breadcrumb-item">Home</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/" class="breadcrumb-item">Misc</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/colorimetry/" class="breadcrumb-item">Colorimetry</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <span class="breadcrumb-item breadcrumb-current" aria-current="page">Module 5</span>
-  </nav>
-</div>
 
 <header class="module-header">
   <div class="module-meta">

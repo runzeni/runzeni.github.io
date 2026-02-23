@@ -1,5 +1,6 @@
 ---
 title: Miscellaneous
+breadcrumb_title: Misc
 permalink: /misc/
 ---
 
@@ -31,7 +32,7 @@ permalink: /misc/
       <a href="/misc/linux-notes/" class="misc-card misc-card-link">
         <div class="misc-card-header">
           <h3>Linux command line notes</h3>
-          <span class="misc-date">Dec 2025</span>
+          <span class="misc-date">Feb 2026</span>
         </div>
         <p class="misc-excerpt">
           For beginners like me.

@@ -1,19 +1,10 @@
 ---
 title: Regarding Colorimetry
+breadcrumb_title: Colorimetry
 permalink: /misc/colorimetry/
 layout: default
 description: A comprehensive technical guide to colorimetry, ACES, HDR, and camera color science for DITs, colorists, DoPs, and imaging professionals.
 ---
-
-<div class="site-breadcrumb">
-  <nav class="breadcrumb-container" aria-label="Breadcrumb">
-    <a href="/" class="breadcrumb-item">Home</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/" class="breadcrumb-item">Misc</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <span class="breadcrumb-item breadcrumb-current" aria-current="page">Colorimetry</span>
-  </nav>
-</div>
 
 <div class="article-landing-header">
   <h1>Regarding Colorimetry</h1>

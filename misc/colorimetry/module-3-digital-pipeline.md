@@ -1,5 +1,6 @@
 ---
 title: "Module 3: The Digital Image Pipeline"
+breadcrumb_title: Module 3
 permalink: /misc/colorimetry/module-3/
 layout: default
 series: colorimetry
@@ -10,18 +11,6 @@ reading_time: 13
 date: 2025-12-10
 description: "The camera does not take pictures. It collects data. Understanding scene-referred vs. display-referred workflows, color models, transfer functions, and the view transform."
 ---
-
-<div class="site-breadcrumb">
-  <nav class="breadcrumb-container" aria-label="Breadcrumb">
-    <a href="/" class="breadcrumb-item">Home</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/" class="breadcrumb-item">Misc</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/colorimetry/" class="breadcrumb-item">Colorimetry</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <span class="breadcrumb-item breadcrumb-current" aria-current="page">Module 3</span>
-  </nav>
-</div>
 
 <header class="module-header">
   <div class="module-meta">

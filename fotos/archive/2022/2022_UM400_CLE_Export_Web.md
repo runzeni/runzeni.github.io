@@ -1,7 +1,7 @@
 ---
 title: Kodak Ultramax 400 / Cleveland
 breadcrumb_title: Kodak Ultramax 400
-permalink: /fotos/2022/kodak-ultramax-400/
+permalink: /fotos/archive/2022/kodak-ultramax-400/
 ---
 
 <div class="gallery-header">

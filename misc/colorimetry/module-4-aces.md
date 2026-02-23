@@ -1,5 +1,6 @@
 ---
 title: "Module 4: ACES & Modern Color Management"
+breadcrumb_title: Module 4
 permalink: /misc/colorimetry/module-4/
 layout: default
 series: colorimetry
@@ -10,18 +11,6 @@ reading_time: 11
 date: 2025-12-10
 description: "A file format is not a workflow. ACES is a workflow. Understanding the architecture, gamut compression issues, and practical implementation."
 ---
-
-<div class="site-breadcrumb">
-  <nav class="breadcrumb-container" aria-label="Breadcrumb">
-    <a href="/" class="breadcrumb-item">Home</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/" class="breadcrumb-item">Misc</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/colorimetry/" class="breadcrumb-item">Colorimetry</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <span class="breadcrumb-item breadcrumb-current" aria-current="page">Module 4</span>
-  </nav>
-</div>
 
 <header class="module-header">
   <div class="module-meta">

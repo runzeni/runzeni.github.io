@@ -1,5 +1,6 @@
 ---
 title: "Comprehensive Outline"
+breadcrumb_class: no-print
 permalink: /misc/colorimetry/comprehensive-outline/
 layout: default
 description: "Complete outline of the colorimetry series"
@@ -13,17 +14,6 @@ description: "Complete outline of the colorimetry series"
   h2 { page-break-after: avoid; }
 }
 </style>
-<div class="site-breadcrumb no-print">
-  <nav class="breadcrumb-container" aria-label="Breadcrumb">
-    <a href="/" class="breadcrumb-item">Home</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/" class="breadcrumb-item">Misc</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/colorimetry/" class="breadcrumb-item">Colorimetry</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <span class="breadcrumb-item breadcrumb-current" aria-current="page">Comprehensive Outline</span>
-  </nav>
-</div>
 <div class="no-print" style="text-align: right; margin: 1rem 0;">
   <button onclick="window.print()" style="padding: 0.5rem 1.5rem; background: transparent; color: var(--color-text); border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer; font-weight: 500; font-size: var(--text-sm); transition: all 0.2s ease;">
     Print

@@ -1,5 +1,6 @@
 ---
 title: "Module 1: The Hardware of Sight"
+breadcrumb_title: Module 1
 permalink: /misc/colorimetry/module-1/
 layout: default
 series: colorimetry
@@ -10,18 +11,6 @@ reading_time: 15
 date: 2025-12-10
 description: "The eye is not a camera. It is a brain peripheral. Understanding the biological signal chain of color before diving into ACES, LUTs, and digital grading workflows."
 ---
-
-<div class="site-breadcrumb">
-  <nav class="breadcrumb-container" aria-label="Breadcrumb">
-    <a href="/" class="breadcrumb-item">Home</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/" class="breadcrumb-item">Misc</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/colorimetry/" class="breadcrumb-item">Colorimetry</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <span class="breadcrumb-item breadcrumb-current" aria-current="page">Module 1</span>
-  </nav>
-</div>
 
 <header class="module-header">
   <div class="module-meta">

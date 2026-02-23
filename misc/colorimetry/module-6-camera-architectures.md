@@ -1,5 +1,6 @@
 ---
 title: "Module 6: Camera Architectures & Case Studies"
+breadcrumb_title: Module 6
 permalink: /misc/colorimetry/module-6/
 layout: default
 series: colorimetry
@@ -10,18 +11,6 @@ reading_time: 12
 date: 2025-12-10
 description: "A camera is just a sensor with an opinion. Analyzing ARRI's gold standard, the color wars (RED IPP2 vs. ACES), and RAW demosaicing mechanics."
 ---
-
-<div class="site-breadcrumb">
-  <nav class="breadcrumb-container" aria-label="Breadcrumb">
-    <a href="/" class="breadcrumb-item">Home</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/" class="breadcrumb-item">Misc</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/colorimetry/" class="breadcrumb-item">Colorimetry</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <span class="breadcrumb-item breadcrumb-current" aria-current="page">Module 6</span>
-  </nav>
-</div>
 
 <header class="module-header">
   <div class="module-meta">

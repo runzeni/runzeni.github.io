@@ -1,21 +1,8 @@
 ---
 title: Kodak Ultramax 400 / Cleveland & Chicago
+breadcrumb_title: Kodak Ultramax 400
 permalink: /fotos/2024/kodak-ultramax-400/
 ---
-
-<div class="site-breadcrumb">
-  <nav class="breadcrumb-container" aria-label="Breadcrumb">
-    <a href="/" class="breadcrumb-item">Home</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/fotos/" class="breadcrumb-item">Portfolio</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/archive/" class="breadcrumb-item">Archive</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/fotos/2024/" class="breadcrumb-item">2024</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <span class="breadcrumb-item breadcrumb-current" aria-current="page">Kodak Ultramax 400</span>
-  </nav>
-</div>
 
 <div class="gallery-header">
   <h1 class="gallery-title">Kodak Ultramax 400</h1>

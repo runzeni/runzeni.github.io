@@ -1,7 +1,7 @@
 ---
 title: Fujifilm Superia X-tra 400 / Cleveland
 breadcrumb_title: Fujifilm Superia X-tra 400
-permalink: /fotos/2023/fuji-xtra-400/
+permalink: /fotos/archive/2023/fuji-xtra-400/
 ---
 
 <div class="gallery-header">

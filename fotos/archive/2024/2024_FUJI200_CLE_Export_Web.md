@@ -1,7 +1,7 @@
 ---
 title: Kodak Gold 200 / Cleveland
 breadcrumb_title: Kodak Gold 200
-permalink: /fotos/2024/kodak-gold-200/
+permalink: /fotos/archive/2024/kodak-gold-200/
 ---
 
 <div class="gallery-header">

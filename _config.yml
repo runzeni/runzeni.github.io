@@ -7,3 +7,13 @@ repository: runzeni/runzeni.github.io
 # Include hidden directories
 include:
   - .well-known
+
+# Exclude from build
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - node_modules
+  - COMPREHENSIVE_REVIEW.md
+  - .claude

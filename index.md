@@ -8,7 +8,7 @@
 
   <div class="hero-section" id="hero-section">
     <h1 class="hero-title">Runze Ni</h1>
-    <p class="hero-subtitle">Researcher • B.Sc. | Renal physiology, genetics, & translational science</p>
+    <p class="hero-subtitle">PhD Student | Renal physiology, genetics, & translational science</p>
     <p class="hero-contact">
       <a href="mailto:runzeni2001@gmail.com">runzeni2001@gmail.com</a> · 
       <a href="https://scholar.google.com/citations?user=-Azv6CYAAAAJ&hl" target="_blank" rel="noopener noreferrer">Google Scholar</a> · 
@@ -31,11 +31,14 @@ I study how acute kidney injury triggers cascading effects across organ systems.
 Case Western Reserve University, Cleveland, OH (2024)  
 Dean's High Honors
 
+**Ph.D. Student, Medical Sciences**  
+USF Health, Morsani College of Medicine, Tampa, FL (2026–)
+
 ---
 
 ### Research Experience
 
-**Researcher**  
+**Research Scientist**  
 University of South Florida, Morsani College of Medicine (2024–Present)  
 *Dr. Ruisheng Liu's Lab*
 
@@ -47,14 +50,7 @@ Case Western Reserve University (2023–2024)
 
 ### Publications
 
-**Published**
-
 - **Acute Kidney Injury Induces Lung Damage via Mitochondrial DAMPs by Activating TREM-1 and cGAS-STING Pathways.** *Biomedicines*, Oct 2025. [Link](https://www.mdpi.com/3569600)
-
-**Under Review**
-
-- **Macula Densa-Specific NOS1 Knockout Exacerbates Ischemic Acute Kidney Injury** (submitted)
-- **Acute Kidney Injury Disrupts Cardiac Remodeling via SerpinA3N** (submitted)
 
 ---
 
@@ -70,11 +66,9 @@ Case Western Reserve University (2023–2024)
 
 ### Current Projects
 
-- Severity thresholds in acute kidney injury and mesenteric vascular reprogramming
-- Macula densa-specific NKCC2 knockout effects on ischemia-reperfusion injury
-- Multi-organ injury modeling in large animal systems with SMEF technology
+- Severity thresholds in AKI and mesenteric vascular reprogramming
+- MD-specific NKCC2 knockout effects on ischemia-reperfusion injury
+- Multi-organ injury modeling in large animal systems with SMEF*
 - Cardiac transplantation following acute kidney injury
 
----
-
-*Updated December 2025*
+*Updated February 2026*

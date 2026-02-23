@@ -6,18 +6,6 @@ series: colorimetry
 description: "Comprehensive mathematical reference for all formulas used in the Modern Color Science series"
 ---
 
-<div class="site-breadcrumb">
-  <nav class="breadcrumb-container" aria-label="Breadcrumb">
-    <a href="/" class="breadcrumb-item">Home</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/" class="breadcrumb-item">Misc</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/colorimetry/" class="breadcrumb-item">Colorimetry</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <span class="breadcrumb-item breadcrumb-current" aria-current="page">Mathematical Appendix</span>
-  </nav>
-</div>
-
 <header class="module-header">
   <div class="module-meta">
     <span class="module-series-badge">Colorimetry Series</span>

@@ -1,5 +1,6 @@
 ---
 title: "Module 2: Measuring Color (History & Standards)"
+breadcrumb_title: Module 2
 permalink: /misc/colorimetry/module-2/
 layout: default
 series: colorimetry
@@ -10,18 +11,6 @@ reading_time: 15
 date: 2025-12-10
 description: "If you can't measure it, you can't manage it. From painted swatches to mathematical color spaces—the journey to CIE 1931 XYZ."
 ---
-
-<div class="site-breadcrumb">
-  <nav class="breadcrumb-container" aria-label="Breadcrumb">
-    <a href="/" class="breadcrumb-item">Home</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/" class="breadcrumb-item">Misc</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/colorimetry/" class="breadcrumb-item">Colorimetry</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <span class="breadcrumb-item breadcrumb-current" aria-current="page">Module 2</span>
-  </nav>
-</div>
 
 <header class="module-header">
   <div class="module-meta">

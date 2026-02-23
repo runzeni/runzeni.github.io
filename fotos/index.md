@@ -8,7 +8,7 @@ permalink: /fotos/
   <div class="gallery-subtitle">
     A curated portfolio.
     <br>
-    <a href="/archive/">View Full Archive &rarr;</a>
+    <a href="/fotos/archive/">View Full Archive &rarr;</a>
   </div>
 </div>
 
@@ -23,7 +23,7 @@ permalink: /fotos/
 </div>
 
 <div class="archive-link-container">
-  <a href="/archive/" class="archive-link">
+  <a href="/fotos/archive/" class="archive-link">
     View Full Archive &rarr;
   </a>
 </div>

@@ -1,5 +1,6 @@
 ---
 title: "Module 7: Computational Color & Advanced DIT Dev"
+breadcrumb_title: Module 7
 permalink: /misc/colorimetry/module-7/
 layout: default
 series: colorimetry
@@ -10,18 +11,6 @@ reading_time: 14
 date: 2025-12-10
 description: "When the tools break, you have to build your own. Advanced color matching algorithms, LUT mathematics, inverse LUTs, and visual encryption for DITs."
 ---
-
-<div class="site-breadcrumb">
-  <nav class="breadcrumb-container" aria-label="Breadcrumb">
-    <a href="/" class="breadcrumb-item">Home</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/" class="breadcrumb-item">Misc</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <a href="/misc/colorimetry/" class="breadcrumb-item">Colorimetry</a>
-    <span class="breadcrumb-separator" aria-hidden="true">/</span>
-    <span class="breadcrumb-item breadcrumb-current" aria-current="page">Module 7</span>
-  </nav>
-</div>
 
 <header class="module-header">
   <div class="module-meta">

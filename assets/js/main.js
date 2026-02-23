@@ -166,13 +166,13 @@ if (scrollBottom) {
       show: false
     },
     'fotos': {
-      href: '/archive/',
+      href: '/fotos/archive/',
       title: 'Archive',
       ariaLabel: 'View photo archive',
       show: true
     },
     'archive': {
-      href: '/archive/',
+      href: '/fotos/archive/',
       title: 'Archive',
       ariaLabel: 'View photo archive',
       show: true
@@ -257,14 +257,11 @@ if (menuToggle && siteMenu && siteHeader) {
 function handleReadmeScroll(e) {
   e.preventDefault();
   const heroSection = document.getElementById('hero-section');
-  const header = document.getElementById('site-header');
 
   // If on homepage, smooth scroll to hero section
   if (heroSection && window.location.pathname === '/') {
-    // DYNAMIC: Get actual header height instead of hardcoded 80px
-    const offset = header ? header.offsetHeight : 80;
-    const targetPosition = heroSection.getBoundingClientRect().top + window.pageYOffset - offset;
-    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+    // scrollIntoView respects the CSS scroll-margin-top on .hero-section
+    heroSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     if (window.closeMenu) window.closeMenu();
   } else {
     // If on other pages, store intent and navigate
@@ -279,11 +276,8 @@ window.addEventListener('DOMContentLoaded', () => {
     sessionStorage.removeItem('scrollToHero');
     setTimeout(() => {
       const heroSection = document.getElementById('hero-section');
-      const header = document.getElementById('site-header');
       if (heroSection) {
-        const offset = header ? header.offsetHeight : 80;
-        const targetPosition = heroSection.getBoundingClientRect().top + window.pageYOffset - offset;
-        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+        heroSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }, 100);
   }
