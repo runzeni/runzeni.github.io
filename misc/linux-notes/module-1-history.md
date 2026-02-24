@@ -8,7 +8,7 @@ module_number: 1
 prev_module: null
 next_module: /misc/linux-notes/module-2/
 date: 2026-02-23
-description: "From Unix to Linux — how we got here, what a shell is, and why any of this matters."
+description: "From Unix to Linux"
 ---
 
 <header class="module-header">
@@ -26,203 +26,126 @@ description: "From Unix to Linux — how we got here, what a shell is, and why a
 
   <div class="module-intro">
     <p class="lead-paragraph">
-      "The Linux command line is a text interface to your computer."
-    </p>
-    <p>
-      Before we start typing commands, it helps to know where all of this came from. The command line isn't some ancient relic — it's a deliberately designed tool that has evolved over 50+ years and is still the backbone of servers, research clusters, and pretty much everything on the internet.
+      The command line isn't a relic; it is a deliberately designed tool for complex tasks. It is the standard interface for servers, research clusters, and embedded systems.
     </p>
   </div>
 
   <nav class="module-toc" aria-label="Table of contents">
     <h2 class="module-toc-title">In This Module</h2>
     <ul>
-      <li><a href="#section-1-1">1.1 The Unix Origins</a></li>
-      <li><a href="#section-1-2">1.2 Enter GNU & Linux</a></li>
-      <li><a href="#section-1-3">1.3 The Distro Landscape</a></li>
-      <li><a href="#section-1-4">1.4 What Is a Shell?</a></li>
-      <li><a href="#section-1-5">1.5 Why the Command Line?</a></li>
+      <li><a href="#section-1-1">1.1 The Unix Philosophy</a></li>
+      <li><a href="#section-1-2">1.2 The Linux Architecture</a></li>
+      <li><a href="#section-1-3">1.3 Distributions (Distros)</a></li>
+      <li><a href="#section-1-4">1.4 The Shell</a></li>
+      <li><a href="#section-1-5">1.5 Why CLI?</a></li>
     </ul>
   </nav>
 
-  <section id="section-1-1" class="content-section">
-    <h2>1.1 The Unix Origins</h2>
+  <section id="section-1-1" class="content-section" markdown="block">
 
-    <p>
-      It all started at <strong>Bell Labs</strong> in 1969. Ken Thompson and Dennis Ritchie (the same Ritchie who created the C programming language) built Unix as a small, elegant operating system. The core philosophy was simple:
-    </p>
+## 1.1 The Unix Philosophy
 
-    <blockquote>
-      Do one thing and do it well.
-    </blockquote>
+Born at Bell Labs (1969) by Ken Thompson and Dennis Ritchie. Unix introduced the core concepts we use today.
 
-    <p>
-      Unix introduced ideas we still use every day:
-    </p>
+> **The Golden Rule:** "Write programs that do one thing and do it well. Write programs to work together."
 
-    <ul>
-      <li><strong>Everything is a file</strong> — devices, processes, sockets, all represented as files</li>
-      <li><strong>Plain text as universal interface</strong> — programs communicate through text streams</li>
-      <li><strong>Small, composable tools</strong> — chain simple programs together to do complex things</li>
-      <li><strong>Hierarchical filesystem</strong> — the <code>/</code> root directory tree we still navigate today</li>
-    </ul>
+### Core Concepts
 
-    <h3>The Timeline</h3>
+- **Everything is a file:** Documents, hard drives, processes, and network sockets are all treated as files.
+- **Text streams:** Programs talk to each other via plain text, not binary formats.
+- **Composability:** Small tools chained together (pipes) solve complex problems.
 
-    <ul>
-      <li><strong>1969</strong> — Unix born at Bell Labs (PDP-7)</li>
-      <li><strong>1973</strong> — Rewritten in C (a huge deal — made it portable across hardware)</li>
-      <li><strong>1970s–80s</strong> — AT&T licenses Unix to universities; UC Berkeley creates BSD</li>
-      <li><strong>1983</strong> — AT&T commercializes Unix → becomes expensive and proprietary</li>
-    </ul>
+</section>
 
-    <p>
-      That last point is what sets the stage for everything that follows.
-    </p>
+<section id="section-1-2" class="content-section" markdown="block">
 
-  </section>
+## 1.2 The Linux Architecture
 
-  <section id="section-1-2" class="content-section">
-    <h2>1.2 Enter GNU & Linux</h2>
+**GNU (1983):** Richard Stallman created the tools (Compiler, Shell, Editor) but lacked a kernel.
+**Linux (1991):** Linus Torvalds wrote the kernel.
 
-    <p>
-      In 1983, <strong>Richard Stallman</strong> launched the <strong>GNU Project</strong> (GNU's Not Unix — yes, it's recursive) with the goal of creating a completely free Unix-like operating system. He wrote essential tools — compiler (<code>gcc</code>), editor (<code>emacs</code>), shell (<code>bash</code>) — but the kernel was missing.
-    </p>
+Combined, they form the operating system: **GNU/Linux**.
 
-    <p>
-      Then in 1991, a Finnish student named <strong>Linus Torvalds</strong> posted this now-famous message to the comp.os.minix newsgroup:
-    </p>
+### The Stack
 
-    <blockquote>
-      "I'm doing a (free) operating system (just a hobby, won't be big and professional like gnu)…"
-    </blockquote>
+| Layer | Role |
+|-------|------|
+| **Hardware** | CPU, RAM, Disks |
+| **Kernel (Linux)** | The "boss." Manages hardware resources and memory. Talks to hardware so software doesn't have to |
+| **Shell (GNU)** | The "translator." Takes your text commands and sends instructions to the Kernel |
+| **Applications** | Web servers, Python scripts, File browsers |
 
-    <p>
-      That "hobby" became the <strong>Linux kernel</strong>. Combined with the GNU userspace tools, it formed a complete free operating system: <mark>GNU/Linux</mark>.
-    </p>
+</section>
 
-    <h3>Kernel vs. OS — What's the Difference?</h3>
+<section id="section-1-3" class="content-section" markdown="block">
 
-    <ul>
-      <li><strong>Kernel</strong> — the core. Manages hardware, memory, processes, scheduling. Linux is a kernel.</li>
-      <li><strong>OS / Distribution</strong> — the kernel + shell + package manager + desktop environment + everything else. Ubuntu, Fedora, Arch — these are distributions.</li>
-    </ul>
+## 1.3 Distributions (Distros)
 
-    <p>
-      When people say "Linux," they usually mean the whole distribution, not just the kernel. Stallman would prefer you say "GNU/Linux," and honestly, he has a point.
-    </p>
+A "Distro" is the Kernel + Tools + Package Manager bundled together. The main difference for users is **how you install software**.
 
-  </section>
+### Debian Family (Uses `apt`)
 
-  <section id="section-1-3" class="content-section">
-    <h2>1.3 The Distro Landscape</h2>
+- **Debian:** Stable, slow updates. The foundation.
+- **Ubuntu:** Most popular, user-friendly. Great driver support.
+- **Kali:** Specialized for security/pentesting.
 
-    <p>
-      There are hundreds of Linux distributions. Here's a practical breakdown of the ones you'll actually encounter:
-    </p>
+### Red Hat Family (Uses `dnf` / `rpm`)
 
-    <h3>Debian Family</h3>
+- **RHEL:** Enterprise standard. Paid support.
+- **Fedora:** Bleeding edge. Upstream for RHEL.
+- **Rocky/Alma:** Free versions of RHEL.
 
-    <ul>
-      <li><strong>Debian</strong> — the grandfather. Rock-solid stability, slower release cycle. Uses <code>apt</code> / <code>.deb</code> packages.</li>
-      <li><strong>Ubuntu</strong> — Debian-based, beginner-friendly, most popular desktop distro. Also uses <code>apt</code>.</li>
-      <li><strong>Linux Mint</strong> — Ubuntu-based, even more beginner-friendly.</li>
-    </ul>
+### Others
 
-    <h3>Red Hat Family</h3>
+- **Arch (`pacman`):** DIY, rolling release. Documentation is legendary.
+- **Alpine (`apk`):** Tiny, used heavily in Docker/Containers.
 
-    <ul>
-      <li><strong>RHEL (Red Hat Enterprise Linux)</strong> — enterprise standard, paid support. Uses <code>dnf</code> / <code>.rpm</code> packages.</li>
-      <li><strong>Fedora</strong> — RHEL's upstream testing ground. Bleeding edge, also uses <code>dnf</code>.</li>
-      <li><strong>CentOS / Rocky / Alma</strong> — free RHEL rebuilds for servers.</li>
-    </ul>
+> **Class Note:** We are using **Ubuntu**. Key command: `sudo apt install <package>`.
 
-    <h3>Other Notables</h3>
+</section>
 
-    <ul>
-      <li><strong>Arch Linux</strong> — rolling release, DIY, teaches you everything. Uses <code>pacman</code>.</li>
-      <li><strong>openSUSE</strong> — stable and polished. Uses <code>zypper</code>.</li>
-      <li><strong>Alpine</strong> — ultra-lightweight, popular in Docker containers. Uses <code>apk</code>.</li>
-    </ul>
+<section id="section-1-4" class="content-section" markdown="block">
 
-    <blockquote>
-      <strong>My note:</strong> For class I'm mostly working with Ubuntu on WSL or a VM. The apt commands are the ones I'll use the most.
-    </blockquote>
+## 1.4 The Shell
 
-  </section>
+The program that interprets your commands.
 
-  <section id="section-1-4" class="content-section">
-    <h2>1.4 What Is a Shell?</h2>
-
-    <p>
-      The <strong>shell</strong> is the program that interprets your commands and talks to the kernel. When you open a "terminal," you're really opening a <em>terminal emulator</em> that runs a shell inside it.
-    </p>
-
-    <h3>Common Shells</h3>
-
-    <ul>
-      <li><strong>sh</strong> (Bourne Shell) — the original, 1979. Minimal.</li>
-      <li><strong>bash</strong> (Bourne Again Shell) — the default on most Linux distros. What we'll use.</li>
-      <li><strong>zsh</strong> — default on macOS since Catalina. Bash-compatible + extras (better autocomplete, themes).</li>
-      <li><strong>fish</strong> — user-friendly, auto-suggestions out of the box, but not POSIX-compatible.</li>
-    </ul>
-
-    <p>
-      Check which shell you're running:
-    </p>
+- **sh:** The ancestor. Minimal.
+- **bash (Bourne Again Shell):** The Linux standard. Default on most systems.
+- **zsh:** Modern, themeable. Default on macOS.
 
 ```bash
+# Check your shell
 echo $SHELL
-# /bin/bash or /bin/zsh typically
 ```
 
-    <p>
-      See all available shells on your system:
-    </p>
+### Terminal vs. Shell vs. Console
 
-```bash
-cat /etc/shells
-```
+| Term | What it is |
+|------|------------|
+| **Terminal** | The window app (GNOME Terminal, iTerm2) |
+| **Shell** | The text interpreter running *inside* the window (Bash, Zsh) |
+| **Console** | The physical text display (mostly relevant for servers) |
 
-    <h3>Terminal vs. Shell vs. Console</h3>
+</section>
 
-    <ul>
-      <li><strong>Terminal (emulator)</strong> — the window application (iTerm2, GNOME Terminal, Windows Terminal)</li>
-      <li><strong>Shell</strong> — the interpreter running inside the terminal (bash, zsh)</li>
-      <li><strong>Console</strong> — historically, the physical hardware; now often used loosely to mean terminal</li>
-    </ul>
+<section id="section-1-5" class="content-section" markdown="block">
 
-  </section>
+## 1.5 Why CLI?
 
-  <section id="section-1-5" class="content-section">
-    <h2>1.5 Why the Command Line?</h2>
+Why not just use a GUI?
 
-    <p>
-      Fair question — we have GUIs everywhere. Why bother with a text interface?
-    </p>
+- **Scale:** Rename 1 file? GUI. Rename 10,000 files? CLI (1 line of code).
+- **Remote Access (SSH):** Servers don't have monitors. You access them via text.
+- **Resources:** GUIs eat RAM; text is cheap.
+- **Reproducibility (Crucial for Science):** A shell script documents exactly how data was processed. Clicking buttons is not reproducible research.
 
-    <ul>
-      <li><strong>Automation</strong> — you can script anything. Run 10,000 files through a pipeline overnight.</li>
-      <li><strong>Remote access</strong> — SSH into a server on the other side of the world. No GUI needed, no bandwidth wasted.</li>
-      <li><strong>Reproducibility</strong> — a shell script is a precise record of what you did. Essential for research and bioinformatics.</li>
-      <li><strong>Speed</strong> — renaming 500 files takes one line on the command line, 500 clicks in a GUI.</li>
-      <li><strong>Servers don't have GUIs</strong> — most of the internet runs on headless Linux machines.</li>
-    </ul>
-
-    <blockquote>
-      <strong>My note:</strong> As a biology student, the command line is basically unavoidable once you start doing any kind of computational work — sequence alignment, proteomics pipelines, RNA-seq, anything involving a computing cluster.
-    </blockquote>
-
-    <p>
-      <strong>Next up:</strong> We get our hands dirty with actual commands.
-    </p>
-
-  </section>
+</section>
 
 </article>
 
 <nav class="module-navigation" aria-label="Module navigation">
   <div class="module-nav-container">
-
     <a href="/misc/linux-notes/" class="module-nav-overview">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="3" y="3" width="7" height="7"></rect>
@@ -235,7 +158,6 @@ cat /etc/shells
 
     <div class="module-nav-arrows">
       <span class="module-nav-disabled"></span>
-
       <a href="/misc/linux-notes/module-2/" class="module-nav-next">
         <span>Next Module</span>
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

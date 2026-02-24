@@ -7,20 +7,17 @@ series: colorimetry
 module_number: 6
 prev_module: /misc/colorimetry/module-5/
 next_module: /misc/colorimetry/module-7/
-reading_time: 12
 date: 2025-12-10
-description: "A camera is just a sensor with an opinion. Analyzing ARRI's gold standard, the color wars (RED IPP2 vs. ACES), and RAW demosaicing mechanics."
+description: "ARRI's LogC pipeline, RED IPP2 vs ACES, and RAW demosaicing mechanics."
 ---
 
 <header class="module-header">
   <div class="module-meta">
-    <span class="module-series-badge">Colorimetry Series</span>
+    <span class="module-series-badge">Colorimetry</span>
     <span class="module-number-badge">Module 6 of 7</span>
   </div>
   <h1>Camera Architectures & Case Studies</h1>
   <div class="module-header-meta">
-    <span class="module-reading-time">~12 min read</span>
-    <span class="article-meta-separator">•</span>
     <span class="module-date">December 2025</span>
   </div>
 </header>

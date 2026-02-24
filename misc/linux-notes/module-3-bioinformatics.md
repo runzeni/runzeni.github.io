@@ -44,18 +44,15 @@ description: "Proteomics analysis in Python — environment setup, key libraries
     </ul>
   </nav>
 
-  <section id="section-3-1" class="content-section">
-    <h2>3.1 Environment Setup</h2>
+  <section id="section-3-1" class="content-section" markdown="block">
 
-    <p>
-      Rule number one: <strong>never install packages into your system Python</strong>. Always use a virtual environment or conda.
-    </p>
+## 3.1 Environment Setup
 
-    <h3>Option A: conda (Recommended for Bioinformatics)</h3>
+Rule number one: **never install packages into your system Python**. Always use a virtual environment or conda.
 
-    <p>
-      Conda handles both Python packages and system-level dependencies (like compiled C libraries that many bioinformatics tools need).
-    </p>
+### Option A: conda (Recommended for Bioinformatics)
+
+Conda handles both Python packages and system-level dependencies (like compiled C libraries that many bioinformatics tools need).
 
 ```bash
 # Install miniconda (if not already installed)
@@ -78,7 +75,7 @@ conda env export > environment.yml
 conda env create -f environment.yml
 ```
 
-    <h3>Option B: venv + pip</h3>
+### Option B: venv + pip
 
 ```bash
 # Create virtual environment
@@ -96,44 +93,35 @@ pip freeze > requirements.txt
 pip install -r requirements.txt
 ```
 
-    <blockquote>
-      <strong>My note:</strong> I use conda because half the tools in bioinformatics have weird C dependencies that pip can't handle. Save yourself the headache.
-    </blockquote>
+> **My note:** I use conda because half the tools in bioinformatics have weird C dependencies that pip can't handle. Save yourself the headache.
 
   </section>
 
-  <section id="section-3-2" class="content-section">
-    <h2>3.2 Key Libraries</h2>
+  <section id="section-3-2" class="content-section" markdown="block">
 
-    <p>
-      Quick reference for the Python libraries I keep reaching for.
-    </p>
+## 3.2 Key Libraries
 
-    <h3>Data & Computation</h3>
+Quick reference for the Python libraries I keep reaching for.
 
-    <ul>
-      <li><strong>pandas</strong> — DataFrames, the workhorse for tabular data. Read CSVs, filter, group, merge.</li>
-      <li><strong>numpy</strong> — numerical arrays, linear algebra, fast math.</li>
-      <li><strong>scipy</strong> — statistical tests, signal processing, optimization.</li>
-    </ul>
+### Data & Computation
 
-    <h3>Proteomics-Specific</h3>
+- **pandas** — DataFrames, the workhorse for tabular data. Read CSVs, filter, group, merge.
+- **numpy** — numerical arrays, linear algebra, fast math.
+- **scipy** — statistical tests, signal processing, optimization.
 
-    <ul>
-      <li><strong>pyteomics</strong> — read mzML, mzXML, FASTA, pepXML, mzIdentML files. The Swiss army knife.</li>
-      <li><strong>biopython</strong> — sequence handling, BLAST, PDB parsing, GenBank access.</li>
-      <li><strong>pyopenms</strong> — Python bindings for OpenMS (feature detection, alignment, ID). Heavy but powerful.</li>
-    </ul>
+### Proteomics-Specific
 
-    <h3>Visualization</h3>
+- **pyteomics** — read mzML, mzXML, FASTA, pepXML, mzIdentML files. The Swiss army knife.
+- **biopython** — sequence handling, BLAST, PDB parsing, GenBank access.
+- **pyopenms** — Python bindings for OpenMS (feature detection, alignment, ID). Heavy but powerful.
 
-    <ul>
-      <li><strong>matplotlib</strong> — the base plotting library. Not pretty by default, but fully customizable.</li>
-      <li><strong>seaborn</strong> — statistical plots built on matplotlib. Heatmaps, violin plots, pair plots.</li>
-      <li><strong>plotly</strong> — interactive plots. Good for exploring spectra.</li>
-    </ul>
+### Visualization
 
-    <h3>Quick Install Cheat Sheet</h3>
+- **matplotlib** — the base plotting library. Not pretty by default, but fully customizable.
+- **seaborn** — statistical plots built on matplotlib. Heatmaps, violin plots, pair plots.
+- **plotly** — interactive plots. Good for exploring spectra.
+
+### Quick Install Cheat Sheet
 
 ```bash
 # Everything at once with conda
@@ -149,18 +137,15 @@ pip install pandas numpy scipy matplotlib seaborn \
 
   </section>
 
-  <section id="section-3-3" class="content-section">
-    <h2>3.3 Loading & Inspecting Data</h2>
+  <section id="section-3-3" class="content-section" markdown="block">
 
-    <p>
-      Mass spectrometry data comes in various formats. Here are the most common ones and how to open them.
-    </p>
+## 3.3 Loading & Inspecting Data
 
-    <h3>Reading mzML Files (Raw Spectra)</h3>
+Mass spectrometry data comes in various formats. Here are the most common ones and how to open them.
 
-    <p>
-      <code>mzML</code> is the standard open format for mass spec data. Each "spectrum" in the file represents one scan.
-    </p>
+### Reading mzML Files (Raw Spectra)
+
+`mzML` is the standard open format for mass spec data. Each "spectrum" in the file represents one scan.
 
 ```python
 from pyteomics import mzml
@@ -191,7 +176,7 @@ plt.savefig('spectrum.png', dpi=150)
 plt.show()
 ```
 
-    <h3>Reading FASTA Files (Protein Sequences)</h3>
+### Reading FASTA Files (Protein Sequences)
 
 ```python
 from pyteomics import fasta
@@ -208,7 +193,7 @@ reviewed = [p for p in proteins if 'reviewed' in p.description.lower()]
 print(f"Reviewed entries: {len(reviewed)}")
 ```
 
-    <h3>Reading Search Results (pepXML / mzIdentML)</h3>
+### Reading Search Results (pepXML / mzIdentML)
 
 ```python
 from pyteomics import pepxml
@@ -239,14 +224,13 @@ print(df.describe())
 
   </section>
 
-  <section id="section-3-4" class="content-section">
-    <h2>3.4 Filtering & Analysis</h2>
+  <section id="section-3-4" class="content-section" markdown="block">
 
-    <p>
-      Raw search results need filtering. The standard approach is FDR (False Discovery Rate) control using a target-decoy strategy.
-    </p>
+## 3.4 Filtering & Analysis
 
-    <h3>Basic FDR Filtering</h3>
+Raw search results need filtering. The standard approach is FDR (False Discovery Rate) control using a target-decoy strategy.
+
+### Basic FDR Filtering
 
 ```python
 import pandas as pd
@@ -272,7 +256,7 @@ print(f"Unique peptides: {filtered['peptide'].nunique()}")
 print(f"Unique proteins: {filtered['protein'].nunique()}")
 ```
 
-    <h3>Protein Grouping (Parsimony)</h3>
+### Protein Grouping (Parsimony)
 
 ```python
 # Simple protein grouping — minimal set that explains all peptides
@@ -309,20 +293,17 @@ print(f"Protein groups: {len(groups_df)}")
 print(groups_df.head(10))
 ```
 
-    <blockquote>
-      <strong>My note:</strong> This is a simplified version. Real tools like ProteinProphet or Percolator do much more sophisticated grouping and rescoring. But this helps understand what's happening under the hood.
-    </blockquote>
+> **My note:** This is a simplified version. Real tools like ProteinProphet or Percolator do much more sophisticated grouping and rescoring. But this helps understand what's happening under the hood.
 
   </section>
 
-  <section id="section-3-5" class="content-section">
-    <h2>3.5 Visualization</h2>
+  <section id="section-3-5" class="content-section" markdown="block">
 
-    <p>
-      Plots I keep making for class assignments and lab reports.
-    </p>
+## 3.5 Visualization
 
-    <h3>Spectrum Plot (Annotated)</h3>
+Plots I keep making for class assignments and lab reports.
+
+### Spectrum Plot (Annotated)
 
 ```python
 import matplotlib.pyplot as plt
@@ -353,7 +334,7 @@ def plot_spectrum(mz, intensity, annotations=None, title='MS2 Spectrum'):
     return fig
 ```
 
-    <h3>Volcano Plot (Differential Expression)</h3>
+### Volcano Plot (Differential Expression)
 
 ```python
 import seaborn as sns
@@ -390,7 +371,7 @@ def volcano_plot(df, fc_col='log2_fc', pval_col='neg_log10_pval',
     return fig
 ```
 
-    <h3>Heatmap (Protein Abundance)</h3>
+### Heatmap (Protein Abundance)
 
 ```python
 def abundance_heatmap(df, sample_cols, protein_col='protein',
@@ -416,13 +397,9 @@ def abundance_heatmap(df, sample_cols, protein_col='protein',
     return fig
 ```
 
-    <blockquote>
-      <strong>My note:</strong> These are templates — I copy-paste and adapt for each assignment. The volcano plot in particular comes up in almost every proteomics paper.
-    </blockquote>
+> **My note:** These are templates — I copy-paste and adapt for each assignment. The volcano plot in particular comes up in almost every proteomics paper.
 
-    <p>
-      This module will keep growing as I work through more class material. The goal is to have a personal reference I can quickly search through instead of digging through lecture slides.
-    </p>
+This module will keep growing as I work through more class material. The goal is to have a personal reference I can quickly search through instead of digging through lecture slides.
 
   </section>
 

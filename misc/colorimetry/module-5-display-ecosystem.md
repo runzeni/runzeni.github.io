@@ -7,20 +7,17 @@ series: colorimetry
 module_number: 5
 prev_module: /misc/colorimetry/module-4/
 next_module: /misc/colorimetry/module-6/
-reading_time: 10
 date: 2025-12-10
-description: "The image does not exist until it hits the screen. Understanding HDR standards (PQ/HLG), viewing environment effects, and system color management."
+description: "HDR standards (PQ/HLG), viewing environment effects, and system color management across platforms."
 ---
 
 <header class="module-header">
   <div class="module-meta">
-    <span class="module-series-badge">Colorimetry Series</span>
+    <span class="module-series-badge">Colorimetry</span>
     <span class="module-number-badge">Module 5 of 7</span>
   </div>
   <h1>The Display Ecosystem</h1>
   <div class="module-header-meta">
-    <span class="module-reading-time">~10 min read</span>
-    <span class="article-meta-separator">•</span>
     <span class="module-date">December 2025</span>
   </div>
 </header>

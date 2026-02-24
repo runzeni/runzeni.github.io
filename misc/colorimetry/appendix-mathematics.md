@@ -8,7 +8,7 @@ description: "Comprehensive mathematical reference for all formulas used in the 
 
 <header class="module-header">
   <div class="module-meta">
-    <span class="module-series-badge">Colorimetry Series</span>
+    <span class="module-series-badge">Colorimetry</span>
   </div>
   <h1>Mathematical Appendix</h1>
   <div class="module-header-meta">

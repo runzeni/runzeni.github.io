@@ -7,20 +7,17 @@ series: colorimetry
 module_number: 3
 prev_module: /misc/colorimetry/module-2/
 next_module: /misc/colorimetry/module-4/
-reading_time: 13
 date: 2025-12-10
-description: "The camera does not take pictures. It collects data. Understanding scene-referred vs. display-referred workflows, color models, transfer functions, and the view transform."
+description: "Scene-referred vs. display-referred workflows, color models, transfer functions, and the view transform."
 ---
 
 <header class="module-header">
   <div class="module-meta">
-    <span class="module-series-badge">Colorimetry Series</span>
+    <span class="module-series-badge">Colorimetry</span>
     <span class="module-number-badge">Module 3 of 7</span>
   </div>
   <h1>The Digital Image Pipeline</h1>
   <div class="module-header-meta">
-    <span class="module-reading-time">~13 min read</span>
-    <span class="article-meta-separator">•</span>
     <span class="module-date">December 2025</span>
   </div>
 </header>

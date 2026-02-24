@@ -864,3 +864,98 @@ function showCopyNotification(element, message) {
   // Export to global scope (needed by menu)
   window.closeMenu = closeMenu;
 })();
+
+/* ===============================================
+ * CODE BLOCK — STICKY HEADER + COPY TO CLIPBOARD
+ * =============================================== */
+(function initCodeHeaders() {
+  var COPY_ICON = '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+  var CHECK_ICON = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+
+  /* Language display names */
+  var LANG_MAP = {
+    bash: 'bash', sh: 'sh', shell: 'shell', zsh: 'zsh',
+    python: 'python', py: 'python', ruby: 'ruby',
+    javascript: 'js', js: 'js', typescript: 'ts', ts: 'ts',
+    html: 'html', css: 'css', scss: 'scss', sass: 'sass',
+    yaml: 'yaml', yml: 'yaml', json: 'json', xml: 'xml',
+    sql: 'sql', r: 'R', c: 'C', cpp: 'C++', java: 'java',
+    go: 'go', rust: 'rust', swift: 'swift', kotlin: 'kotlin',
+    plaintext: '', text: ''
+  };
+
+  function getLang(wrapper) {
+    var classes = wrapper.className.split(/\s+/);
+    for (var i = 0; i < classes.length; i++) {
+      var m = classes[i].match(/^language-(.+)$/);
+      if (m) return LANG_MAP[m[1]] !== undefined ? LANG_MAP[m[1]] : m[1];
+    }
+    return '';
+  }
+
+  function createHeader(lang, codeEl) {
+    var header = document.createElement('div');
+    header.className = 'code-header';
+
+    /* Language label (left) */
+    var langSpan = document.createElement('span');
+    langSpan.className = 'code-lang';
+    langSpan.textContent = lang || '';
+    header.appendChild(langSpan);
+
+    /* Copy button (right) */
+    var btn = document.createElement('button');
+    btn.className = 'code-copy-btn';
+    btn.setAttribute('aria-label', 'Copy code');
+    btn.innerHTML = COPY_ICON;
+    header.appendChild(btn);
+
+    btn.addEventListener('click', function () {
+      var text = (codeEl).textContent;
+      navigator.clipboard.writeText(text).then(function () {
+        btn.innerHTML = CHECK_ICON;
+        btn.classList.add('copied');
+        setTimeout(function () {
+          btn.innerHTML = COPY_ICON;
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+
+    return header;
+  }
+
+  function init() {
+    /* Rouge-highlighted blocks (fenced code with language) */
+    document.querySelectorAll('div.highlighter-rouge').forEach(function (wrapper) {
+      if (wrapper.querySelector('.code-header')) return;
+      var lang = getLang(wrapper);
+      var codeEl = wrapper.querySelector('code') || wrapper.querySelector('pre');
+      var header = createHeader(lang, codeEl);
+      wrapper.insertBefore(header, wrapper.firstChild);
+    });
+
+    /* Plain <pre> blocks not inside a Rouge wrapper */
+    document.querySelectorAll('pre').forEach(function (pre) {
+      if (pre.closest('.highlighter-rouge')) return;
+      var parent = pre.parentElement;
+      if (!parent || !parent.classList.contains('code-block-wrapper')) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper';
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(pre);
+      }
+      var container = pre.parentElement;
+      if (container.querySelector('.code-header')) return;
+      var codeEl = pre.querySelector('code') || pre;
+      var header = createHeader('', codeEl);
+      container.insertBefore(header, container.firstChild);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();

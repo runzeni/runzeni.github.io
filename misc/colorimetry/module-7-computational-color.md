@@ -7,20 +7,17 @@ series: colorimetry
 module_number: 7
 prev_module: /misc/colorimetry/module-6/
 next_module: null
-reading_time: 14
 date: 2025-12-10
-description: "When the tools break, you have to build your own. Advanced color matching algorithms, LUT mathematics, inverse LUTs, and visual encryption for DITs."
+description: "Advanced color matching algorithms, LUT mathematics, inverse LUTs, and visual encryption for DITs."
 ---
 
 <header class="module-header">
   <div class="module-meta">
-    <span class="module-series-badge">Colorimetry Series</span>
+    <span class="module-series-badge">Colorimetry</span>
     <span class="module-number-badge">Module 7 of 7</span>
   </div>
   <h1>Computational Color & Advanced DIT Dev</h1>
   <div class="module-header-meta">
-    <span class="module-reading-time">~14 min read</span>
-    <span class="article-meta-separator">•</span>
     <span class="module-date">December 2025</span>
   </div>
 </header>

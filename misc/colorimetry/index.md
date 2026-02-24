@@ -3,7 +3,7 @@ title: Regarding Colorimetry
 breadcrumb_title: Colorimetry
 permalink: /misc/colorimetry/
 layout: default
-description: A comprehensive technical guide to colorimetry, ACES, HDR, and camera color science for DITs, colorists, DoPs, and imaging professionals.
+description: Notes on color science, from biology to ACES.
 ---
 
 <div class="article-landing-header">
@@ -11,40 +11,14 @@ description: A comprehensive technical guide to colorimetry, ACES, HDR, and came
   <p class="article-landing-subtitle">
     A not-so-brief history of color science.
   </p>
-  <div class="article-meta">
-    <span class="article-length">7 Modules</span>
-    <span class="article-meta-separator">•</span>
-    <span class="article-reading-time">~90 min read total</span>
-  </div>
 </div>
 
-<div style="max-width: 800px; margin: 2rem auto; padding: 1.5rem; background: var(--color-background-secondary); border: 1px solid var(--color-border); border-radius: 8px;">
-  <div style="display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap;">
-    <div style="flex: 1; min-width: 250px;">
-      <h3 style="margin: 0 0 0.5rem 0; font-size: var(--text-lg);">Comprehensive Outline</h3>
-      <p style="margin: 0; color: var(--color-text-light); font-size: var(--text-base);">
-        Complete series outline—optimized for printing or saving as PDF.
-      </p>
-    </div>
-    <div style="display: flex; gap: 0.75rem;">
-      <a href="/misc/colorimetry/comprehensive-outline/" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.25rem; background: var(--color-accent); color: var(--color-bg); text-decoration: none; border-radius: 6px; font-weight: 500; font-size: var(--text-base); transition: opacity 0.2s;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 6 2 18 2 18 9"></polyline>
-          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-          <rect x="6" y="14" width="12" height="8"></rect>
-        </svg>
-        <span>Print</span>
-      </a>
-      <a href="/misc/colorimetry/appendix-mathematics/" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.65rem 1.25rem; background: transparent; color: var(--color-text); text-decoration: none; border: 1px solid var(--color-border); border-radius: 6px; font-weight: 500; font-size: var(--text-base); transition: background 0.2s;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="4" y1="9" x2="20" y2="9"></line>
-          <line x1="4" y1="15" x2="20" y2="15"></line>
-          <line x1="10" y1="3" x2="8" y2="21"></line>
-          <line x1="16" y1="3" x2="14" y2="21"></line>
-        </svg>
-        <span>Math Appendix</span>
-      </a>
-    </div>
+<div class="series-resources">
+  <h3>Resources</h3>
+  <p>Full outline for print/PDF, plus a math reference appendix.</p>
+  <div class="series-resources-links">
+    <a href="/misc/colorimetry/comprehensive-outline/" class="series-start-button">Print Outline</a>
+    <a href="/misc/colorimetry/appendix-mathematics/" class="series-resource-link">Math Appendix</a>
   </div>
 </div>
 
@@ -54,7 +28,6 @@ description: A comprehensive technical guide to colorimetry, ACES, HDR, and came
     <a href="/misc/colorimetry/module-1/" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 1</span>
-        <span class="module-reading-time">~15 min</span>
       </div>
       <h2 class="module-title">The Hardware of Sight</h2>
       <p class="module-excerpt">
@@ -80,7 +53,6 @@ description: A comprehensive technical guide to colorimetry, ACES, HDR, and came
     <a href="/misc/colorimetry/module-2/" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 2</span>
-        <span class="module-reading-time">~15 min</span>
       </div>
       <h2 class="module-title">Measuring Color: History & Standards</h2>
       <p class="module-excerpt">
@@ -105,7 +77,6 @@ description: A comprehensive technical guide to colorimetry, ACES, HDR, and came
     <a href="/misc/colorimetry/module-3/" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 3</span>
-        <span class="module-reading-time">~13 min</span>
       </div>
       <h2 class="module-title">The Digital Image Pipeline</h2>
       <p class="module-excerpt">
@@ -129,7 +100,6 @@ description: A comprehensive technical guide to colorimetry, ACES, HDR, and came
     <a href="/misc/colorimetry/module-4/" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 4</span>
-        <span class="module-reading-time">~11 min</span>
       </div>
       <h2 class="module-title">ACES & Modern Color Management</h2>
       <p class="module-excerpt">
@@ -152,7 +122,6 @@ description: A comprehensive technical guide to colorimetry, ACES, HDR, and came
     <a href="/misc/colorimetry/module-5/" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 5</span>
-        <span class="module-reading-time">~10 min</span>
       </div>
       <h2 class="module-title">The Display Ecosystem</h2>
       <p class="module-excerpt">
@@ -175,7 +144,6 @@ description: A comprehensive technical guide to colorimetry, ACES, HDR, and came
     <a href="/misc/colorimetry/module-6/" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 6</span>
-        <span class="module-reading-time">~12 min</span>
       </div>
       <h2 class="module-title">Camera Architectures & Case Studies</h2>
       <p class="module-excerpt">
@@ -198,7 +166,6 @@ description: A comprehensive technical guide to colorimetry, ACES, HDR, and came
     <a href="/misc/colorimetry/module-7/" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 7</span>
-        <span class="module-reading-time">~14 min</span>
       </div>
       <h2 class="module-title">Computational Color & Advanced DIT Dev</h2>
       <p class="module-excerpt">

@@ -7,7 +7,7 @@ description: For beginners like me.
 ---
 
 <div class="article-landing-header">
-  <h1>Linux command line notes</h1>
+  <h1>Linux command line</h1>
   <p class="article-landing-subtitle">
     For beginners like me.
   </p>
@@ -22,7 +22,7 @@ description: For beginners like me.
       </div>
       <h2 class="module-title">A Brief History</h2>
       <p class="module-excerpt">
-        From Unix to Linux — how we got here, what a shell is, and why any of this matters.
+        From Unix to Linux
       </p>
       <nav class="module-outline" aria-label="Module 1 outline">
         <ul>
@@ -70,7 +70,7 @@ description: For beginners like me.
       </div>
       <h2 class="module-title">Practice: Bioinformatics</h2>
       <p class="module-excerpt">
-        Proteomics analysis in Python — environment setup, key libraries, and sample workflows for class.
+        Proteomics analysis in Python: environment setup, key libraries, and sample workflows for class.
       </p>
       <nav class="module-outline" aria-label="Module 3 outline">
         <ul>

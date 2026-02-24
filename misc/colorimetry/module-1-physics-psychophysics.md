@@ -7,20 +7,17 @@ series: colorimetry
 module_number: 1
 prev_module: null
 next_module: /misc/colorimetry/module-2/
-reading_time: 15
 date: 2025-12-10
-description: "The eye is not a camera. It is a brain peripheral. Understanding the biological signal chain of color before diving into ACES, LUTs, and digital grading workflows."
+description: "How biological vision works — from photons to perception — and why it matters for digital color."
 ---
 
 <header class="module-header">
   <div class="module-meta">
-    <span class="module-series-badge">Colorimetry Series</span>
+    <span class="module-series-badge">Colorimetry</span>
     <span class="module-number-badge">Module 1 of 7</span>
   </div>
   <h1>The Hardware of Sight</h1>
   <div class="module-header-meta">
-    <span class="module-reading-time">~15 min read</span>
-    <span class="article-meta-separator">•</span>
     <span class="module-date">December 2025</span>
   </div>
 </header>

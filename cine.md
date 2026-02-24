@@ -13,6 +13,6 @@ permalink: /cine/
 <div class="cine-grid">
   <!-- Video/still content to be added -->
   <p style="text-align: center; color: var(--color-text-light); margin: 3rem 0;">
-    Content coming soon
+    Nothing to see here, yet...
   </p>
 </div>

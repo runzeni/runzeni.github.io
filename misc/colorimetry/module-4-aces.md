@@ -7,20 +7,17 @@ series: colorimetry
 module_number: 4
 prev_module: /misc/colorimetry/module-3/
 next_module: /misc/colorimetry/module-5/
-reading_time: 11
 date: 2025-12-10
-description: "A file format is not a workflow. ACES is a workflow. Understanding the architecture, gamut compression issues, and practical implementation."
+description: "ACES architecture, AP0/AP1 working spaces, gamut compression, and practical workflows."
 ---
 
 <header class="module-header">
   <div class="module-meta">
-    <span class="module-series-badge">Colorimetry Series</span>
+    <span class="module-series-badge">Colorimetry</span>
     <span class="module-number-badge">Module 4 of 7</span>
   </div>
   <h1>ACES & Modern Color Management</h1>
   <div class="module-header-meta">
-    <span class="module-reading-time">~11 min read</span>
-    <span class="article-meta-separator">•</span>
     <span class="module-date">December 2025</span>
   </div>
 </header>

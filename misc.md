@@ -16,7 +16,7 @@ permalink: /misc/
 
   <!-- Section 1: Technical Essays -->
   <section class="misc-section">
-    <h2 class="misc-section-title">Technical Notes</h2>
+    <h2 class="misc-section-title">Notes</h2>
     <div class="misc-grid">
 
       <a href="/misc/colorimetry/" class="misc-card misc-card-link">
@@ -31,7 +31,7 @@ permalink: /misc/
 
       <a href="/misc/linux-notes/" class="misc-card misc-card-link">
         <div class="misc-card-header">
-          <h3>Linux command line notes</h3>
+          <h3>Linux command line</h3>
           <span class="misc-date">Feb 2026</span>
         </div>
         <p class="misc-excerpt">
@@ -49,7 +49,7 @@ permalink: /misc/
     <h2 class="misc-section-title">Resources</h2>
     <div class="misc-grid">
       <div class="misc-card placeholder">
-        <p>Coming soon</p>
+        <p>Nothing yet</p>
       </div>
     </div>
   </section>
@@ -59,7 +59,7 @@ permalink: /misc/
     <h2 class="misc-section-title">Experiments</h2>
     <div class="misc-grid">
       <div class="misc-card placeholder">
-        <p>Coming soon</p>
+        <p>Also empty</p>
       </div>
     </div>
   </section>

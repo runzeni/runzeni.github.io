@@ -7,20 +7,17 @@ series: colorimetry
 module_number: 2
 prev_module: /misc/colorimetry/module-1/
 next_module: /misc/colorimetry/module-3/
-reading_time: 15
 date: 2025-12-10
-description: "If you can't measure it, you can't manage it. From painted swatches to mathematical color spaces—the journey to CIE 1931 XYZ."
+description: "From early color-matching experiments to the CIE 1931 XYZ standard, perceptual uniformity, and the analog legacy of film."
 ---
 
 <header class="module-header">
   <div class="module-meta">
-    <span class="module-series-badge">Colorimetry Series</span>
+    <span class="module-series-badge">Colorimetry</span>
     <span class="module-number-badge">Module 2 of 7</span>
   </div>
   <h1>Measuring Color: History & Standards</h1>
   <div class="module-header-meta">
-    <span class="module-reading-time">~15 min read</span>
-    <span class="article-meta-separator">•</span>
     <span class="module-date">December 2025</span>
   </div>
 </header>
