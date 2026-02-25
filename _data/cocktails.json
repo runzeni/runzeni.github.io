@@ -170,6 +170,20 @@
       "instructions": "Shake & strain into coupe"
     },
     {
+      "name": "Harvest Sour",
+      "year": "2017",
+      "creator": "Sam Ross",
+      "base": "whiskey",
+      "ingredients": [
+        {"amount": 0.75, "unit": "oz", "ingredient": "Rye"},
+        {"amount": 0.75, "unit": "oz", "ingredient": "Applejack"},
+        {"amount": 0.5, "unit": "oz", "ingredient": "Lemon juice"},
+        {"amount": 0.33, "unit": "oz", "ingredient": "Simple syrup"},
+        {"amount": 1, "unit": "count", "ingredient": "Egg white"}
+      ],
+      "instructions": "Dry shake, shake & strain into coupe, garnish with apple slice & cinnamon powder"
+    },
+    {
       "name": "Negroni",
       "year": "Classic",
       "creator": "Classic",
@@ -231,6 +245,19 @@
         {"amount": 0.5, "unit": "oz", "ingredient": "Lime juice"}
       ],
       "instructions": "Shake & strain into coupe, lemon twist"
+    },
+    {
+      "name": "Poet's Dream",
+      "year": "Classic",
+      "creator": "Classic",
+      "base": "gin",
+      "ingredients": [
+        {"amount": 2, "unit": "oz", "ingredient": "Gin"},
+        {"amount": 0.75, "unit": "oz", "ingredient": "Dry vermouth"},
+        {"amount": 0.25, "unit": "oz", "ingredient": "Bénédictine"},
+        {"amount": 2, "unit": "dash", "ingredient": "Orange bitters"}
+      ],
+      "instructions": "Stir & strain into coupe, garnish with lemon twist"
     },
     {
       "name": "Bee's Knees",
@@ -324,6 +351,20 @@
         {"amount": "Top off", "unit": "", "ingredient": "Grapefruit soda"}
       ],
       "instructions": "Shake & strain into Collins, half salt rim & lime wheel"
+    },
+    {
+      "name": "Dried Meadow Flower",
+      "year": "2015",
+      "creator": "Simon Difford",
+      "base": "tequila",
+      "ingredients": [
+        {"amount": 1.5, "unit": "oz", "ingredient": "Reposado tequila"},
+        {"amount": 1, "unit": "oz", "ingredient": "St. Germain"},
+        {"amount": 0.5, "unit": "oz", "ingredient": "Suze"},
+        {"amount": 0.5, "unit": "oz", "ingredient": "Lemon juice"},
+        {"amount": 1.5, "unit": "oz", "ingredient": "Soda water"}
+      ],
+      "instructions": "Shake & strain into Collins, top with soda, garnish with lemon wheel"
     },
     {
       "name": "New York minute",
@@ -598,6 +639,19 @@
         {"amount": 0.25, "unit": "oz", "ingredient": "Peated scotch whisky"}
       ],
       "instructions": "Shake & strain into rocks, float with peated whiskey, garnish with candied ginger"
+    },
+    {
+      "name": "Star",
+      "year": "1870",
+      "creator": "George Kappeler 1895",
+      "base": "misc",
+      "ingredients": [
+        {"amount": 2, "unit": "oz", "ingredient": "Applejack"},
+        {"amount": 0.75, "unit": "oz", "ingredient": "Carpano Antica Formula"},
+        {"amount": 1, "unit": "bs", "ingredient": "Simple syrup"},
+        {"amount": 2, "unit": "dashes", "ingredient": "Angostura bitters"}
+      ],
+      "instructions": "Stir & strain into coupe, garnish with Maraschino cherry & lemon twist"
     },
     {
       "name": "Chartreuse Swizzle",
