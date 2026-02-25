@@ -1,0 +1,14 @@
+{% comment %}
+  ============================================================
+  NAVIGATION INCLUDE
+  Renders site.data.navigation as an unordered list.
+  ============================================================
+{% endcomment %}
+
+<ul class="site-nav-list">
+  {% for link in site.data.navigation %}
+    <li class="site-nav-item{% if page.url == link.url %} site-nav-active{% endif %}">
+      <a href="{{ link.url | relative_url }}">{{ link.title }}</a>
+    </li>
+  {% endfor %}
+</ul>

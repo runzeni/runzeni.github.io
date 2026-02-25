@@ -29,17 +29,16 @@ I study how acute kidney injury triggers cascading effects across organ systems.
 
 **B.Sc. Biology, Chemistry**  
 Case Western Reserve University, Cleveland, OH (2020-2024)  
-Dean's High Honors
 
 **Ph.D. Student, Medical Sciences**  
-USF Health, Morsani College of Medicine, Tampa, FL (2026-)
+University of South Florida, Morsani College of Medicine, Tampa, FL (2026-)
 
 ---
 
 ### Research Experience
 
 **Research Scientist**  
-University of South Florida, Morsani College of Medicine (2024-Present)  
+USF Health, Morsani College of Medicine (2024-Present)  
 *Dr. Ruisheng Liu's Lab*
 
 **Undergraduate Researcher**  

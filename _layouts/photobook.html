@@ -1,0 +1,36 @@
+---
+layout: default
+---
+
+{% comment %}
+  ============================================================
+  PHOTOBOOK LAYOUT — The Gallery Engine
+  Renders a grid of images from /assets/img/<year>/<image_dir>/
+  ============================================================
+{% endcomment %}
+
+{% assign search_path = "/assets/img/" | append: page.year | append: "/" | append: page.image_dir | append: "/" %}
+
+<section class="photobook-header">
+  <h1>{{ page.title }}</h1>
+  <div class="photobook-meta">
+    <span class="photobook-film">{{ page.film }}</span>
+    {% if page.camera %}
+      <span class="photobook-camera">{{ page.camera }}</span>
+    {% endif %}
+  </div>
+</section>
+
+<section class="photobook-gallery">
+  <div class="contact-sheet-grid">
+    <div class="contact-sheet-sizer"></div>
+    {% for file in site.static_files %}
+      {% if file.path contains search_path %}
+        {% assign ext = file.extname | downcase %}
+        {% if ext == ".jpg" or ext == ".jpeg" or ext == ".png" %}
+          <img class="contact-sheet-thumb" src="{{ file.path | relative_url }}" alt="{{ file.basename }}" loading="lazy">
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>

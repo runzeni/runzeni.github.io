@@ -43,19 +43,30 @@ const setupPreferenceToggle = (toggleId, attribute, storageKey, config) => {
   // Initialize
   updateLabels(htmlElement.getAttribute(attribute));
 
+  // Apply attribute change, optionally animated via View Transitions API
+  const applyChange = (newValue) => {
+    htmlElement.setAttribute(attribute, newValue);
+    localStorage.setItem(storageKey, newValue);
+    updateLabels(newValue);
+  };
+
   // Click handler
   toggle.addEventListener('click', () => {
     const current = htmlElement.getAttribute(attribute);
     const newValue = config.toggle(current);
-    htmlElement.setAttribute(attribute, newValue);
-    localStorage.setItem(storageKey, newValue);
-    updateLabels(newValue);
+
+    if (config.useViewTransition && document.startViewTransition) {
+      document.startViewTransition(() => applyChange(newValue));
+    } else {
+      applyChange(newValue);
+    }
   });
 };
 
 // Dark mode toggle
 setupPreferenceToggle('theme-toggle', 'data-theme', 'theme', {
   toggle: (current) => current === 'light' ? 'dark' : 'light',
+  useViewTransition: true,
   labels: {
     dark: { aria: 'Switch to light mode', title: 'Switch to light mode (D)' },
     light: { aria: 'Switch to dark mode', title: 'Switch to dark mode (D)' }
@@ -71,12 +82,12 @@ setupPreferenceToggle('monochrome-toggle', 'data-monochrome', 'monochrome', {
   }
 });
 
-// Glass effect toggle
-setupPreferenceToggle('glass-toggle', 'data-glass', 'glass', {
-  toggle: (current) => current === 'on' ? 'off' : 'on',
+// Reduce transparency toggle
+setupPreferenceToggle('reduce-transparency-toggle', 'data-reduce-transparency', 'reduceTransparency', {
+  toggle: (current) => current === 'off' ? 'on' : 'off',
   labels: {
-    on: { aria: 'Disable glass effect', title: 'Disable glass effect (G)' },
-    off: { aria: 'Enable glass effect', title: 'Enable glass effect (G)' }
+    off: { aria: 'Reduce transparency', title: 'Reduce transparency (G)' },
+    on: { aria: 'Restore transparency', title: 'Restore transparency (G)' }
   }
 });
 
@@ -84,7 +95,8 @@ setupPreferenceToggle('glass-toggle', 'data-glass', 'glass', {
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 prefersDark.addEventListener('change', (e) => {
   if (!localStorage.getItem('theme')) {
-    htmlElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    const apply = () => htmlElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    document.startViewTransition ? document.startViewTransition(apply) : apply();
   }
 });
 
@@ -398,6 +410,7 @@ const portfolioThumbs = document.querySelectorAll('.portfolio-thumb');
 const contactSheetThumbs = document.querySelectorAll('.contact-sheet-thumb');
 
 let thumbnails = [];
+let imageUrls = [];
 if (portfolioThumbs.length > 0) {
   thumbnails = portfolioThumbs;
 } else if (contactSheetThumbs.length > 0) {
@@ -416,7 +429,7 @@ if (thumbnails.length > 0) {
   const lightboxCounter = document.getElementById('lightbox-counter');
   const swipeHint = document.getElementById('swipe-hint');
 
-  const imageUrls = Array.from(thumbnails).map(thumb => thumb.src || thumb.dataset.src);
+  imageUrls = Array.from(thumbnails).map(thumb => thumb.src || thumb.dataset.src);
   let currentIndex = 0;
   let isZoomed = false;
   let scale = 1;
@@ -733,7 +746,9 @@ if (thumbnails.length > 0) {
   document.addEventListener('keydown', (e) => {
     // Global shortcuts
     if (!lightbox.classList.contains('open')) {
-      const glassToggle = document.getElementById('glass-toggle');
+      const themeToggle = document.getElementById('theme-toggle');
+      const monochromeToggle = document.getElementById('monochrome-toggle');
+      const transparencyToggle = document.getElementById('reduce-transparency-toggle');
       switch(e.key) {
         case 'd':
         case 'D':
@@ -745,7 +760,7 @@ if (thumbnails.length > 0) {
           break;
         case 'g':
         case 'G':
-          if (glassToggle) glassToggle.click();
+          if (transparencyToggle) transparencyToggle.click();
           break;
         case '?':
           const shortcutsOverlay = document.getElementById('shortcuts-overlay');
@@ -863,6 +878,72 @@ function showCopyNotification(element, message) {
 
   // Export to global scope (needed by menu)
   window.closeMenu = closeMenu;
+
+  /* ===============================================
+   * MASONRY GRID LAYOUT (Portfolio)
+   * =============================================== */
+  var grid = document.querySelector('.portfolio-grid');
+  if (grid) {
+    imagesLoaded(grid, function() {
+      // Detect portrait images and add class before Masonry measures
+      var thumbs = grid.querySelectorAll('.portfolio-thumb');
+      thumbs.forEach(function(img) {
+        if (img.naturalHeight > img.naturalWidth) {
+          img.classList.add('portrait');
+        }
+      });
+
+      var msnry = new Masonry(grid, {
+        itemSelector: '.portfolio-thumb',
+        columnWidth: '.grid-sizer',
+        gutter: 10,
+        percentPosition: true,
+        transitionDuration: 0
+      });
+
+      // Fade in the grid
+      grid.classList.add('is-loaded');
+
+      // Re-sync thumbnails for lightbox
+      var freshThumbs = grid.querySelectorAll('.portfolio-thumb');
+      if (freshThumbs.length > 0) {
+        thumbnails = freshThumbs;
+        imageUrls.length = 0;
+        Array.from(freshThumbs).forEach(function(t) {
+          imageUrls.push(t.src || t.dataset.src || '');
+        });
+      }
+    });
+  }
+
+  /* ===============================================
+   * MASONRY GRID LAYOUT (Contact Sheet)
+   * =============================================== */
+  var contactGrid = document.querySelector('.contact-sheet-grid');
+  if (contactGrid) {
+    imagesLoaded(contactGrid, function() {
+      var msnryContact = new Masonry(contactGrid, {
+        itemSelector: '.contact-sheet-thumb',
+        columnWidth: '.contact-sheet-sizer',
+        gutter: 10,
+        percentPosition: true,
+        transitionDuration: 0
+      });
+
+      // Fade in the grid
+      contactGrid.classList.add('is-loaded');
+
+      // Re-sync thumbnails for lightbox
+      var freshThumbs = contactGrid.querySelectorAll('.contact-sheet-thumb');
+      if (freshThumbs.length > 0) {
+        thumbnails = freshThumbs;
+        imageUrls.length = 0;
+        Array.from(freshThumbs).forEach(function(t) {
+          imageUrls.push(t.src || t.dataset.src || '');
+        });
+      }
+    });
+  }
 })();
 
 /* ===============================================

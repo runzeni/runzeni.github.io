@@ -1,0 +1,14 @@
+# Global navigation links
+# Used by header/footer includes to avoid hardcoded paths.
+
+- title: Home
+  url: /
+
+- title: Photography
+  url: /fotos/
+
+- title: Misc / Modules
+  url: /misc/
+
+- title: Protocols
+  url: /protocols/

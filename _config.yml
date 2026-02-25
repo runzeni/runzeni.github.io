@@ -17,3 +17,37 @@ exclude:
   - node_modules
   - COMPREHENSIVE_REVIEW.md
   - .claude
+
+# ---------------------------------------------------------------------------
+# Collections
+# ---------------------------------------------------------------------------
+collections:
+  photobook:
+    output: true
+    permalink: /fotos/archive/:slug/
+  modules:
+    output: true
+    permalink: /misc/:name/
+
+# ---------------------------------------------------------------------------
+# Default Front Matter
+# ---------------------------------------------------------------------------
+defaults:
+  - scope:
+      path: ""
+      type: photobook
+    values:
+      layout: photobook
+  - scope:
+      path: ""
+      type: modules
+    values:
+      layout: module
+
+# ---------------------------------------------------------------------------
+# Plugins (explicit for GitHub Pages)
+# ---------------------------------------------------------------------------
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-feed

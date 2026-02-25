@@ -1,0 +1,49 @@
+---
+layout: default
+title: "Archive"
+permalink: /fotos/archive/
+---
+
+<div class="archive-header">
+  <h1>{{ page.title }}</h1>
+</div>
+
+{% assign sorted_rolls = site.photobook | sort: "year" | reverse %}
+{% assign grouped = sorted_rolls | group_by: "year" %}
+
+{% for group in grouped %}
+<section class="archive-year">
+  <h2 id="{{ group.name }}">{{ group.name }}</h2>
+  <div class="year-grid">
+    {% for roll in group.items %}
+      {% comment %} Collect all images in this roll's directory, then pick a random cover {% endcomment %}
+      {% assign search_path = "/assets/img/" | append: roll.year | append: "/" | append: roll.image_dir | append: "/" %}
+      {% assign roll_images = "" | split: "" %}
+      {% for file in site.static_files %}
+        {% if file.path contains search_path %}
+          {% assign ext = file.extname | downcase %}
+          {% if ext == ".jpg" or ext == ".jpeg" or ext == ".png" %}
+            {% assign roll_images = roll_images | push: file %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% assign cover_image = roll_images | sample %}
+
+      <a href="{{ roll.url | relative_url }}" class="roll-card">
+        {% if cover_image %}
+          <div class="roll-thumb" style="background-image: url('{{ cover_image.path | relative_url }}');"></div>
+        {% else %}
+          <div class="roll-thumb roll-thumb-empty"></div>
+        {% endif %}
+        <div class="roll-info">
+          {% assign parts = roll.title | split: " / " %}
+          <span class="roll-film">{{ roll.film }}</span>
+          {% if parts.size > 1 %}
+            <span class="roll-location">{{ parts.last }}</span>
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endfor %}

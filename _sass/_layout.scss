@@ -29,10 +29,6 @@ main {
   box-shadow: 0 0 4px rgba(232, 232, 232, 0.2);
 }
 
-@keyframes fadeInProgress {
-  to { opacity: 0.85; }
-}
-
 /* === Site Header === */
 .site-header {
   position: fixed;
@@ -48,7 +44,7 @@ main {
   align-items: center;
   gap: 1rem;
   padding: 0 1rem;
-  transition: box-shadow var(--duration-base) ease, background-color var(--duration-slow) ease, border-color var(--duration-slower) ease;
+  transition: box-shadow var(--duration-base) ease;
 }
 
 .site-header.menu-active {
@@ -150,23 +146,23 @@ main {
   filter: brightness(1.25);
 }
 
-/* Glass toggle animations */
-.glass-toggle .icon-glass-on {
+/* Reduce transparency toggle animations */
+.reduce-transparency-toggle .icon-transparency-on {
   opacity: 1;
   transform: scale(1);
 }
 
-.glass-toggle .icon-glass-off {
+.reduce-transparency-toggle .icon-transparency-off {
   opacity: 0;
   transform: scale(0.5);
 }
 
-[data-glass="off"] .glass-toggle .icon-glass-on {
+[data-reduce-transparency="on"] .reduce-transparency-toggle .icon-transparency-on {
   opacity: 0;
   transform: scale(0.5);
 }
 
-[data-glass="off"] .glass-toggle .icon-glass-off {
+[data-reduce-transparency="on"] .reduce-transparency-toggle .icon-transparency-off {
   opacity: 1;
   transform: scale(1);
 }
@@ -308,7 +304,27 @@ main {
   padding: 1.75rem 1rem;
 }
 
-.site-menu-dropdown a {
+/* --- Navigation list reset --- */
+.site-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.site-nav-item {
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity var(--duration-base) var(--transition-smooth),
+              transform var(--duration-base) var(--transition-smooth);
+}
+
+.site-menu-dropdown .site-nav-item a {
+  display: block;
   font-size: var(--text-sm);
   line-height: var(--leading-tight);
   color: var(--color-text);
@@ -319,27 +335,24 @@ main {
   border-left: 3px solid transparent;
   transition: background var(--duration-base) var(--transition-smooth),
               border-left-color var(--duration-base) var(--transition-smooth),
-              transform var(--duration-base) var(--transition-smooth),
-              opacity var(--duration-base) var(--transition-smooth);
-  opacity: 0;
-  transform: translateX(-10px);
+              transform var(--duration-base) var(--transition-smooth);
   font-family: var(--font-sans);
   margin-bottom: 0.25rem;
 }
 
-.site-menu-dropdown.menu-open a {
+.site-menu-dropdown.menu-open .site-nav-item {
   opacity: 1;
   transform: translateX(0);
 }
 
 /* Faster, tighter stagger for fluid opening */
-.site-menu-dropdown.menu-open a:nth-child(1) { transition-delay: 0.05s; }
-.site-menu-dropdown.menu-open a:nth-child(2) { transition-delay: 0.08s; }
-.site-menu-dropdown.menu-open a:nth-child(3) { transition-delay: 0.11s; }
-.site-menu-dropdown.menu-open a:nth-child(4) { transition-delay: 0.14s; }
-.site-menu-dropdown.menu-open a:nth-child(5) { transition-delay: 0.17s; }
+.site-menu-dropdown.menu-open .site-nav-item:nth-child(1) { transition-delay: 0.05s; }
+.site-menu-dropdown.menu-open .site-nav-item:nth-child(2) { transition-delay: 0.08s; }
+.site-menu-dropdown.menu-open .site-nav-item:nth-child(3) { transition-delay: 0.11s; }
+.site-menu-dropdown.menu-open .site-nav-item:nth-child(4) { transition-delay: 0.14s; }
+.site-menu-dropdown.menu-open .site-nav-item:nth-child(5) { transition-delay: 0.17s; }
 
-.site-menu-dropdown.menu-open a:hover {
+.site-menu-dropdown.menu-open .site-nav-item a:hover {
   background: var(--color-border);
   border-left-color: var(--color-accent);
   transform: translateX(6px);
@@ -523,7 +536,6 @@ body:has(.quick-nav-buttons) #section-nav-button {
   border-bottom: 1px solid var(--color-border);
   padding: 1rem clamp(1rem, 4vw, 2rem);
   margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
-  transition: background-color 0.4s ease, border-color 0.6s ease;
 }
 
 /* Inner navigation container - max width for alignment */
@@ -583,7 +595,6 @@ a.breadcrumb-item:hover::after {
   opacity: 0.5;
   user-select: none;
   font-weight: 300;
-  transition: color 0.6s ease;
 }
 
 /* Mobile responsive adjustments */
@@ -644,7 +655,7 @@ a.breadcrumb-item:hover::after {
     content: ' \2022  ';
   }
 
-  .site-menu-dropdown a {
+  .site-menu-dropdown .site-nav-item a {
     font-size: var(--text-sm);
     padding: 0.7rem 0.85rem;
   }
@@ -683,5 +694,91 @@ a.breadcrumb-item:hover::after {
 
   .header-left {
     gap: 0.25rem;
+  }
+}
+
+/* ================================================================
+   ARCHIVE — Thumbnail Grid
+   ================================================================ */
+.archive-header {
+  margin-bottom: 2rem;
+}
+
+.archive-year {
+  margin-bottom: 3rem;
+}
+
+.archive-year h2 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--text-xl);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.year-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.roll-card {
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--color-surface, var(--color-bg));
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: transform var(--duration-base) var(--transition-smooth),
+              box-shadow var(--duration-base) var(--transition-smooth);
+}
+
+.roll-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.roll-thumb {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  background-color: var(--color-border);
+}
+
+.roll-thumb-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.roll-info {
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.roll-film {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+
+.roll-location {
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted, var(--color-text));
+  opacity: 0.7;
+}
+
+@media (max-width: 640px) {
+  .year-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .roll-thumb {
+    height: 180px;
   }
 }

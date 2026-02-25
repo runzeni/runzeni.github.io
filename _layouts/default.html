@@ -1,6 +1,6 @@
 {% assign section = page.url | split: '/' | slice: 1 | first | default: 'home' %}
 <!DOCTYPE html>
-<html lang="en" data-theme="light" data-monochrome="false" data-glass="on" data-section="{{ section }}">
+<html lang="en" data-theme="light" data-monochrome="false" data-reduce-transparency="off" data-section="{{ section }}">
   <head>
     <!-- ========================================
          BLOCKING SCRIPT (Must run before CSS)
@@ -17,11 +17,11 @@
       const storedMonochrome = localStorage.getItem('monochrome') || 'false';
       document.documentElement.setAttribute('data-monochrome', storedMonochrome);
 
-      // Glass effect (check support + localStorage)
-      const supportsGlass = CSS.supports('backdrop-filter', 'blur(1px)') || CSS.supports('-webkit-backdrop-filter', 'blur(1px)');
-      const storedGlass = localStorage.getItem('glass');
-      const glass = supportsGlass ? (storedGlass || 'on') : 'off';
-      document.documentElement.setAttribute('data-glass', glass);
+      // Reduce transparency (check support + localStorage)
+      const supportsBackdrop = CSS.supports('backdrop-filter', 'blur(1px)') || CSS.supports('-webkit-backdrop-filter', 'blur(1px)');
+      const storedReduceTransparency = localStorage.getItem('reduceTransparency');
+      const reduceTransparency = supportsBackdrop ? (storedReduceTransparency || 'off') : 'on';
+      document.documentElement.setAttribute('data-reduce-transparency', reduceTransparency);
     })();
     </script>
 
@@ -40,7 +40,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Security: Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-src 'self';">
 
     <title>{{ page.title | default: site.title }}</title>
 
@@ -148,11 +148,7 @@
     </header>
     
     <nav id="site-menu" class="site-menu-dropdown">
-      <a href="/">README</a>
-      <a href="/fotos/">PORTFOLIO</a>
-      <a href="/cine/">CINE</a>
-      <a href="/protocols/">PROTOCOL</a>
-      <a href="/misc/">MISC</a>
+      {% include navigation.html %}
 
       <div class="menu-controls">
         <button id="monochrome-toggle" class="monochrome-toggle header-button" aria-label="Toggle monochrome mode" title="Toggle B&W mode (M)">
@@ -174,13 +170,13 @@
           </svg>
         </button>
 
-        <button id="glass-toggle" class="glass-toggle header-button" aria-label="Toggle glass effect" title="Toggle glass effect (G)">
-          <svg class="icon-glass-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <button id="reduce-transparency-toggle" class="reduce-transparency-toggle header-button" aria-label="Reduce transparency" title="Reduce transparency (G)">
+          <svg class="icon-transparency-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="3" y="3" width="18" height="18" rx="2"></rect>
             <line x1="12" y1="3" x2="12" y2="21"></line>
             <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" fill="currentColor" opacity="0.3"></path>
           </svg>
-          <svg class="icon-glass-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg class="icon-transparency-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect x="3" y="3" width="18" height="18" rx="2"></rect>
             <line x1="12" y1="3" x2="12" y2="21"></line>
             <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" fill="currentColor"></path>
@@ -277,11 +273,21 @@
         <kbd class="shortcut-key">M</kbd>
       </div>
       <div class="shortcut-item">
+        <span>Reduce transparency</span>
+        <kbd class="shortcut-key">G</kbd>
+      </div>
+      <div class="shortcut-item">
         <span>Show shortcuts</span>
         <kbd class="shortcut-key">?</kbd>
       </div>
     </div>
     
+    <!-- ========================================
+         MASONRY + IMAGESLOADED (Portfolio grid)
+         ======================================== -->
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js" defer></script>
+    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js" defer></script>
+
     <!-- ========================================
          MAIN JAVASCRIPT
          ======================================== -->
