@@ -15,8 +15,6 @@ exclude:
   - Gemfile.lock
   - vendor
   - node_modules
-  - COMPREHENSIVE_REVIEW.md
-  - .claude
 
 # ---------------------------------------------------------------------------
 # Collections

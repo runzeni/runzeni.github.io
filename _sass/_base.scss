@@ -19,69 +19,6 @@ img:not(.no-filter) {
   filter: grayscale(100%);
 }
 
-/* === Semantic Typography Classes === */
-/* Single source of truth for typography patterns */
-/* Size Map: h1/page-title=3xl, h2/section=2xl, h3/card=xl, body=base, nav/btn=sm, meta/footer=xs */
-
-.text-display {
-  font-size: var(--text-3xl);
-  line-height: var(--leading-tight);
-  font-family: var(--font-sans);
-  font-weight: 300;
-  letter-spacing: -0.02em;
-}
-
-.text-page-title {
-  font-size: var(--text-3xl);
-  line-height: var(--leading-tight);
-  font-family: var(--font-sans);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
-.text-section-title {
-  font-size: var(--text-2xl);
-  line-height: var(--leading-tight);
-  font-family: var(--font-sans);
-  font-weight: 600;
-}
-
-.text-card-title {
-  font-size: var(--text-xl);
-  line-height: var(--leading-tight);
-  font-family: var(--font-sans);
-  font-weight: 600;
-}
-
-.text-body {
-  font-size: var(--text-base);
-  line-height: var(--leading-normal);
-  font-family: var(--font-serif);
-  font-weight: 400;
-}
-
-.text-lead {
-  font-size: var(--text-lg);
-  line-height: var(--leading-normal);
-  font-family: var(--font-serif);
-  font-weight: 400;
-}
-
-.text-small {
-  font-size: var(--text-sm);
-  line-height: var(--leading-tight);
-  font-family: var(--font-sans);
-  font-weight: 500;
-}
-
-.text-meta {
-  font-size: var(--text-xs);
-  line-height: var(--leading-tight);
-  font-family: var(--font-sans);
-  font-weight: 400;
-  color: var(--color-text-light);
-}
-
 /* === Base & Typography === */
 * {
   box-sizing: border-box;
@@ -236,7 +173,7 @@ mark {
 
   /* Hide UI elements */
   .site-header, .site-menu-dropdown, .lightbox, .scroll-progress, .sticky-nav,
-  .shortcuts-overlay, .module-navigation, .no-print, button,
+  .shortcuts-overlay, .module-navigation, .module-nav, .no-print, button,
   .portfolio-grid, .gallery-grid, .contact-sheet-grid { display: none !important; }
 
   /* Layout */

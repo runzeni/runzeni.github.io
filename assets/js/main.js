@@ -844,6 +844,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// TODO: Remove deprecated execCommand fallback once navigator.clipboard
+// has sufficient browser support for all target environments.
 function fallbackCopyToClipboard(text, element) {
   const textarea = document.createElement('textarea');
   textarea.value = text;
@@ -875,9 +877,6 @@ function showCopyNotification(element, message) {
     setTimeout(() => notification.remove(), 300);
   }, 2000);
 }
-
-  // Export to global scope (needed by menu)
-  window.closeMenu = closeMenu;
 
   /* ===============================================
    * MASONRY GRID LAYOUT (Portfolio)

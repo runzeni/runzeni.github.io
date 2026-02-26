@@ -19,6 +19,7 @@
   --color-accent: var(--color-ink);
   --color-lightbox-bg: rgba(255, 255, 255, 0.97);
   --color-progress: var(--color-ink);
+  --color-background-secondary: rgba(0, 0, 0, 0.02);
 
   /* Scientific palette */
   --color-sci-red: #d73027;
@@ -32,11 +33,6 @@
   /* Spacing */
   --header-height: 50px;
   --progress-height: 3px;
-
-  /* Content widths */
-  --content-width: 820px;
-  --content-width-wide: 1200px;
-  --content-width-max: 1600px;
 
   /* Typography - Font Stacks */
   --font-serif: 'Source Serif 4', Palatino, 'Palatino Linotype', serif;
@@ -71,7 +67,6 @@
   /* Radius */
   --radius-sm: 4px;
   --radius-md: 8px;
-  --radius-lg: 12px;
   --radius-full: 50%;
 
   /* Shadows */
@@ -97,6 +92,7 @@
   --color-accent: var(--color-mid);
   --color-lightbox-bg: rgba(0, 0, 0, 0.97);
   --color-progress: var(--color-mid);
+  --color-background-secondary: rgba(255, 255, 255, 0.04);
   --glass-bg: rgba(15, 15, 15, 0.5);
   --glass-bg-heavy: rgba(15, 15, 15, 0.95);
 }
@@ -152,7 +148,6 @@ $z-layers: (
   'modal-controls': 2002,
   'modal-overlay': 2003,
   'toast': 3000,
-  'a11y': 9999,
   'max': 10000
 );
 
@@ -164,31 +159,3 @@ $z-layers: (
   @return null;
 }
 
-/* Breakpoint system */
-$breakpoints: (
-  'sm': 480px,
-  'md': 600px,
-  'lg': 768px,
-  'xl': 1024px,
-  'xxl': 1200px,
-  'wide': 1400px,
-  'ultra': 1536px
-);
-
-@mixin respond-to($breakpoint, $type: 'max') {
-  @if map-has-key($breakpoints, $breakpoint) {
-    $bp: map-get($breakpoints, $breakpoint);
-    @if $type == 'max' {
-      @media (max-width: #{$bp}) {
-        @content;
-      }
-    } @else {
-      $min: $bp + 1px;
-      @media (min-width: #{$min}) {
-        @content;
-      }
-    }
-  } @else {
-    @warn "Unknown breakpoint: #{$breakpoint}";
-  }
-}

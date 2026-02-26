@@ -805,7 +805,7 @@
   background: var(--color-bg);
   color: var(--color-text);
   cursor: pointer;
-  transition: all var(--duration-med) ease;
+  transition: background var(--duration-med) ease, transform var(--duration-med) ease, box-shadow var(--duration-med) ease;
   line-height: 1;
 }
 
@@ -845,7 +845,7 @@
   background: var(--color-bg);
   color: var(--color-text);
   cursor: pointer;
-  transition: all var(--duration-med) ease;
+  transition: background var(--duration-med) ease, color var(--duration-med) ease, border-color var(--duration-med) ease;
 }
 
 .filter-btn:hover {
@@ -895,7 +895,7 @@
   background: var(--color-bg);
   color: var(--color-text);
   cursor: pointer;
-  transition: all var(--duration-med) ease;
+  transition: background var(--duration-med) ease;
 }
 
 .clear-search-btn:hover {
@@ -1084,7 +1084,7 @@
   z-index: z('max');
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   opacity: 0;
-  transition: all var(--duration-base) var(--transition-smooth);
+  transition: opacity var(--duration-base) var(--transition-smooth), transform var(--duration-base) var(--transition-smooth);
   pointer-events: none;
 }
 

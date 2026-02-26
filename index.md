@@ -1,3 +1,9 @@
+---
+layout: default
+title: Runze Ni
+hide_breadcrumb: true
+---
+
 <div class="landing-container">
   <div class="quick-nav-buttons">
     <a href="/fotos/" class="quick-nav-btn">Fotos</a>

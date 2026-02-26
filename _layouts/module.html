@@ -34,25 +34,27 @@ layout: default
 {% endfor %}
 
 {% if prev_module or next_module %}
-<nav class="module-nav" aria-label="Module navigation">
-  <div class="module-nav-links">
-    {% if prev_module %}
-      <a href="{{ prev_module.url | relative_url }}" class="module-nav-prev" rel="prev">
-        <span class="module-nav-direction">&larr; Previous Module</span>
-        <span class="module-nav-title">{{ prev_module.title }}</span>
-      </a>
-    {% else %}
-      <span class="module-nav-prev module-nav-disabled"></span>
-    {% endif %}
+<nav class="module-navigation" aria-label="Module navigation">
+  <div class="module-nav-container">
+    <div class="module-nav-arrows">
+      {% if prev_module %}
+        <a href="{{ prev_module.url | relative_url }}" class="module-nav-prev" rel="prev">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          <span>Previous Module</span>
+        </a>
+      {% else %}
+        <span class="module-nav-disabled"></span>
+      {% endif %}
 
-    {% if next_module %}
-      <a href="{{ next_module.url | relative_url }}" class="module-nav-next" rel="next">
-        <span class="module-nav-direction">Next Module &rarr;</span>
-        <span class="module-nav-title">{{ next_module.title }}</span>
-      </a>
-    {% else %}
-      <span class="module-nav-next module-nav-disabled"></span>
-    {% endif %}
+      {% if next_module %}
+        <a href="{{ next_module.url | relative_url }}" class="module-nav-next" rel="next">
+          <span>Next Module</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </a>
+      {% else %}
+        <span class="module-nav-disabled"></span>
+      {% endif %}
+    </div>
   </div>
 </nav>
 {% endif %}
