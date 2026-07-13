@@ -6,6 +6,7 @@ slug: module-6
 permalink: /misc/colorimetry/module-6/
 date: 2025-12-10
 description: "ARRI's LogC pipeline, RED IPP2 vs ACES, and RAW demosaicing mechanics."
+math: true
 ---
 
 <header class="module-header">
@@ -108,7 +109,7 @@ description: "ARRI's LogC pipeline, RED IPP2 vs ACES, and RAW demosaicing mechan
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: LogC3 vs LogC4 Comparison - Side-by-side curves showing Middle Grey position (39% vs 32%) and highlight allocation with sample HDR image showing shoulder rolloff behavior]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 6.1: ARRI LogC3 vs LogC4—expanding dynamic range through curve optimization</figcaption>
@@ -182,7 +183,7 @@ description: "ARRI's LogC pipeline, RED IPP2 vs ACES, and RAW demosaicing mechan
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: Camera Gamut Comparison - CIE 1931 diagram showing ARRI Wide Gamut 3, REDWideGamutRGB, Sony S-Gamut3.Cine, and Canon Cinema Gamut overlaid with ACES AP0/AP1 and Rec.2020]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 6.2: Camera native gamuts—the "color wars" visualized on the CIE diagram</figcaption>
@@ -229,7 +230,7 @@ description: "ARRI's LogC pipeline, RED IPP2 vs ACES, and RAW demosaicing mechan
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: Bayer Pattern Visualizer - Magnified view of BGGR mosaic with toggles to show RAW sensor data, basic bilinear interpolation, and advanced edge-aware demosaicing (ADA-7 equivalent)]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 6.3: Bayer pattern demosaicing—from mosaic to RGB image</figcaption>
@@ -295,34 +296,3 @@ description: "ARRI's LogC pipeline, RED IPP2 vs ACES, and RAW demosaicing mechan
   </section>
 
 </article>
-
-<nav class="module-navigation" aria-label="Module navigation">
-  <div class="module-nav-container">
-
-    <a href="/misc/colorimetry/" class="module-nav-overview">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="7" height="7"></rect>
-        <rect x="14" y="3" width="7" height="7"></rect>
-        <rect x="14" y="14" width="7" height="7"></rect>
-        <rect x="3" y="14" width="7" height="7"></rect>
-      </svg>
-      <span>Back to Overview</span>
-    </a>
-
-    <div class="module-nav-arrows">
-      <a href="/misc/colorimetry/module-5/" class="module-nav-prev">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-        <span>Previous Module</span>
-      </a>
-
-      <a href="/misc/colorimetry/module-7/" class="module-nav-next">
-        <span>Next Module</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </a>
-    </div>
-  </div>
-</nav>

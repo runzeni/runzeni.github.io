@@ -2,45 +2,9 @@
 // Animations: @keyframes & transition utilities
 // ==============================================
 
-/* === Shimmer (skeleton loading) === */
-@keyframes shimmer {
-  0% { background-position: -1000px 0; }
-  100% { background-position: 1000px 0; }
-}
-
-/* === Fade In === */
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-
-/* === Fade Out === */
-@keyframes fadeOut {
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
 /* === Fade In Progress Bar === */
 @keyframes fadeInProgress {
   to { opacity: 0.85; }
-}
-
-/* === Image Zoom In (lightbox) === */
-@keyframes imageZoomIn {
-  from {
-    transform: scale(0.98);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* === Spinner === */
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 
 /* === Theme Transition (View Transitions API) === */

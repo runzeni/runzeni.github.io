@@ -6,6 +6,8 @@ slug: module-3
 permalink: /misc/colorimetry/module-3/
 date: 2025-12-10
 description: "Scene-referred vs. display-referred workflows, color models, transfer functions, and the view transform."
+math: true
+colorimetry_interactive: true
 ---
 
 <header class="module-header">
@@ -89,7 +91,7 @@ description: "Scene-referred vs. display-referred workflows, color models, trans
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: Scene vs Display Encoding - Side-by-side comparison showing linear scene values (0.18 = middle grey) vs gamma-encoded display values (0.5 = middle grey) with interactive slider]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 3.1: Scene-referred linear encoding vs display-referred gamma encoding</figcaption>
@@ -135,7 +137,7 @@ description: "Scene-referred vs. display-referred workflows, color models, trans
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: Color Model Comparison - RGB cube, HSL cylinder, and Lab* perceptual space with sample colors showing how different models represent the same color]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 3.2: Comparing color models—RGB (device), HSL (artist), Lab* (perceptual)</figcaption>
@@ -162,7 +164,7 @@ description: "Scene-referred vs. display-referred workflows, color models, trans
 
     <ul>
       <li><strong>Direction:</strong> Electrical Signal (Data) $\rightarrow$ Optical Light (Screen).</li>
-      <li><strong>Example:</strong> <mark>Gamma 2.4</mark> (Rec.709) or <mark>ST.2084 PQ</mark> (HDR).</li>
+      <li><strong>Example:</strong> a <mark>BT.1886-style gamma 2.4</mark> display transform for SDR reference viewing, or <mark>ST.2084 PQ</mark> for HDR.</li>
       <li><strong>Purpose:</strong> Decoding. It tells the monitor: "When you see code value 0.5, emit X nits of light."</li>
     </ul>
 
@@ -173,7 +175,7 @@ description: "Scene-referred vs. display-referred workflows, color models, trans
     </p>
 
     <blockquote>
-      <strong>Modern Reality:</strong> Today, we don't have CRTs, but we keep Gamma because it happens to align perfectly with human vision (Weber's Law). Gamma is not just brightness; it is data efficiency.
+      <strong>Modern Reality:</strong> Today, display systems are more complex than CRT gamma. Power-law curves remain useful approximations because they allocate code values efficiently, but the exact behavior depends on the encoding, display transform, surround, and mastering target.
     </blockquote>
 
     <h3>Transfer Function Mathematics</h3>
@@ -202,7 +204,7 @@ description: "Scene-referred vs. display-referred workflows, color models, trans
     $$
 
     <p>
-      Notice the linear segment below 0.003. This prevents shadow noise from being amplified. The effective gamma is ~2.2, but the exact function is hybrid.
+      Notice the linear segment below 0.0031308. It defines the low-end behavior near black; the often-quoted “gamma 2.2” is only an approximation of this hybrid function.
     </p>
 
     <p><strong>3. LogC3 (ARRI - Simplified):</strong></p>
@@ -222,20 +224,35 @@ description: "Scene-referred vs. display-referred workflows, color models, trans
     $$
 
     <p>
-      Where: $m_1 = 0.1593$, $m_2 = 78.8438$, $c_1 = 0.8359$, $c_2 = 18.8516$, $c_3 = 18.6875$, and $L$ is luminance in nits. This is perceptually quantized to match the human Just Noticeable Difference (JND) across the full range from 0.0001 to 10,000 nits.
+      Where: $m_1 = 0.1593$, $m_2 = 78.8438$, $c_1 = 0.8359$, $c_2 = 18.8516$, $c_3 = 18.6875$, and $L$ is luminance in nits. PQ is designed to allocate code values perceptually across a reference range up to 10,000 nits.
     </p>
 
     <blockquote>
-      <strong>Critical Insight:</strong> PQ is <mark>absolute</mark> (code value 0.75 always = 1000 nits), while Gamma and Log are <mark>relative</mark> (code values scale with display peak). This distinction becomes critical in Module 5 when we discuss HDR workflows.
+      <strong>Critical Insight:</strong> PQ is <mark>absolute</mark>: code value 0.7518 maps to approximately 1,000 nits on the reference EOTF. Gamma and log encodings are <mark>relative</mark>. A real display may still apply tone mapping when its capabilities differ from the mastered signal.
     </blockquote>
 
-    <figure class="diagram-placeholder">
-      <div class="diagram-container">
-        <div class="placeholder-text">
-          [Future Interactive: OETF/EOTF Curves - Plot showing linear input vs gamma 2.2, sRGB, LogC3, and ST.2084 PQ curves with adjustable parameters and visual comparison]
-        </div>
+    <figure class="colorimetry-widget" data-colorimetry-widget="transfer-curves" aria-labelledby="transfer-curves-title">
+      <p class="colorimetry-widget__eyebrow">Interactive study</p>
+      <h4 class="colorimetry-widget__title" id="transfer-curves-title">Transfer-curve explorer</h4>
+      <p class="colorimetry-widget__note">Compare scene-linear, sRGB, and a simple power-law encoding. This is deliberately a formula study, not a camera-profile or display simulation.</p>
+      <div class="colorimetry-widget__canvas">
+        <svg data-transfer-svg role="img" aria-labelledby="transfer-curves-svg-title transfer-curves-svg-description"></svg>
       </div>
-      <figcaption>Figure 3.3: Transfer function curves—from linear to various encoding standards</figcaption>
+      <div class="colorimetry-widget__controls">
+        <label class="colorimetry-widget__control" for="transfer-gamma">
+          <span>Reference gamma</span>
+          <output class="colorimetry-widget__output" id="transfer-gamma-output" data-transfer-gamma-output></output>
+          <input id="transfer-gamma" data-transfer-gamma type="range" min="1.8" max="2.6" step="0.1" value="2.4">
+        </label>
+        <ul class="colorimetry-widget__legend" aria-label="Transfer curve legend">
+          <li class="colorimetry-widget__legend-item"><span class="colorimetry-widget__swatch" style="--swatch-color: #858585"></span>Scene-linear</li>
+          <li class="colorimetry-widget__legend-item"><span class="colorimetry-widget__swatch" style="--swatch-color: #2f6b85"></span>sRGB</li>
+          <li class="colorimetry-widget__legend-item"><span class="colorimetry-widget__swatch" style="--swatch-color: #a2492a"></span>Reference gamma</li>
+        </ul>
+      </div>
+      <p class="colorimetry-widget__readout" data-transfer-readout role="status" aria-live="polite"></p>
+      <noscript><p class="colorimetry-widget__fallback">JavaScript is off. The equations above remain the source for this study.</p></noscript>
+      <figcaption>Figure 3.3: Transfer-function comparison using the sRGB encoding equation and a simple gamma power law.</figcaption>
     </figure>
 
   </section>
@@ -296,7 +313,7 @@ description: "Scene-referred vs. display-referred workflows, color models, trans
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: View Transform Comparison - Same HDR scene rendered with sRGB/Filmic, AgX, and PBR Neutral, showing highlight rolloff and saturation behavior with fire/bright objects]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 3.4: View transform comparison—how different tone mappers handle highlights</figcaption>
@@ -338,34 +355,3 @@ description: "Scene-referred vs. display-referred workflows, color models, trans
   </section>
 
 </article>
-
-<nav class="module-navigation" aria-label="Module navigation">
-  <div class="module-nav-container">
-
-    <a href="/misc/colorimetry/" class="module-nav-overview">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="7" height="7"></rect>
-        <rect x="14" y="3" width="7" height="7"></rect>
-        <rect x="14" y="14" width="7" height="7"></rect>
-        <rect x="3" y="14" width="7" height="7"></rect>
-      </svg>
-      <span>Back to Overview</span>
-    </a>
-
-    <div class="module-nav-arrows">
-      <a href="/misc/colorimetry/module-2/" class="module-nav-prev">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-        <span>Previous Module</span>
-      </a>
-
-      <a href="/misc/colorimetry/module-4/" class="module-nav-next">
-        <span>Next Module</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </a>
-    </div>
-  </div>
-</nav>

@@ -11,14 +11,6 @@ img:not(.no-filter) {
   filter: grayscale(100%);
 }
 
-.lightbox-image {
-  transition: filter var(--duration-fast) ease-in;
-}
-
-[data-monochrome="true"] .lightbox-image {
-  filter: grayscale(100%);
-}
-
 /* === Base & Typography === */
 * {
   box-sizing: border-box;
@@ -46,6 +38,18 @@ img {
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* Typography Scale - Semantic Hierarchy */
@@ -172,9 +176,9 @@ mark {
   }
 
   /* Hide UI elements */
-  .site-header, .site-menu-dropdown, .lightbox, .scroll-progress, .sticky-nav,
+  .site-header, .site-menu-dropdown, .gallery-lightbox, .scroll-progress, .sticky-nav,
   .shortcuts-overlay, .module-navigation, .module-nav, .no-print, button,
-  .portfolio-grid, .gallery-grid, .contact-sheet-grid { display: none !important; }
+  .portfolio-grid, .contact-sheet-grid { display: none !important; }
 
   /* Layout */
   body { padding: 0 !important; margin: 0 !important; font-size: 11pt !important; line-height: 1.5 !important; }

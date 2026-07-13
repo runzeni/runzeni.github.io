@@ -1,0 +1,151 @@
+/*
+ * Colorimetry studies
+ * Small SVG-based teaching aids. They use named standards and formulas rather
+ * than simulated footage, so their limits remain visible in the interface.
+ */
+
+.colorimetry-widget {
+  margin: 2.5rem 0;
+  padding: clamp(1rem, 3vw, 1.5rem);
+  border-top: 1px solid var(--color-text);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-background-secondary);
+}
+
+.colorimetry-widget__eyebrow {
+  margin: 0 0 0.4rem;
+  color: var(--color-text-light);
+  font: 600 var(--text-xs)/var(--leading-tight) var(--font-sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.colorimetry-widget__title {
+  margin: 0;
+  font: 600 var(--text-lg)/var(--leading-tight) var(--font-serif);
+}
+
+.colorimetry-widget__note {
+  margin: 0.6rem 0 0;
+  color: var(--color-text-light);
+  font: 400 var(--text-sm)/var(--leading-normal) var(--font-sans);
+}
+
+.colorimetry-widget__canvas {
+  margin: 1.25rem 0;
+  padding: clamp(0.5rem, 1.5vw, 0.85rem);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+}
+
+.colorimetry-widget svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.colorimetry-widget__controls {
+  display: grid;
+  gap: 0.85rem;
+  align-items: end;
+}
+
+.colorimetry-widget__control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem 0.75rem;
+  align-items: center;
+  color: var(--color-text);
+  font: 500 var(--text-sm)/var(--leading-tight) var(--font-sans);
+}
+
+.colorimetry-widget__control input[type="range"] {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 0;
+  accent-color: var(--color-text);
+}
+
+.colorimetry-widget__output {
+  color: var(--color-text-light);
+  font-variant-numeric: tabular-nums;
+}
+
+.colorimetry-widget__legend,
+.colorimetry-widget__checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.colorimetry-widget__legend {
+  list-style: none;
+  color: var(--color-text-light);
+  font: 400 var(--text-xs)/var(--leading-tight) var(--font-sans);
+}
+
+.colorimetry-widget__legend-item,
+.colorimetry-widget__checkboxes label {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.colorimetry-widget__checkboxes {
+  color: var(--color-text);
+  font: 500 var(--text-sm)/var(--leading-tight) var(--font-sans);
+}
+
+.colorimetry-widget__checkboxes input {
+  inline-size: 1rem;
+  block-size: 1rem;
+  margin: 0;
+  accent-color: var(--color-text);
+}
+
+.colorimetry-widget__swatch {
+  inline-size: 0.85rem;
+  block-size: 0.2rem;
+  background: var(--swatch-color, var(--color-text));
+}
+
+.colorimetry-widget__readout {
+  margin: 0;
+  color: var(--color-text-light);
+  font: 400 var(--text-xs)/var(--leading-normal) var(--font-sans);
+}
+
+.colorimetry-widget__fallback {
+  margin: 0;
+  color: var(--color-text-light);
+  font: 400 var(--text-xs)/var(--leading-normal) var(--font-sans);
+}
+
+.colorimetry-widget .chart-grid {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.colorimetry-widget .chart-axis {
+  stroke: var(--color-text-light);
+  stroke-width: 1.25;
+}
+
+.colorimetry-widget .chart-label {
+  fill: var(--color-text-light);
+  font: 11px var(--font-sans);
+}
+
+@media (min-width: 640px) {
+  .colorimetry-widget__controls {
+    grid-template-columns: minmax(12rem, 0.8fr) 1.2fr;
+  }
+
+  .colorimetry-widget__checkboxes {
+    align-self: center;
+  }
+}

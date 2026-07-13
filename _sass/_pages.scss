@@ -1,3 +1,5 @@
+@use "variables" as *;
+
 // ==============================================
 // Pages: Styles scoped to specific page types
 // ==============================================
@@ -8,6 +10,7 @@
 
 /* === Hero Section === */
 .hero-section {
+  width: min(100%, 700px);
   text-align: center;
   margin: auto auto 2rem;
   max-width: 700px;
@@ -583,7 +586,7 @@ div.highlighter-rouge::before { display: none; }
   color: var(--color-text-medium);
 }
 
-/* === Diagram Placeholder === */
+/* === Draft diagram === */
 .diagram-placeholder {
   margin: 2.5rem 0;
   text-align: center;
@@ -609,6 +612,10 @@ div.highlighter-rouge::before { display: none; }
   font-size: var(--text-sm);
   color: var(--color-text-light);
   font-style: italic;
+}
+
+.placeholder-status {
+  margin: 0 !important;
 }
 
 .diagram-placeholder figcaption {

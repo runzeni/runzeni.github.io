@@ -6,6 +6,8 @@ slug: module-4
 permalink: /misc/colorimetry/module-4/
 date: 2025-12-10
 description: "ACES architecture, AP0/AP1 working spaces, gamut compression, and practical workflows."
+math: true
+colorimetry_interactive: true
 ---
 
 <header class="module-header">
@@ -73,7 +75,7 @@ description: "ACES architecture, AP0/AP1 working spaces, gamut compression, and 
     <ul>
       <li><strong>The "Archive" Space.</strong></li>
       <li><strong>Size:</strong> Massive. It encompasses the entire <mark>CIE Spectral Locus</mark>. It includes colors that humans can see but no screen can show, and even "imaginary" colors that don't exist.</li>
-      <li><strong>Use Case:</strong> Storage, Interchange, and Archival (<mark>EXR</mark> files). You never grade or render in <mark>AP0</mark>.</li>
+      <li><strong>Use Case:</strong> Storage, interchange, and archival (<mark>EXR</mark> files). It is usually not the preferred working space for grading or rendering.</li>
       <li><strong>Why?</strong> It is future-proof. If we invent a laser display in 2050 that can show pure spectral cyan, your AP0 file already contains that data.</li>
     </ul>
 
@@ -85,15 +87,15 @@ description: "ACES architecture, AP0/AP1 working spaces, gamut compression, and 
       <li><strong>Use Case:</strong> Grading, CGI Rendering, Compositing.</li>
       <li><strong>Why?</strong> AP0 is too big.
         <ul>
-          <li><strong>Math Issue:</strong> Calculating drag/lift/gamma operations in AP0 feels "weird" to colorists because the primaries are so far apart.</li>
-          <li><strong>CGI Issue:</strong> Calculating light bounces in AP0 can result in <mark>negative energy</mark> (physically impossible) because the primaries are imaginary.</li>
-          <li><strong>Solution:</strong> <mark>AP1</mark> uses "Real" primaries (closer to Rec.2020) that make grading knobs feel responsive and CGI light calculations stable.</li>
+          <li><strong>Math Issue:</strong> The very wide AP0 primaries can produce unintuitive channel values during creative operations.</li>
+          <li><strong>CGI Issue:</strong> Intermediate RGB components can become negative in a wide or imaginary-primary coordinate system. That is a coordinate-system result, not negative physical light.</li>
+          <li><strong>Working Choice:</strong> <mark>AP1</mark> is smaller and closer to common production gamuts, which makes it a practical working space for many ACES tools.</li>
         </ul>
       </li>
     </ul>
 
     <blockquote>
-      <strong>The Rule:</strong> Save files in <mark>AP0</mark>. Work on pixels in <mark>AP1</mark>.
+      <strong>Practical convention:</strong> archive or interchange in <mark>AP0</mark> when the pipeline calls for it; use an appropriate working space such as <mark>AP1</mark> for the actual creative operation.
     </blockquote>
 
     <h3>The Mathematics: Primaries and Matrices</h3>
@@ -203,13 +205,23 @@ description: "ACES architecture, AP0/AP1 working spaces, gamut compression, and 
       <strong>Critical Understanding:</strong> An IDT is NOT just a LUT. It's a mathematical transform (matrix + curve + white point adaptation) specific to each camera model. This is why you need the correct IDT for your camera—guessing creates color shifts.
     </blockquote>
 
-    <figure class="diagram-placeholder">
-      <div class="diagram-container">
-        <div class="placeholder-text">
-          [Future Interactive: AP0 vs AP1 Gamut Comparison - CIE 1931 diagram showing AP0 (spectral locus boundary), AP1, Rec.2020, DCI-P3, and Rec.709 gamut triangles with toggles]
-        </div>
+    <figure class="colorimetry-widget" data-colorimetry-widget="gamut-coordinates" aria-labelledby="gamut-coordinates-title">
+      <p class="colorimetry-widget__eyebrow">Interactive study</p>
+      <h4 class="colorimetry-widget__title" id="gamut-coordinates-title">Primary-coordinate explorer</h4>
+      <p class="colorimetry-widget__note">Toggle named primary triangles on a chromaticity-coordinate plane. It intentionally omits a spectral-locus drawing, so it cannot imply a measured gamut area.</p>
+      <div class="colorimetry-widget__canvas">
+        <svg data-gamut-svg role="img" aria-labelledby="gamut-coordinates-svg-title gamut-coordinates-svg-description"></svg>
       </div>
-      <figcaption>Figure 4.1: ACES gamut comparison—AP0 vs AP1 on the CIE 1931 chromaticity diagram</figcaption>
+      <fieldset class="colorimetry-widget__checkboxes">
+        <legend class="visually-hidden">Show gamut primary coordinates</legend>
+        <label><input data-gamut-toggle type="checkbox" value="rec709" checked>Rec.709</label>
+        <label><input data-gamut-toggle type="checkbox" value="rec2020">Rec.2020</label>
+        <label><input data-gamut-toggle type="checkbox" value="ap1" checked>ACES AP1</label>
+        <label><input data-gamut-toggle type="checkbox" value="ap0">ACES AP0</label>
+      </fieldset>
+      <p class="colorimetry-widget__readout" data-gamut-readout role="status" aria-live="polite"></p>
+      <noscript><p class="colorimetry-widget__fallback">JavaScript is off. The AP0 and AP1 coordinate tables above remain the source for this comparison.</p></noscript>
+      <figcaption>Figure 4.1: Primary-coordinate comparison. AP0/AP1 values follow the tables above; Rec.709 and Rec.2020 are standard reference primaries.</figcaption>
     </figure>
 
   </section>
@@ -255,21 +267,21 @@ description: "ACES architecture, AP0/AP1 working spaces, gamut compression, and 
       <li><strong>Result:</strong> It "heals" the broken pixels without affecting the rest of the image.</li>
     </ul>
 
-    <h3>ACES 2.0 (The Future)</h3>
+    <h3>ACES 2</h3>
 
     <p>
-      <mark>ACES 2.0</mark> (released 2024/2025) is a massive overhaul aimed at the "SDR vs. HDR" problem.
+      <mark>ACES 2</mark> revises the output-transform approach with the goal of more consistent rendering across SDR and HDR display targets. Check the current Academy documentation before choosing a production implementation.
     </p>
 
     <ul>
-      <li><strong>Unified Tone Scale:</strong> In ACES 1.x, the SDR and HDR transforms looked different. Grading for theatrical (48 nits) often felt completely different from Home HDR (1000 nits). ACES 2.0 aligns these looks perceptually.</li>
-      <li><strong>Native Gamut Compression:</strong> Better handling of the "Blue Light" issues built directly into the transforms.</li>
+      <li><strong>Unified tone scale:</strong> The updated output transforms aim for more consistent perceptual behavior across display targets.</li>
+      <li><strong>Gamut handling:</strong> Treat the exact tool and transform version as part of the show-specific pipeline, not as a generic fix for every saturated-light issue.</li>
     </ul>
 
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: Blue Light Artifact - Before/after comparison showing police siren LED with broken magenta artifacts (no RGC) vs clean blue gradient (with RGC), including pixel value inspection]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 4.2: Blue light artifact demonstration—gamut compression healing negative values</figcaption>
@@ -343,7 +355,7 @@ description: "ACES architecture, AP0/AP1 working spaces, gamut compression, and 
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: ACES Pipeline Flowchart - Camera RAW → IDT → ACES2065-1 (AP0 Archive) → ACEScg (AP1 Working) → LMT (Look) → RRT+ODT (Display) with branching outputs for Rec.709/P3/HDR]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 4.3: ACES workflow architecture—from camera to display with separation of concerns</figcaption>
@@ -368,34 +380,3 @@ description: "ACES architecture, AP0/AP1 working spaces, gamut compression, and 
   </section>
 
 </article>
-
-<nav class="module-navigation" aria-label="Module navigation">
-  <div class="module-nav-container">
-
-    <a href="/misc/colorimetry/" class="module-nav-overview">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="7" height="7"></rect>
-        <rect x="14" y="3" width="7" height="7"></rect>
-        <rect x="14" y="14" width="7" height="7"></rect>
-        <rect x="3" y="14" width="7" height="7"></rect>
-      </svg>
-      <span>Back to Overview</span>
-    </a>
-
-    <div class="module-nav-arrows">
-      <a href="/misc/colorimetry/module-3/" class="module-nav-prev">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-        <span>Previous Module</span>
-      </a>
-
-      <a href="/misc/colorimetry/module-5/" class="module-nav-next">
-        <span>Next Module</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </a>
-    </div>
-  </div>
-</nav>

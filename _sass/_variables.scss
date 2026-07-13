@@ -1,3 +1,5 @@
+@use "sass:map";
+
 // ==============================================
 // Variables, Custom Properties & Mixins
 // ==============================================
@@ -152,10 +154,9 @@ $z-layers: (
 );
 
 @function z($layer) {
-  @if map-has-key($z-layers, $layer) {
-    @return map-get($z-layers, $layer);
+  @if map.has-key($z-layers, $layer) {
+    @return map.get($z-layers, $layer);
   }
   @warn "Unknown z-layer: #{$layer}";
   @return null;
 }
-

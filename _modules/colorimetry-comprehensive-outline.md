@@ -16,7 +16,7 @@ description: "Complete outline of the colorimetry series"
 }
 </style>
 <div class="no-print" style="text-align: right; margin: 1rem 0;">
-  <button onclick="window.print()" style="padding: 0.5rem 1.5rem; background: transparent; color: var(--color-text); border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer; font-weight: 500; font-size: var(--text-sm); transition: all 0.2s ease;">
+  <button type="button" data-print-page style="padding: 0.5rem 1.5rem; background: transparent; color: var(--color-text); border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer; font-weight: 500; font-size: var(--text-sm); transition: all 0.2s ease;">
     Print
   </button>
 </div>
@@ -223,5 +223,5 @@ Color science is the intersection of:
 <footer style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border); color: var(--color-text-light); font-size: var(--text-sm);">
   <p><strong>Regarding Colorimetry</strong></p>
   <p>By Runze Ni • December 2025</p>
-  <p><a href="/misc/colorimetry/">runzeni.github.io/misc/colorimetry</a></p>
+  <p><a href="{{ '/misc/colorimetry/' | relative_url }}">runzeni.github.io/misc/colorimetry</a></p>
 </footer>

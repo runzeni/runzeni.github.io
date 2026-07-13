@@ -46,7 +46,7 @@ description: "HDR standards (PQ/HLG), viewing environment effects, and system co
     <h2>5.1 The HDR Landscape: PQ vs. HLG</h2>
 
     <p>
-      <mark>High Dynamic Range (HDR)</mark> is not just "brighter." It is a fundamental shift in how we map signal to light. There are two competing standards, and they work on completely different philosophies.
+      <mark>High Dynamic Range (HDR)</mark> is not just "brighter." It changes how a signal is mapped to light. PQ and HLG are two widely used transfer systems with different design goals.
     </p>
 
     <h3>A. Perceptual Quantizer (PQ / ST.2084)</h3>
@@ -55,13 +55,13 @@ description: "HDR standards (PQ/HLG), viewing environment effects, and system co
       <li><strong>Philosophy:</strong> <mark>Absolute Luminance</mark>.</li>
       <li><strong>The Logic:</strong> A code value in <mark>PQ</mark> corresponds to a specific number of <mark>Nits (cd/m²)</mark>.
         <ul>
-          <li>Code Value <mark>0.51 = Exactly 100 nits</mark>.</li>
-          <li>Code Value <mark>0.75 = Exactly 1,000 nits</mark>.</li>
+          <li>Code Value <mark>0.508 ≈ 100 nits</mark>.</li>
+          <li>Code Value <mark>0.752 ≈ 1,000 nits</mark>.</li>
         </ul>
       </li>
       <li><strong>The "Container":</strong> The container is always <mark>0 to 10,000 nits</mark>.</li>
-      <li><strong>Pros:</strong> It preserves the artistic intent perfectly. If you graded a lamp at 500 nits, it will play at 500 nits on any PQ TV.</li>
-      <li><strong>Cons:</strong> If the TV cannot reach 500 nits, it must "<mark>Tone Map</mark>" (clip or roll off) the signal. The TV makes a guess, which can change the look.</li>
+      <li><strong>Pros:</strong> It carries an absolute luminance target through the mastering signal.</li>
+      <li><strong>Limit:</strong> If a display cannot reproduce that target, its tone-mapping behavior can change the result.</li>
       <li><strong>Used By:</strong> <mark>Dolby Vision</mark>, <mark>HDR10</mark>, Cinema.</li>
     </ul>
 
@@ -69,21 +69,17 @@ description: "HDR standards (PQ/HLG), viewing environment effects, and system co
 
     <ul>
       <li><strong>Philosophy:</strong> <mark>Relative Luminance</mark>.</li>
-      <li><strong>The Logic:</strong> It works like traditional SDR gamma. The signal is a percentage of the display's peak capability.
-        <ul>
-          <li>Code Value <mark>0.5 = "50% of whatever this TV can do."</mark></li>
-        </ul>
-      </li>
-      <li><strong>The "Container":</strong> It is "stretchy." On a 1,000 nit TV, the image is bright. On a 300 nit TV, the image is dimmer, but nothing is clipped.</li>
-      <li><strong>Pros:</strong> Backwards compatible with SDR TVs. No tone mapping required (the display just shows what it can).</li>
-      <li><strong>Cons:</strong> The artistic intent is fluid. The image looks different on every screen.</li>
+      <li><strong>The Logic:</strong> It uses a relative signal and a display-dependent system gamma, rather than assigning one fixed luminance to each code value.</li>
+      <li><strong>The "Container":</strong> Its display behavior adapts to the target environment; monitoring and display transforms still matter.</li>
+      <li><strong>Pros:</strong> It can support an HDR production path while retaining a practical SDR compatibility story.</li>
+      <li><strong>Limit:</strong> The same signal can look different across display capabilities and viewing conditions.</li>
       <li><strong>Used By:</strong> Broadcast (<mark>BBC/NHK</mark>), Live Sports, YouTube HDR.</li>
     </ul>
 
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: PQ vs HLG Curves - Side-by-side comparison showing PQ absolute mapping (code value → nits) vs HLG relative mapping (code value → % of peak), with adjustable display peak brightness slider]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 5.1: PQ vs HLG transfer functions—absolute vs relative luminance encoding</figcaption>
@@ -123,7 +119,7 @@ description: "HDR standards (PQ/HLG), viewing environment effects, and system co
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: Viewing Environment Simulator - Same image shown in dark surround (Gamma 2.6), dim surround (Gamma 2.4), and bright surround (Gamma 2.2) with adjustable ambient light slider demonstrating Bartleson-Breneman effect]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 5.2: Bartleson-Breneman effect—how viewing environment affects perceived contrast</figcaption>
@@ -174,7 +170,7 @@ description: "HDR standards (PQ/HLG), viewing environment effects, and system co
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: NCLC Tag Decoder - Upload video file to inspect NCLC metadata tags, showing how different tags (1-1-1 vs 1-2-1) are interpreted by QuickTime/ColorSync with before/after gamma shift visualization]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 5.3: QuickTime gamma shift—NCLC tag interpretation and workarounds</figcaption>
@@ -199,34 +195,3 @@ description: "HDR standards (PQ/HLG), viewing environment effects, and system co
   </section>
 
 </article>
-
-<nav class="module-navigation" aria-label="Module navigation">
-  <div class="module-nav-container">
-
-    <a href="/misc/colorimetry/" class="module-nav-overview">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="7" height="7"></rect>
-        <rect x="14" y="3" width="7" height="7"></rect>
-        <rect x="14" y="14" width="7" height="7"></rect>
-        <rect x="3" y="14" width="7" height="7"></rect>
-      </svg>
-      <span>Back to Overview</span>
-    </a>
-
-    <div class="module-nav-arrows">
-      <a href="/misc/colorimetry/module-4/" class="module-nav-prev">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-        <span>Previous Module</span>
-      </a>
-
-      <a href="/misc/colorimetry/module-6/" class="module-nav-next">
-        <span>Next Module</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </a>
-    </div>
-  </div>
-</nav>

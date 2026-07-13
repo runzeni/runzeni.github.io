@@ -1,29 +1,28 @@
 <footer class="site-footer">
   <div class="footer-content">
     <div class="footer-grid">
-      <div class="footer-section">
-        <h3>Explore</h3>
+      <section class="footer-section" aria-labelledby="footer-explore">
+        <h2 id="footer-explore">Explore</h2>
         <ul>
-          <li><a href="/fotos/">Portfolio</a></li>
-          <li><a href="/cine/">Cine</a></li>
-          <li><a href="/protocols/">Protocol</a></li>
-          <li><a href="/misc/">Misc</a></li>
+          {% for link in site.data.navigation %}
+            {% unless link.title == 'Home' %}<li><a href="{{ link.url | relative_url }}">{{ link.title }}</a></li>{% endunless %}
+          {% endfor %}
         </ul>
-      </div>
-      <div class="footer-section">
-        <h3>Connect</h3>
+      </section>
+      <section class="footer-section" aria-labelledby="footer-connect">
+        <h2 id="footer-connect">Connect</h2>
         <ul>
-          <li><a href="mailto:runzeni2001@gmail.com">Email</a></li>
-          <li><a href="https://scholar.google.com/citations?user=-Azv6CYAAAAJ&hl" target="_blank" rel="noopener noreferrer">Google Scholar</a></li>
-          <li><a href="https://github.com/runzeni" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-          <li><a href="https://www.linkedin.com/in/runze233" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href="mailto:{{ site.data.profile.email }}">Email</a></li>
+          <li><a href="{{ site.data.profile.links.scholar }}" target="_blank" rel="noopener noreferrer">Google Scholar</a></li>
+          <li><a href="{{ site.data.profile.links.github }}" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="{{ site.data.profile.links.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
         </ul>
-      </div>
+      </section>
     </div>
     <div class="footer-bottom">
-      <p>&copy; {{ 'now' | date: "%Y" }} Runze Ni. No rights reserved.</p>
-      <p>Tampa, FL</p>
-      <p class="footer-powered">Powered by <a href="https://pages.github.com" target="_blank" rel="noopener noreferrer">GitHub Pages</a></p>
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ site.data.profile.name }}.</p>
+      <p>{{ site.data.profile.location }}</p>
+      <p class="footer-powered">Built with <a href="https://pages.github.com" target="_blank" rel="noopener noreferrer">GitHub Pages</a></p>
     </div>
   </div>
 </footer>

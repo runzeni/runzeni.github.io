@@ -1,14 +1,10 @@
-# Global navigation links
-# Used by header/footer includes to avoid hardcoded paths.
-
 - title: Home
   url: /
-
-- title: Photography
+- title: Fotos
   url: /fotos/
-
-- title: Misc / Modules
+- title: Cine
+  url: /cine/
+- title: Notes & playground
   url: /misc/
-
-- title: Protocols
+- title: Protocol
   url: /protocols/

@@ -6,6 +6,7 @@ slug: module-1
 permalink: /misc/colorimetry/module-1/
 date: 2025-12-10
 description: "How biological vision works — from photons to perception — and why it matters for digital color."
+math: true
 ---
 
 <header class="module-header">
@@ -74,7 +75,7 @@ description: "How biological vision works — from photons to perception — and
     </p>
 
     <figure class="content-figure">
-      <img src="/assets/figures/colorimetry/png/fig-1-1.png" alt="SPD comparison showing Tungsten continuous spectrum vs LED discontinuous spectrum" loading="lazy">
+      <img src="{{ '/assets/figures/colorimetry/png/fig-1-1.png' | relative_url }}" alt="SPD comparison showing Tungsten continuous spectrum vs LED discontinuous spectrum" loading="lazy">
       <figcaption>Figure 1.1: SPD comparison—Tungsten (continuous) vs LED (discontinuous). Notice the missing data in cyan and deep red regions.</figcaption>
     </figure>
 
@@ -91,7 +92,7 @@ description: "How biological vision works — from photons to perception — and
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: Metamerism Demo - Two fabric swatches that match under D65 but separate under LED illumination]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 1.2: Metamerism failure—same apparent color under tungsten, different colors under LED</figcaption>
@@ -131,7 +132,7 @@ description: "How biological vision works — from photons to perception — and
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: Eye Cross-Section - Highlighting foveal density vs peripheral rod distribution with resolution heat map]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 1.3: Retinal structure showing foveal cone density vs peripheral rod dominance</figcaption>
@@ -163,7 +164,7 @@ description: "How biological vision works — from photons to perception — and
     </ul>
 
     <figure class="content-figure">
-      <img src="/assets/figures/colorimetry/png/fig-1-4.png" alt="LMS cone spectral sensitivities showing L, M, and S cone response curves with significant overlap" loading="lazy">
+      <img src="{{ '/assets/figures/colorimetry/png/fig-1-4.png' | relative_url }}" alt="LMS cone spectral sensitivities showing L, M, and S cone response curves with significant overlap" loading="lazy">
       <figcaption>Figure 1.4: LMS cone spectral sensitivities showing significant overlap, especially between L and M</figcaption>
     </figure>
 
@@ -246,7 +247,7 @@ description: "How biological vision works — from photons to perception — and
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: Perception Anomaly Demonstrator - Side-by-side comparisons showing H-K effect, Abney effect, and simultaneous contrast]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 1.5: Perception anomaly demonstrations—seeing the "bugs" in human vision</figcaption>
@@ -287,7 +288,7 @@ description: "How biological vision works — from photons to perception — and
     </p>
 
     <figure class="content-figure">
-      <img src="/assets/figures/colorimetry/png/fig-1-6.png" alt="Camera sensor spectral sensitivity compared to CIE 1931 human observer curves" loading="lazy">
+      <img src="{{ '/assets/figures/colorimetry/png/fig-1-6.png' | relative_url }}" alt="Camera sensor spectral sensitivity compared to CIE 1931 human observer curves" loading="lazy">
       <figcaption>Figure 1.6: Camera sensor spectral sensitivity vs human observer—the fundamental mismatch ACES attempts to correct</figcaption>
     </figure>
 
@@ -298,29 +299,3 @@ description: "How biological vision works — from photons to perception — and
   </section>
 
 </article>
-
-<nav class="module-navigation" aria-label="Module navigation">
-  <div class="module-nav-container">
-
-    <a href="/misc/colorimetry/" class="module-nav-overview">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="7" height="7"></rect>
-        <rect x="14" y="3" width="7" height="7"></rect>
-        <rect x="14" y="14" width="7" height="7"></rect>
-        <rect x="3" y="14" width="7" height="7"></rect>
-      </svg>
-      <span>Back to Overview</span>
-    </a>
-
-    <div class="module-nav-arrows">
-      <span class="module-nav-disabled"></span>
-
-      <a href="/misc/colorimetry/module-2/" class="module-nav-next">
-        <span>Next Module</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </a>
-    </div>
-  </div>
-</nav>

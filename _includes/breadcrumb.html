@@ -2,7 +2,7 @@
 {% unless page.hide_breadcrumb %}
 <div class="site-breadcrumb{% if page.breadcrumb_class %} {{ page.breadcrumb_class }}{% endif %}">
   <nav class="breadcrumb-container" aria-label="Breadcrumb">
-    <a href="/" class="breadcrumb-item">Home</a>
+    <a href="{{ '/' | relative_url }}" class="breadcrumb-item">Home</a>
     {% assign crumbs = page.url | split: '/' %}
     {% assign crumb_path = '' %}
     {% for crumb in crumbs %}
@@ -21,7 +21,7 @@
               {% break %}
             {% endif %}
           {% endfor %}
-          <a href="{{ crumb_url }}" class="breadcrumb-item">{{ crumb_label }}</a>
+          <a href="{{ crumb_url | relative_url }}" class="breadcrumb-item">{{ crumb_label }}</a>
         {% endif %}
       {% endif %}
     {% endfor %}

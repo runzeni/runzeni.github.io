@@ -6,6 +6,7 @@ slug: module-2
 permalink: /misc/colorimetry/module-2/
 date: 2025-12-10
 description: "From early color-matching experiments to the CIE 1931 XYZ standard, perceptual uniformity, and the analog legacy of film."
+math: true
 ---
 
 <header class="module-header">
@@ -73,7 +74,7 @@ description: "From early color-matching experiments to the CIE 1931 XYZ standard
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: Munsell Color Solid - 3D rotatable visualization showing Hue, Value, and Chroma axes with irregular perceptual shape]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 2.0: Munsell Color Solid—the first perceptually-organized 3D color space</figcaption>
@@ -110,7 +111,7 @@ description: "From early color-matching experiments to the CIE 1931 XYZ standard
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: Wright-Guild Bipartite Field - Split screen with adjustable RGB sliders to match spectral test colors, showing color matching functions]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 2.1: Wright-Guild experimental setup—color matching with three primaries</figcaption>
@@ -211,7 +212,7 @@ description: "From early color-matching experiments to the CIE 1931 XYZ standard
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: CIE 1931 Chromaticity Diagram - Interactive horseshoe showing spectral locus, purple line, white point (D65), and adjustable gamut triangles (sRGB, Rec.709, DCI-P3, Rec.2020)]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 2.2: CIE 1931 xy Chromaticity Diagram—the horseshoe that defines all visible colors</figcaption>
@@ -280,7 +281,7 @@ description: "From early color-matching experiments to the CIE 1931 XYZ standard
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: MacAdam Ellipses - CIE 1931 diagram overlaid with JND ellipses at 10× scale, showing perceptual non-uniformity (tiny in blue, large in green)]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 2.3: MacAdam Ellipses (10× magnified)—visualizing perceptual non-uniformity of CIE 1931 XYZ</figcaption>
@@ -325,7 +326,7 @@ description: "From early color-matching experiments to the CIE 1931 XYZ standard
     <figure class="diagram-placeholder">
       <div class="diagram-container">
         <div class="placeholder-text">
-          [Future Interactive: Hurter & Driffield Characteristic Curve - Log Exposure vs Density plot showing toe (shadows), linear region (midtones), and shoulder (highlights) with adjustable film stock comparisons]
+          {% include colorimetry-figure-in-development.html %}
         </div>
       </div>
       <figcaption>Figure 2.4: Hurter & Driffield Characteristic Curve—the analog foundation of digital Log encoding</figcaption>
@@ -350,34 +351,3 @@ description: "From early color-matching experiments to the CIE 1931 XYZ standard
   </section>
 
 </article>
-
-<nav class="module-navigation" aria-label="Module navigation">
-  <div class="module-nav-container">
-
-    <a href="/misc/colorimetry/" class="module-nav-overview">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="7" height="7"></rect>
-        <rect x="14" y="3" width="7" height="7"></rect>
-        <rect x="14" y="14" width="7" height="7"></rect>
-        <rect x="3" y="14" width="7" height="7"></rect>
-      </svg>
-      <span>Back to Overview</span>
-    </a>
-
-    <div class="module-nav-arrows">
-      <a href="/misc/colorimetry/module-1/" class="module-nav-prev">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-        <span>Previous Module</span>
-      </a>
-
-      <a href="/misc/colorimetry/module-3/" class="module-nav-next">
-        <span>Next Module</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </a>
-    </div>
-  </div>
-</nav>

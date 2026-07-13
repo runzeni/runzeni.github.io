@@ -4,6 +4,7 @@
 # Jekyll build output
 /_site/
 .jekyll-cache/
+/assets/img/derived/
 
 # Ruby / Bundler
 /vendor/

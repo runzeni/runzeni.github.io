@@ -1,0 +1,14 @@
+<dialog class="gallery-lightbox" id="gallery-lightbox" aria-label="Image viewer">
+  <div class="gallery-lightbox__toolbar">
+    <button type="button" class="gallery-lightbox__button" data-gallery-close aria-label="Close image viewer">Close</button>
+    <p class="gallery-lightbox__counter" data-gallery-counter aria-live="polite"></p>
+    <div class="gallery-lightbox__navigation" aria-label="Image navigation">
+      <button type="button" class="gallery-lightbox__button" data-gallery-prev aria-label="Previous image">←</button>
+      <button type="button" class="gallery-lightbox__button" data-gallery-next aria-label="Next image">→</button>
+    </div>
+  </div>
+  <div class="gallery-lightbox__stage" data-gallery-stage>
+    <img class="gallery-lightbox__image" data-gallery-image alt="" draggable="false">
+  </div>
+  <p class="gallery-lightbox__hint">Double-tap or pinch to zoom. Swipe to move between images.</p>
+</dialog>

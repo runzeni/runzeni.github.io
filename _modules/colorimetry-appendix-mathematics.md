@@ -4,6 +4,7 @@ series: colorimetry
 slug: appendix-mathematics
 permalink: /misc/colorimetry/appendix-mathematics/
 description: "Comprehensive mathematical reference for all formulas used in the Modern Color Science series"
+math: true
 ---
 
 <header class="module-header">
@@ -373,17 +374,3 @@ description: "Comprehensive mathematical reference for all formulas used in the 
   </section>
 
 </article>
-
-<nav class="module-navigation" aria-label="Module navigation">
-  <div class="module-nav-container">
-    <a href="/misc/colorimetry/" class="module-nav-overview">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="7" height="7"></rect>
-        <rect x="14" y="3" width="7" height="7"></rect>
-        <rect x="14" y="14" width="7" height="7"></rect>
-        <rect x="3" y="14" width="7" height="7"></rect>
-      </svg>
-      <span>Back to Overview</span>
-    </a>
-  </div>
-</nav>

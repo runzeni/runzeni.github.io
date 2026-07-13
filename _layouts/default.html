@@ -1,305 +1,117 @@
 {% assign section = page.url | split: '/' | slice: 1 | first | default: 'home' %}
-<!DOCTYPE html>
-<html lang="en" data-theme="light" data-monochrome="false" data-reduce-transparency="off" data-section="{{ section }}">
+<!doctype html>
+<html lang="{{ site.lang | default: 'en' }}" data-theme="light" data-monochrome="false" data-reduce-transparency="off" data-section="{{ section }}">
   <head>
-    <!-- ========================================
-         BLOCKING SCRIPT (Must run before CSS)
-         ======================================== -->
     <script>
-    (function() {
-      // Theme detection (system preference + localStorage)
-      const storedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = storedTheme || (prefersDark ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme', theme);
+      (function () {
+        try {
+          var theme = localStorage.getItem('theme');
+          var monochrome = localStorage.getItem('monochrome') || 'false';
+          var reduceTransparency = localStorage.getItem('reduceTransparency');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var supportsBackdrop = CSS.supports('backdrop-filter', 'blur(1px)') || CSS.supports('-webkit-backdrop-filter', 'blur(1px)');
 
-      // Monochrome mode (localStorage only)
-      const storedMonochrome = localStorage.getItem('monochrome') || 'false';
-      document.documentElement.setAttribute('data-monochrome', storedMonochrome);
-
-      // Reduce transparency (check support + localStorage)
-      const supportsBackdrop = CSS.supports('backdrop-filter', 'blur(1px)') || CSS.supports('-webkit-backdrop-filter', 'blur(1px)');
-      const storedReduceTransparency = localStorage.getItem('reduceTransparency');
-      const reduceTransparency = supportsBackdrop ? (storedReduceTransparency || 'off') : 'on';
-      document.documentElement.setAttribute('data-reduce-transparency', reduceTransparency);
-    })();
+          document.documentElement.setAttribute('data-theme', theme || (prefersDark ? 'dark' : 'light'));
+          document.documentElement.setAttribute('data-monochrome', monochrome);
+          document.documentElement.setAttribute('data-reduce-transparency', supportsBackdrop ? (reduceTransparency || 'off') : 'on');
+        } catch (error) {
+          // Preference storage can be unavailable in a private browsing context.
+        }
+      }());
     </script>
 
-    <!-- Fallback for users with JavaScript disabled -->
-    <noscript>
-      <style>
-        .sticky-nav, .lightbox { display: none !important; }
-        body::before { content: "JavaScript disabled."; display: block; background: #fff3cd; color: #856404; padding: 0.1rem; text-align: center; font-family: -apple-system, sans-serif; border-bottom: 1px solid #ffeaa7; }
-      </style>
-    </noscript>
-
-    <!-- ========================================
-         ESSENTIAL META TAGS
-         ======================================== -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Security: Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-src 'self';">
-
-    <title>{{ page.title | default: site.title }}</title>
-
-    <!-- ========================================
-         STYLES & FONTS
-         ======================================== -->
-    <!-- Critical CSS preload -->
-    <link rel="preload" href="/assets/css/style.css" as="style">
-    <link rel="stylesheet" href="/assets/css/style.css">
-
-    <!-- Google Fonts: Source Serif 4, IBM Plex Sans, IBM Plex Mono -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&display=swap" rel="stylesheet">
-
-    <!-- ========================================
-         FAVICONS & MOBILE ICONS
-         ======================================== -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
-
-    <!-- Browser theme colors (responsive to color scheme) -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fefefe" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#0f0f0f" media="(prefers-color-scheme: dark)">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'self';">
 
-    <!-- ========================================
-         SEO & SOCIAL META
-         ======================================== -->
-    <link rel="canonical" href="{{ page.url | absolute_url }}">
+    {% seo %}
 
-    <!-- Basic SEO -->
-    <meta name="description" content="{{ page.description | default: 'Runze Ni - Researcher in renal physiology and photographer.' }}">
-    <meta name="author" content="Runze Ni">
-    <meta name="robots" content="index, follow">
-    <meta name="keywords" content="runze ni, renal physiology, kidney research, photography, portfolio, USF, Case Western">
+    <link rel="preload" href="{{ '/assets/css/style.css' | relative_url }}" as="style">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
 
-    <!-- Open Graph (Facebook, LinkedIn) -->
-    <meta property="og:title" content="{{ page.title | default: site.title }}">
-    <meta property="og:description" content="{{ page.description | default: site.description }}">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ page.url | absolute_url }}">
-    <meta property="og:site_name" content="Runze Ni">
-    {% if page.image %}
-    <meta property="og:image" content="{{ page.image | absolute_url }}">
-    <meta property="og:image:alt" content="{{ page.title }}">
+    <link rel="icon" href="{{ '/favicon.ico' | relative_url }}" sizes="any">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ '/assets/img/favicon-32x32.png' | relative_url }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ '/assets/img/apple-touch-icon.png' | relative_url }}">
+
+    {% if page.math %}
+      <script>
+        window.MathJax = {
+          tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']], processEscapes: true },
+          options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
+        };
+      </script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
     {% endif %}
 
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ page.title | default: site.title }}">
-    <meta name="twitter:description" content="{{ page.description | default: site.description }}">
-
-    <!-- ========================================
-         EXTERNAL DEPENDENCIES
-         ======================================== -->
-    <!-- Hammer.js for touch gestures (deferred to prevent render blocking) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" integrity="sha512-UXumZrZNiOwnTcZSHLOfcTs0aos2MzBWHXOHOuB0J/R44QB0dwY5JgfbvljXcklVf65Gc4El6RjZ+lnwd2az2g==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <noscript>
+      <style>
+        .site-menu-dropdown { position: static; max-height: none; overflow: visible; opacity: 1; padding: 1rem; }
+        .site-nav-item, .menu-controls { opacity: 1; transform: none; }
+        .sticky-nav { display: none; }
+      </style>
+    </noscript>
   </head>
-  
-  <!-- ========================================
-       BODY CONTENT
-       ======================================== -->
+
   <body>
-
     <div class="scroll-progress" id="scroll-progress" role="progressbar" aria-label="Page scroll progress" aria-valuemin="0" aria-valuemax="100"></div>
-    
+
     <header class="site-header" id="site-header">
-      
       <div class="header-left">
-        <button id="menu-toggle" class="menu-toggle header-button" aria-label="Toggle navigation menu" aria-expanded="false" title="Menu">
-          <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
+        <button id="menu-toggle" class="menu-toggle header-button" type="button" aria-label="Open navigation" aria-controls="site-menu" aria-expanded="false" title="Menu">
+          <span class="hamburger" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
         </button>
-        
-        <button id="theme-toggle" class="theme-toggle header-button" aria-label="Toggle dark mode" title="Toggle dark mode (D)">
-          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
+
+        <button id="theme-toggle" class="theme-toggle header-button" type="button" aria-label="Switch to dark mode" title="Switch to dark mode (D)">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
         </button>
       </div>
-      
+
       <div class="site-title">
-        <a href="/" class="site-title-link">RUNZE FOTOS</a>
+        <a href="{{ '/' | relative_url }}" class="site-title-link" aria-label="{{ site.title }} home">RUNZE NI{% unless section == 'home' %} / {{ section }}{% endunless %}</a>
       </div>
 
-      <a href="#hero-section" class="readme-link" id="readme-scroll-link">README</a>
-    
+      <a href="{{ '/' | relative_url }}" class="readme-link">INDEX</a>
     </header>
-    
-    <nav id="site-menu" class="site-menu-dropdown">
+
+    <nav id="site-menu" class="site-menu-dropdown" aria-label="Primary navigation" aria-hidden="true">
       {% include navigation.html %}
-
       <div class="menu-controls">
-        <button id="monochrome-toggle" class="monochrome-toggle header-button" aria-label="Toggle monochrome mode" title="Toggle B&W mode (M)">
-          <svg class="icon-color" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 2v20"></path>
-            <path d="M12 2a10 10 0 0 1 0 20" fill="url(#menu-color-gradient)"></path>
-            <defs>
-              <linearGradient id="menu-color-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <svg class="icon-bw" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 2v20"></path>
-            <path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" opacity="0.3"></path>
-          </svg>
+        <button id="monochrome-toggle" class="monochrome-toggle header-button" type="button" aria-label="Switch to monochrome mode" title="Switch to B&W mode (M)">
+          <svg class="icon-color" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20"></path><path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" opacity=".3"></path></svg>
+          <svg class="icon-bw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20"></path><path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" opacity=".3"></path></svg>
         </button>
-
-        <button id="reduce-transparency-toggle" class="reduce-transparency-toggle header-button" aria-label="Reduce transparency" title="Reduce transparency (G)">
-          <svg class="icon-transparency-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-            <line x1="12" y1="3" x2="12" y2="21"></line>
-            <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" fill="currentColor" opacity="0.3"></path>
-          </svg>
-          <svg class="icon-transparency-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-            <line x1="12" y1="3" x2="12" y2="21"></line>
-            <path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7" fill="currentColor"></path>
-          </svg>
+        <button id="reduce-transparency-toggle" class="reduce-transparency-toggle header-button" type="button" aria-label="Reduce transparency" title="Reduce transparency (G)">
+          <svg class="icon-transparency-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M12 3v18"></path></svg>
+          <svg class="icon-transparency-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" fill="currentColor"></rect></svg>
         </button>
       </div>
     </nav>
-    
-    <main id="main-content">
+
+    <main id="main-content" tabindex="-1">
       {% include breadcrumb.html %}
       {{ content }}
     </main>
-    
-    <div class="sticky-nav" id="sticky-nav">
-      <button class="sticky-nav-button" id="scroll-top" aria-label="Scroll to top" title="Go to top">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
-      </button>
-      
-      <a href="/fotos/archive/" class="sticky-nav-button" id="section-nav-button" aria-label="View photo archive" title="Archive">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="3" y="3" width="7" height="7"></rect>
-          <rect x="14" y="3" width="7" height="7"></rect>
-          <rect x="14" y="14" width="7" height="7"></rect>
-          <rect x="3" y="14" width="7" height="7"></rect>
-        </svg>
-      </a>
-      
-      <button class="sticky-nav-button" id="scroll-bottom" aria-label="Scroll to bottom" title="Go to bottom">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </button>
+
+    <div class="sticky-nav" id="sticky-nav" aria-label="Page controls">
+      <button class="sticky-nav-button" id="scroll-top" type="button" aria-label="Scroll to top" title="Go to top">↑</button>
+      {% if section == 'fotos' %}
+        <a href="{{ '/fotos/archive/' | relative_url }}" class="sticky-nav-button" id="section-nav-button" aria-label="View photo archive" title="Archive">▦</a>
+      {% endif %}
+      <button class="sticky-nav-button" id="scroll-bottom" type="button" aria-label="Scroll to bottom" title="Go to bottom">↓</button>
     </div>
-    
+
     {% include footer.html %}
-    
-    <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" aria-hidden="true">
-      <div id="lightbox-overlay" class="lightbox-overlay" aria-label="Close lightbox"></div>
-      
-      <div class="lightbox-image-container" id="lightbox-container">
-        <img id="lightbox-image" class="lightbox-image no-filter" src="" alt="Full size image" loading="lazy">
-      </div>
-      
-      <div class="lightbox-controls">
-        <button id="lightbox-prev" class="lightbox-nav prev" aria-label="Previous image" title="Previous (←)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
-        </button>
-        
-        <button id="lightbox-next" class="lightbox-nav next" aria-label="Next image" title="Next (→)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </button>
-        
-        <button id="lightbox-fullscreen" class="lightbox-fullscreen" aria-label="Toggle fullscreen" title="Fullscreen (F)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-          </svg>
-        </button>
-        
-        <button id="lightbox-close" class="lightbox-close" aria-label="Close lightbox" title="Close (ESC)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        </button>
-      </div>
-      
-      <div class="lightbox-counter" id="lightbox-counter" aria-live="polite">1 / 1</div>
-      <div class="swipe-hint" id="swipe-hint" aria-hidden="true">Swipe to navigate</div>
-    </div>
-    
-    <div class="shortcuts-overlay" id="shortcuts-overlay" role="dialog" aria-labelledby="shortcuts-title">
-      <h3 id="shortcuts-title">Keyboard Shortcuts</h3>
-      <div class="shortcut-item">
-        <span>Next image</span>
-        <kbd class="shortcut-key">→</kbd>
-      </div>
-      <div class="shortcut-item">
-        <span>Previous image</span>
-        <kbd class="shortcut-key">←</kbd>
-      </div>
-      <div class="shortcut-item">
-        <span>Close lightbox</span>
-        <kbd class="shortcut-key">ESC</kbd>
-      </div>
-      <div class="shortcut-item">
-        <span>Toggle fullscreen</span>
-        <kbd class="shortcut-key">F</kbd>
-      </div>
-      <div class="shortcut-item">
-        <span>Toggle dark mode</span>
-        <kbd class="shortcut-key">D</kbd>
-      </div>
-      <div class="shortcut-item">
-        <span>Toggle B&W mode</span>
-        <kbd class="shortcut-key">M</kbd>
-      </div>
-      <div class="shortcut-item">
-        <span>Reduce transparency</span>
-        <kbd class="shortcut-key">G</kbd>
-      </div>
-      <div class="shortcut-item">
-        <span>Show shortcuts</span>
-        <kbd class="shortcut-key">?</kbd>
-      </div>
-    </div>
-    
-    <!-- ========================================
-         MASONRY + IMAGESLOADED (Portfolio grid)
-         ======================================== -->
-    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js" defer></script>
-    <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js" defer></script>
+    {% if page.gallery %}{% include gallery-dialog.html %}{% endif %}
 
-    <!-- ========================================
-         MAIN JAVASCRIPT
-         ======================================== -->
-    <script src="/assets/js/main.js" defer></script>
-
-    <!-- ========================================
-         MATHJAX (Mathematical Notation)
-         ======================================== -->
-    <!-- MathJax for rendering mathematical equations -->
-    <script>
-      MathJax = { tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']], processEscapes: true } };
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+    <script src="{{ '/assets/js/main.js' | relative_url }}" defer></script>
+    {% if page.gallery %}<script src="{{ '/assets/js/gallery.js' | relative_url }}" defer></script>{% endif %}
+    {% if page.protocol %}<script src="{{ '/assets/js/cocktails.js' | relative_url }}" defer></script>{% endif %}
+    {% if page.colorimetry_interactive %}<script src="{{ '/assets/js/colorimetry.js' | relative_url }}" defer></script>{% endif %}
   </body>
 </html>

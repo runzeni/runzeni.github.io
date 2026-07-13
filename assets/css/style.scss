@@ -1,8 +1,10 @@
 ---
 ---
-@import "variables";
-@import "base";
-@import "animations";
-@import "components";
-@import "layout";
-@import "pages";
+@use "variables";
+@use "base";
+@use "animations";
+@use "components";
+@use "layout";
+@use "pages";
+@use "gallery";
+@use "colorimetry";

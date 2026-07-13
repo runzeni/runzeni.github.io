@@ -1,0 +1,60 @@
+name: Runze Ni
+location: Tampa, FL
+email: runzeni2001@gmail.com
+title: PhD student in Medical Sciences
+tagline: Renal physiology, genetics, and translational science.
+description: Runze Ni is a renal physiology researcher and photographer based in Tampa, Florida.
+
+links:
+  scholar: https://scholar.google.com/citations?user=-Azv6CYAAAAJ&hl=en
+  github: https://github.com/runzeni
+  linkedin: https://www.linkedin.com/in/runze-ni-66a67b287
+
+about: >-
+  I study how acute kidney injury propagates across organ systems. My work
+  focuses on tubuloglomerular feedback, injury thresholds, and the translation
+  of mechanistic findings across mouse, porcine, and human-relevant models.
+
+education:
+  - degree: PhD student, Medical Sciences
+    institution: University of South Florida, Morsani College of Medicine
+    location: Tampa, FL
+    years: 2026–present
+  - degree: BSc, Biology and Chemistry
+    institution: Case Western Reserve University
+    location: Cleveland, OH
+    years: 2020–2024
+
+experience:
+  - role: Research Scientist
+    institution: USF Health, Morsani College of Medicine
+    detail: Ruisheng Liu Lab
+    years: 2024–present
+  - role: Undergraduate Researcher
+    institution: Case Western Reserve University
+    detail: Claudia Mizutani Lab
+    years: 2023–2024
+
+publications:
+  - title: Macula densa-specific NOS1 knockout determines susceptibility to ischemic acute kidney injury
+    citation: Clinical Science. 2026;140(4):589–605.
+    doi: 10.1042/CS20258807
+  - title: Acute Kidney Injury Induces Lung Damage via Mitochondrial DAMPs by Activating TREM-1 and cGAS-STING Pathways
+    citation: Cells. 2025;14(21):1716.
+    doi: 10.3390/cells14211716
+
+presentations:
+  - title: AKI Initiates Hepatic Inflammation and Fibrogenic Signaling via Altered TLR4 Signaling Axis
+    event: ASN Kidney Week 2025 · Poster presentation
+    doi: 10.1681/ASN.2025qq47jv2z
+  - title: Enhanced Tubuloglomerular Feedback by Specific Deletion of Macula Densa NOS1 Enhances AKI by Activating Inflammatory and Fibrogenic Factors
+    event: ASN Kidney Week 2025 · Oral presentation
+    doi: 10.1681/ASN.2025x2dxrk84
+  - title: The Drosophila DPP/BMP-4 Gradient Formation in the Embryo is Dependent on Cell Constriction Mediated by Frazzled, Presenilin, and E-Cadherin
+    event: The Allied Genetics Conference, 2024
+
+projects:
+  - Severity thresholds in AKI and mesenteric vascular reprogramming
+  - MD-specific NKCC2 knockout effects on ischemia-reperfusion injury
+  - Multi-organ injury modeling in large-animal systems with SMEF
+  - Cardiac transplantation following acute kidney injury

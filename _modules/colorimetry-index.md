@@ -4,29 +4,35 @@ series: colorimetry
 slug: index
 permalink: /misc/colorimetry/
 layout: default
-description: Notes on color science, from biology to ACES.
+description: Working notes on color science, from biology to ACES.
 ---
 
 <div class="article-landing-header">
   <h1>Regarding Colorimetry</h1>
   <p class="article-landing-subtitle">
-    A not-so-brief history of color science.
+    Working notes on color science for moving images.
   </p>
 </div>
+
+<aside class="article-note" aria-labelledby="colorimetry-status">
+  <h2 id="colorimetry-status">Work in progress</h2>
+  <p>This is a developing reading-and-making project, not a calibrated technical reference. Some diagrams are intentionally marked as studies; they will be replaced only with sourced data or a clearly labelled schematic.</p>
+  <p>The first public interactives are deliberately small and reusable: a formula-based transfer-curve explorer and a named-primary coordinate explorer. Image comparisons, camera-specific claims, and any security demonstration still need real source material before they belong here.</p>
+</aside>
 
 <div class="series-resources">
   <h3>Resources</h3>
   <p>Full outline for print/PDF, plus a math reference appendix.</p>
   <div class="series-resources-links">
-    <a href="/misc/colorimetry/comprehensive-outline/" class="series-start-button">Print Outline</a>
-    <a href="/misc/colorimetry/appendix-mathematics/" class="series-resource-link">Math Appendix</a>
+    <a href="{{ '/misc/colorimetry/comprehensive-outline/' | relative_url }}" class="series-start-button">Print Outline</a>
+    <a href="{{ '/misc/colorimetry/appendix-mathematics/' | relative_url }}" class="series-resource-link">Math Appendix</a>
   </div>
 </div>
 
 <div class="module-grid">
 
   <article class="module-card">
-    <a href="/misc/colorimetry/module-1/" class="module-card-link">
+    <a href="{{ '/misc/colorimetry/module-1/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 1</span>
       </div>
@@ -51,7 +57,7 @@ description: Notes on color science, from biology to ACES.
   </article>
 
   <article class="module-card">
-    <a href="/misc/colorimetry/module-2/" class="module-card-link">
+    <a href="{{ '/misc/colorimetry/module-2/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 2</span>
       </div>
@@ -75,7 +81,7 @@ description: Notes on color science, from biology to ACES.
   </article>
 
   <article class="module-card">
-    <a href="/misc/colorimetry/module-3/" class="module-card-link">
+    <a href="{{ '/misc/colorimetry/module-3/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 3</span>
       </div>
@@ -98,7 +104,7 @@ description: Notes on color science, from biology to ACES.
   </article>
 
   <article class="module-card">
-    <a href="/misc/colorimetry/module-4/" class="module-card-link">
+    <a href="{{ '/misc/colorimetry/module-4/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 4</span>
       </div>
@@ -120,7 +126,7 @@ description: Notes on color science, from biology to ACES.
   </article>
 
   <article class="module-card">
-    <a href="/misc/colorimetry/module-5/" class="module-card-link">
+    <a href="{{ '/misc/colorimetry/module-5/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 5</span>
       </div>
@@ -142,7 +148,7 @@ description: Notes on color science, from biology to ACES.
   </article>
 
   <article class="module-card">
-    <a href="/misc/colorimetry/module-6/" class="module-card-link">
+    <a href="{{ '/misc/colorimetry/module-6/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 6</span>
       </div>
@@ -164,13 +170,13 @@ description: Notes on color science, from biology to ACES.
   </article>
 
   <article class="module-card">
-    <a href="/misc/colorimetry/module-7/" class="module-card-link">
+    <a href="{{ '/misc/colorimetry/module-7/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 7</span>
       </div>
-      <h2 class="module-title">Computational Color & Advanced DIT Dev</h2>
+      <h2 class="module-title">Computational Color: Matching, LUTs, and Limits</h2>
       <p class="module-excerpt">
-        For the coder/scientist DIT: advanced color matching algorithms, LUT mathematics, inverse LUTs, and security workflows.
+        Working notes on color matching algorithms, LUT mathematics, and the limits of image-side workarounds.
       </p>
       <nav class="module-outline" aria-label="Module 7 outline">
         <ul>
@@ -191,7 +197,7 @@ description: Notes on color science, from biology to ACES.
   <p class="series-footer-text">
     This series assumes familiarity with basic color terminology and motion picture workflows. Mathematical formulas are rendered with MathJax.
   </p>
-  <a href="/misc/colorimetry/module-1/" class="series-start-button">
+  <a href="{{ '/misc/colorimetry/module-1/' | relative_url }}" class="series-start-button">
     Start with Module 1 →
   </a>
 </div>

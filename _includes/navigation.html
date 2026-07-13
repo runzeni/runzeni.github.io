@@ -1,14 +1,13 @@
-{% comment %}
-  ============================================================
-  NAVIGATION INCLUDE
-  Renders site.data.navigation as an unordered list.
-  ============================================================
-{% endcomment %}
-
 <ul class="site-nav-list">
   {% for link in site.data.navigation %}
-    <li class="site-nav-item{% if page.url == link.url %} site-nav-active{% endif %}">
-      <a href="{{ link.url | relative_url }}">{{ link.title }}</a>
+    {% assign active = false %}
+    {% if link.url == '/' %}
+      {% if page.url == '/' %}{% assign active = true %}{% endif %}
+    {% elsif page.url == link.url or page.url contains link.url %}
+      {% assign active = true %}
+    {% endif %}
+    <li class="site-nav-item{% if active %} site-nav-active{% endif %}">
+      <a href="{{ link.url | relative_url }}"{% if active %} aria-current="page"{% endif %}>{{ link.title }}</a>
     </li>
   {% endfor %}
 </ul>

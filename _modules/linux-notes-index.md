@@ -17,7 +17,7 @@ description: For beginners like me.
 <div class="module-grid">
 
   <article class="module-card">
-    <a href="/misc/linux-notes/module-1/" class="module-card-link">
+    <a href="{{ '/misc/linux-notes/module-1/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 1</span>
       </div>
@@ -41,7 +41,7 @@ description: For beginners like me.
   </article>
 
   <article class="module-card">
-    <a href="/misc/linux-notes/module-2/" class="module-card-link">
+    <a href="{{ '/misc/linux-notes/module-2/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 2</span>
       </div>
@@ -65,7 +65,7 @@ description: For beginners like me.
   </article>
 
   <article class="module-card">
-    <a href="/misc/linux-notes/module-3/" class="module-card-link">
+    <a href="{{ '/misc/linux-notes/module-3/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 3</span>
       </div>
