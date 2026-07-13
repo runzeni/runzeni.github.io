@@ -2,8 +2,9 @@
 layout: default
 ---
 
-{% assign search_path = '/assets/img/' | append: page.year | append: '/' | append: page.image_dir | append: '/' %}
-{% assign roll_files = site.static_files | where_exp: 'file', 'file.path contains search_path' | sort: 'path' %}
+{% assign rolls = site.data.photobooks.rolls %}
+{% assign roll = rolls[page.slug] %}
+{% assign roll_files = roll.photos %}
 {% assign title_parts = page.title | split: ' / ' %}
 {% assign image_count = 0 %}
 
@@ -15,16 +16,14 @@ layout: default
 
 <section class="photobook-gallery" aria-label="{{ page.title }} photographs">
   <div class="contact-sheet-grid">
-    {% for file in roll_files %}
-      {% assign extension = file.extname | downcase %}
-      {% if extension == '.jpg' or extension == '.jpeg' or extension == '.png' %}
-        {% assign image_count = image_count | plus: 1 %}
-        {% assign thumbnail_path = file.path | replace: '/assets/img/', '/assets/img/derived/' | replace: '.jpg', '.webp' | replace: '.jpeg', '.webp' | replace: '.png', '.webp' %}
-        {% capture alt %}{{ page.film }} photograph from {{ title_parts.last }} — frame {{ image_count }}{% endcapture %}
-        <button class="contact-sheet-item" type="button" data-gallery-trigger data-gallery="{{ page.slug }}" data-gallery-source="{{ thumbnail_path | relative_url }}" data-gallery-alt="{{ alt | strip | escape }}" aria-label="Open photograph: {{ alt | strip | escape }}">
-          <img src="{{ thumbnail_path | relative_url }}" alt="{{ alt | strip | escape }}" loading="{% if image_count == 1 %}eager{% else %}lazy{% endif %}" decoding="async" sizes="(max-width: 760px) 50vw, 33vw"{% if image_count == 1 %} fetchpriority="high"{% endif %}>
-        </button>
-      {% endif %}
+    {% for photo in roll_files %}
+      {% assign image_count = image_count | plus: 1 %}
+      {% capture alt %}{{ page.film }} photograph from {{ title_parts.last }} — frame {{ image_count }}{% endcapture %}
+      <button class="contact-sheet-item" type="button" data-gallery-trigger data-gallery="{{ page.slug }}" data-gallery-source="{{ photo.src | relative_url }}" data-gallery-alt="{{ alt | strip | escape }}" aria-label="Open photograph: {{ alt | strip | escape }}">
+        <img src="{{ photo.src | relative_url }}" alt="{{ alt | strip | escape }}" width="{{ photo.width }}" height="{{ photo.height }}" loading="{% if image_count == 1 %}eager{% else %}lazy{% endif %}" decoding="async" sizes="(max-width: 760px) 50vw, 33vw"{% if image_count == 1 %} fetchpriority="high"{% endif %}>
+      </button>
+    {% else %}
+      <p class="gallery-empty">This roll is being prepared for the archive.</p>
     {% endfor %}
   </div>
 </section>

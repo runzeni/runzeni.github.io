@@ -194,12 +194,14 @@
     const message = document.createElement('p');
     message.className = 'protocol-error';
     message.setAttribute('role', 'alert');
-    message.textContent = 'Cocktails could not be loaded. Please try again later.';
-    grid.replaceChildren(message);
-    count.textContent = 'Unavailable';
+    message.textContent = 'Interactive filters are unavailable; the recipe list remains available below.';
+    grid.prepend(message);
+    const shown = grid.querySelectorAll('.cocktail-card').length;
+    count.textContent = shown ? `${shown} cocktails · filters unavailable` : 'Unavailable';
   };
 
   const initialize = async () => {
+    grid.setAttribute('aria-busy', 'true');
     try {
       const response = await fetch(grid.dataset.endpoint, { headers: { Accept: 'application/json' } });
       if (!response.ok) throw new Error(`Unexpected response: ${response.status}`);

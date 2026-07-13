@@ -27,8 +27,14 @@ protocol: true
       <button class="filter-btn" type="button" data-base="cognac" aria-pressed="false">Cognac</button>
       <button class="filter-btn" type="button" data-base="misc" aria-pressed="false">Misc</button>
     </div>
-    <p class="results-count" id="results-count" role="status" aria-live="polite">Loading cocktails…</p>
+    <p class="results-count" id="results-count" role="status" aria-live="polite">{{ site.data.cocktails.cocktails | size }} cocktails</p>
   </div>
 </form>
 
-<section id="cocktails-grid" class="cocktails-grid" aria-label="Cocktail recipes" aria-busy="true" data-endpoint="{{ '/cocktails.json' | relative_url }}"></section>
+<noscript><p class="protocol-noscript">All recipes are shown below. Search and filters need JavaScript.</p></noscript>
+
+<section id="cocktails-grid" class="cocktails-grid" aria-label="Cocktail recipes" aria-busy="false" data-endpoint="{{ '/cocktails.json' | relative_url }}">
+  {% for cocktail in site.data.cocktails.cocktails %}
+    {% include cocktail-card.html cocktail=cocktail %}
+  {% endfor %}
+</section>

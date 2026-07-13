@@ -8,31 +8,32 @@ Ruby 3.3 is pinned in `.ruby-version`.
 
 ```sh
 bundle install
-bundle exec jekyll serve
+bash scripts/build-site.sh serve
 ```
 
 Build the production artifact with:
 
 ```sh
-bundle exec jekyll build
+bash scripts/build-site.sh build
 ```
 
 ## Content map
 
 - `_data/profile.yml` is the single source for the home-page bio, links, publications, and presentations.
 - `_data/portfolio.yml` is the curated edit for `/fotos/`.
-- `_photobook/` holds roll metadata; the archive page derives its cards from it.
+- `_photobook/` holds roll metadata; `_data/photobooks.yml` is the generated, checked manifest for each roll's published frames.
 - `cocktails.json` powers Protocol.
 - `_modules/` holds Notes & playground series. The two Colorimetry widgets are intentionally small, source-defined studies rather than image simulations.
 
 ## Photos
 
-Original scans stay in `assets/img/2022`, `2023`, `2024`, and `portfolio`; they are excluded from the published artifact. WebP renditions are generated locally into ignored `assets/img/derived` and are generated again by the deploy workflow before Jekyll builds the published artifact.
+Original scans stay in `assets/img/2022`, `2023`, `2024`, and `portfolio`; they are excluded from the published artifact. WebP renditions are generated locally into ignored `assets/img/derived` and are generated again by the deploy workflow before Jekyll builds the published artifact. `bash scripts/build-site.sh` prepares both the frame manifest and WebPs before Jekyll starts.
 
-After adding or replacing original scans, regenerate the renditions with ImageMagick 7:
+After adding or replacing original scans, refresh the manifest, review and commit `_data/photobooks.yml`, then build:
 
 ```sh
-bash scripts/build-photo-derivatives.sh --clean
+ruby scripts/build-photo-manifest.rb
+bash scripts/build-site.sh build
 ```
 
 ## Deployment

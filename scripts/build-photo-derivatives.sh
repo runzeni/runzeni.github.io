@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Generate the checked-in WebP web renditions served by Fotos. Original JPEGs
-# remain untouched in the repository but are excluded from the published site.
+# Generate ignored WebP web renditions served by Fotos. Original JPEGs remain
+# untouched in the repository but are excluded from the published site.
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source_dir="$root/assets/img"

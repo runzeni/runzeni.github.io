@@ -1,0 +1,16 @@
+{% assign cocktail = include.cocktail %}
+<article class="cocktail-card">
+  <header class="cocktail-header">
+    <h2 class="cocktail-name">{{ cocktail.name | escape }}</h2>
+    {% if cocktail.year or cocktail.creator %}
+      <p class="cocktail-meta">{% if cocktail.year %}{{ cocktail.year | escape }}{% endif %}{% if cocktail.creator %}{% if cocktail.year %} · {% endif %}{{ cocktail.creator | escape }}{% endif %}</p>
+    {% endif %}
+    <p class="cocktail-base">{{ cocktail.base | capitalize | escape }}</p>
+  </header>
+  <div class="cocktail-ingredients">
+    {% for ingredient in cocktail.ingredients %}
+      <p class="ingredient-line">{% if ingredient.amount != nil %}{{ ingredient.amount }}{% endif %}{% if ingredient.unit and ingredient.unit != '' %} {{ ingredient.unit }}{% endif %} {{ ingredient.ingredient | escape }}</p>
+    {% endfor %}
+  </div>
+  {% if cocktail.instructions %}<p class="cocktail-instructions">{{ cocktail.instructions | escape }}</p>{% endif %}
+</article>
