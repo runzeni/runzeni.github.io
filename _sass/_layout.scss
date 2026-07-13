@@ -12,6 +12,23 @@ main {
   min-height: 100vh;
 }
 
+/* Content-led pages may use the wider canvas while their reading blocks stay narrow. */
+[data-section="protocols"] main,
+[data-section="cine"] main,
+[data-section="misc"] main {
+  max-width: 1120px;
+}
+
+[data-section="protocols"] .breadcrumb-nav,
+[data-section="cine"] .breadcrumb-nav,
+[data-section="misc"] .breadcrumb-nav,
+[data-section="protocols"] .gallery-header,
+[data-section="cine"] .gallery-header,
+[data-section="misc"] .gallery-header {
+  max-width: 820px;
+  margin-inline: auto;
+}
+
 /* === Scroll Progress === */
 .scroll-progress {
   position: fixed;
@@ -223,6 +240,7 @@ main {
 /* Site title */
 .site-title {
   display: flex;
+  min-width: 0;
   justify-content: center;
   align-items: center;
 }
@@ -238,6 +256,8 @@ main {
   white-space: nowrap;
   font-family: var(--font-sans);
   transition: letter-spacing var(--duration-base) ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .site-title-link:hover {
@@ -696,6 +716,10 @@ a.breadcrumb-item:hover::after {
 
   .header-left {
     gap: 0.25rem;
+  }
+
+  .site-title-section {
+    display: none;
   }
 }
 

@@ -1,14 +1,27 @@
-<dialog class="gallery-lightbox" id="gallery-lightbox" aria-label="Image viewer">
+<dialog class="gallery-lightbox" id="gallery-lightbox" aria-label="Photograph viewer" tabindex="-1">
   <div class="gallery-lightbox__toolbar">
-    <button type="button" class="gallery-lightbox__button" data-gallery-close aria-label="Close image viewer">Close</button>
     <p class="gallery-lightbox__counter" data-gallery-counter aria-live="polite"></p>
-    <div class="gallery-lightbox__navigation" aria-label="Image navigation">
-      <button type="button" class="gallery-lightbox__button" data-gallery-prev aria-label="Previous image">←</button>
-      <button type="button" class="gallery-lightbox__button" data-gallery-next aria-label="Next image">→</button>
+    <div class="gallery-lightbox__tools">
+      <button type="button" class="gallery-lightbox__button gallery-lightbox__zoom" data-gallery-zoom aria-label="Zoom in" title="Zoom in">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m15.5 15.5 5 5M10.5 7.5v6M7.5 10.5h6"></path></svg>
+      </button>
+      <button type="button" class="gallery-lightbox__button gallery-lightbox__close" data-gallery-close aria-label="Close photograph viewer" title="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
     </div>
   </div>
   <div class="gallery-lightbox__stage" data-gallery-stage>
     <img class="gallery-lightbox__image" data-gallery-image alt="" draggable="false">
+    <div class="gallery-lightbox__loader" data-gallery-loader role="status"><span class="visually-hidden">Loading photograph</span></div>
   </div>
-  <p class="gallery-lightbox__hint">Double-tap or pinch to zoom. Swipe to move between images.</p>
+  <button type="button" class="gallery-lightbox__nav gallery-lightbox__nav--prev" data-gallery-prev aria-label="Previous photograph">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 5-7 7 7 7"></path></svg>
+  </button>
+  <button type="button" class="gallery-lightbox__nav gallery-lightbox__nav--next" data-gallery-next aria-label="Next photograph">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"></path></svg>
+  </button>
+  <footer class="gallery-lightbox__footer">
+    <p class="gallery-lightbox__caption" data-gallery-caption></p>
+    <p class="gallery-lightbox__hint"><span class="gallery-lightbox__hint--desktop">Use arrow keys to browse · double-click to zoom</span><span class="gallery-lightbox__hint--touch">Swipe to browse · pinch to zoom</span></p>
+  </footer>
 </dialog>

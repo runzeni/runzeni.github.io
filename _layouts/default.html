@@ -73,7 +73,7 @@
       </div>
 
       <div class="site-title">
-        <a href="{{ '/' | relative_url }}" class="site-title-link" aria-label="{{ site.title }} home">RUNZE NI{% unless section == 'home' %} / {{ section }}{% endunless %}</a>
+        <a href="{{ '/' | relative_url }}" class="site-title-link" aria-label="{{ site.title }} home">RUNZE NI{% unless section == 'home' %}<span class="site-title-section"> / {{ section }}</span>{% endunless %}</a>
       </div>
 
       <a href="{{ '/' | relative_url }}" class="readme-link">INDEX</a>

@@ -6,11 +6,14 @@
   const stage = dialog && dialog.querySelector('[data-gallery-stage]');
   const image = dialog && dialog.querySelector('[data-gallery-image]');
   const counter = dialog && dialog.querySelector('[data-gallery-counter]');
+  const caption = dialog && dialog.querySelector('[data-gallery-caption]');
+  const loader = dialog && dialog.querySelector('[data-gallery-loader]');
   const previous = dialog && dialog.querySelector('[data-gallery-prev]');
   const next = dialog && dialog.querySelector('[data-gallery-next]');
+  const zoomButton = dialog && dialog.querySelector('[data-gallery-zoom]');
   const closeButton = dialog && dialog.querySelector('[data-gallery-close]');
 
-  if (!triggers.length || !dialog || !stage || !image || !counter || !previous || !next || !closeButton) return;
+  if (!triggers.length || !dialog || !stage || !image || !counter || !caption || !loader || !previous || !next || !zoomButton || !closeButton) return;
 
   const groups = new Map();
   triggers.forEach((trigger) => {
@@ -39,6 +42,8 @@
     renderFrame = window.requestAnimationFrame(() => {
       image.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`;
       stage.classList.toggle('is-zoomed', scale > 1.01);
+      zoomButton.setAttribute('aria-label', scale > 1.01 ? 'Reset zoom' : 'Zoom in');
+      zoomButton.setAttribute('title', scale > 1.01 ? 'Reset zoom' : 'Zoom in');
       renderFrame = null;
     });
   };
@@ -66,7 +71,7 @@
   };
 
   const updateControls = () => {
-    counter.textContent = `${index + 1} / ${items.length}`;
+    counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
     previous.disabled = index === 0;
     next.disabled = index === items.length - 1;
   };
@@ -87,6 +92,9 @@
 
     resetTransform();
     image.alt = alt;
+    image.classList.remove('is-loaded');
+    loader.hidden = false;
+    caption.textContent = alt;
     image.src = source;
     updateControls();
     preload(items[index - 1]);
@@ -94,6 +102,8 @@
   };
 
   const show = () => {
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    if (scrollbarWidth > 0) document.body.style.paddingRight = `${scrollbarWidth}px`;
     if (typeof dialog.showModal === 'function') dialog.showModal();
     else dialog.setAttribute('open', '');
     document.body.classList.add('has-gallery-open');
@@ -105,12 +115,15 @@
     gesture = null;
     resetTransform();
     document.body.classList.remove('has-gallery-open');
+    document.body.style.removeProperty('padding-right');
 
     if (typeof dialog.close === 'function') dialog.close();
     else dialog.removeAttribute('open');
 
     window.setTimeout(() => {
       image.removeAttribute('src');
+      image.classList.remove('is-loaded');
+      caption.textContent = '';
       if (returnFocus && opener) opener.focus();
     }, 0);
   };
@@ -129,7 +142,7 @@
     opener = trigger;
     setImage();
     show();
-    window.setTimeout(() => closeButton.focus(), 0);
+    window.setTimeout(() => dialog.focus({ preventScroll: true }), 0);
   };
 
   const zoomAt = (clientX, clientY, targetScale) => {
@@ -146,7 +159,7 @@
     queueRender();
   };
 
-  const beginPan = (point, { suppressTap = false } = {}) => {
+  const beginPan = (point, { suppressTap = false, target = null, pointerType = '' } = {}) => {
     gesture = {
       type: 'pan',
       startX: point.x,
@@ -154,7 +167,9 @@
       originX: translateX,
       originY: translateY,
       startedAt: performance.now(),
-      suppressTap
+      suppressTap,
+      target,
+      pointerType
     };
   };
 
@@ -261,6 +276,7 @@
     const isSwipe = !cancelled && scale <= 1.01 && Math.abs(deltaX) > 56 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4;
 
     if (isSwipe) move(deltaX > 0 ? -1 : 1);
+    else if (isTap && completedGesture.target === stage && completedGesture.pointerType !== 'touch') close();
     else if (isTap) handleTap(event);
     else {
       clampTranslation();
@@ -275,6 +291,20 @@
   closeButton.addEventListener('click', () => close());
   previous.addEventListener('click', () => move(-1));
   next.addEventListener('click', () => move(1));
+  zoomButton.addEventListener('click', () => {
+    const bounds = stage.getBoundingClientRect();
+    zoomAt(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2, scale > 1.01 ? 1 : 2);
+  });
+  image.addEventListener('load', () => {
+    loader.hidden = true;
+    image.classList.add('is-loaded');
+    clampTranslation();
+    queueRender();
+  });
+  image.addEventListener('error', () => {
+    loader.hidden = true;
+    caption.textContent = 'This photograph could not be loaded.';
+  });
   dialog.addEventListener('cancel', (event) => {
     event.preventDefault();
     close();
@@ -287,7 +317,10 @@
     if (event.pointerType !== 'touch' && event.button !== 0) return;
     stage.setPointerCapture(event.pointerId);
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
-    if (pointers.size === 1) beginPan({ x: event.clientX, y: event.clientY });
+    if (pointers.size === 1) beginPan(
+      { x: event.clientX, y: event.clientY },
+      { target: event.target, pointerType: event.pointerType }
+    );
     else beginPinch();
     stage.classList.add('is-interacting');
     event.preventDefault();
@@ -302,6 +335,11 @@
 
   stage.addEventListener('pointerup', (event) => finishPointer(event));
   stage.addEventListener('pointercancel', (event) => finishPointer(event, true));
+  stage.addEventListener('wheel', (event) => {
+    if (!isOpen()) return;
+    event.preventDefault();
+    zoomAt(event.clientX, event.clientY, scale * (event.deltaY < 0 ? 1.14 : 0.88));
+  }, { passive: false });
 
   document.addEventListener('keydown', (event) => {
     if (!isOpen()) return;
@@ -321,11 +359,14 @@
       return;
     }
     if (event.key === 'Tab') {
-      const focusable = [closeButton, previous, next].filter((button) => !button.disabled);
+      const focusable = [zoomButton, closeButton, previous, next].filter((button) => !button.disabled);
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
       if (!first || !last) return;
-      if (event.shiftKey && document.activeElement === first) {
+      if (document.activeElement === dialog) {
+        event.preventDefault();
+        (event.shiftKey ? last : first).focus();
+      } else if (event.shiftKey && document.activeElement === first) {
         event.preventDefault();
         last.focus();
       } else if (!event.shiftKey && document.activeElement === last) {

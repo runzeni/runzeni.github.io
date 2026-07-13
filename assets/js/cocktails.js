@@ -180,6 +180,8 @@
 
   const randomCocktail = () => {
     if (!cocktails.length) return;
+    shuffle.classList.remove('is-shuffling');
+    window.requestAnimationFrame(() => shuffle.classList.add('is-shuffling'));
     const chosen = cocktails[Math.floor(Math.random() * cocktails.length)];
     search.value = '';
     setActiveBase('all');
@@ -219,6 +221,7 @@
       });
       search.addEventListener('input', debounce(() => apply(activeBase(), search.value, { updateHistory: true }), 140));
       shuffle.addEventListener('click', randomCocktail);
+      shuffle.addEventListener('animationend', () => shuffle.classList.remove('is-shuffling'));
       form.addEventListener('submit', (event) => event.preventDefault());
     } catch (error) {
       console.error(error);

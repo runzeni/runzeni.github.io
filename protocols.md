@@ -15,7 +15,10 @@ protocol: true
   <div class="search-row">
     <label for="search-box" class="visually-hidden">Search cocktails by name or ingredient</label>
     <input type="search" id="search-box" placeholder="Search cocktails or ingredients" class="search-input" autocomplete="off" aria-describedby="results-count">
-    <button id="shuffle-btn" class="shuffle-btn" type="button" aria-label="Show a random cocktail" title="Random cocktail">Random</button>
+    <button id="shuffle-btn" class="shuffle-btn" type="button" aria-label="Show a random cocktail" title="Shuffle cocktails">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"></rect><circle cx="9" cy="9" r="1"></circle><circle cx="15" cy="9" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="9" cy="15" r="1"></circle><circle cx="15" cy="15" r="1"></circle></svg>
+      <span class="visually-hidden">Shuffle cocktails</span>
+    </button>
   </div>
   <div class="filter-row">
     <div class="filter-buttons" id="filter-buttons" role="group" aria-label="Filter by spirit">
