@@ -29,6 +29,7 @@
     {% seo %}
 
     <link rel="preload" href="{{ '/assets/css/style.css' | relative_url }}" as="style">
+    {% if page.gallery %}<link rel="stylesheet" href="{{ '/assets/vendor/photoswipe/photoswipe.css' | relative_url }}">{% endif %}
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -76,7 +77,7 @@
         <a href="{{ '/' | relative_url }}" class="site-title-link" aria-label="{{ site.title }} home">RUNZE NI{% unless section == 'home' %}<span class="site-title-section"> / {{ section }}</span>{% endunless %}</a>
       </div>
 
-      <a href="{{ '/' | relative_url }}" class="readme-link">INDEX</a>
+      <a href="{{ '/' | relative_url }}#hero-section" class="readme-link">README</a>
     </header>
 
     <nav id="site-menu" class="site-menu-dropdown" aria-label="Primary navigation">
@@ -99,18 +100,23 @@
     </main>
 
     <div class="sticky-nav" id="sticky-nav" aria-label="Page controls">
-      <button class="sticky-nav-button" id="scroll-top" type="button" aria-label="Scroll to top" title="Go to top">↑</button>
+      <button class="sticky-nav-button" id="scroll-top" type="button" aria-label="Scroll to top" title="Go to top">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 15 6-6 6 6"></path></svg>
+      </button>
       {% if section == 'fotos' %}
-        <a href="{{ '/fotos/archive/' | relative_url }}" class="sticky-nav-button" id="section-nav-button" aria-label="View photo archive" title="Archive">▦</a>
+        <a href="{{ '/fotos/archive/' | relative_url }}" class="sticky-nav-button" id="section-nav-button" aria-label="View photo archive" title="Archive">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
       {% endif %}
-      <button class="sticky-nav-button" id="scroll-bottom" type="button" aria-label="Scroll to bottom" title="Go to bottom">↓</button>
+      <button class="sticky-nav-button" id="scroll-bottom" type="button" aria-label="Scroll to bottom" title="Go to bottom">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
     </div>
 
     {% include footer.html %}
-    {% if page.gallery %}{% include gallery-dialog.html %}{% endif %}
 
     <script src="{{ '/assets/js/main.js' | relative_url }}" defer></script>
-    {% if page.gallery %}<script src="{{ '/assets/js/gallery.js' | relative_url }}" defer></script>{% endif %}
+    {% if page.gallery %}<script src="{{ '/assets/js/gallery.js' | relative_url }}" type="module"></script>{% endif %}
     {% if page.protocol %}<script src="{{ '/assets/js/cocktails.js' | relative_url }}" defer></script>{% endif %}
     {% if page.colorimetry_interactive %}<script src="{{ '/assets/js/colorimetry.js' | relative_url }}" defer></script>{% endif %}
   </body>

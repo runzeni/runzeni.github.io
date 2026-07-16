@@ -448,6 +448,18 @@ body:has(.quick-nav-buttons) #section-nav-button {
   transition: transform var(--duration-base) ease, box-shadow var(--duration-base) ease, background var(--duration-base) ease, border-color var(--duration-slower) ease;
 }
 
+.sticky-nav-button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#section-nav-button svg { stroke-width: 1.9; }
+
 .sticky-nav-button:hover {
   transform: translateY(-3px);
   box-shadow: 0 6px 28px rgba(0, 0, 0, 0.2);

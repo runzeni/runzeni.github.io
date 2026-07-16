@@ -1,378 +1,102 @@
-(() => {
-  'use strict';
+import PhotoSwipeLightbox from '../vendor/photoswipe/photoswipe-lightbox.esm.min.js';
 
-  const triggers = Array.from(document.querySelectorAll('[data-gallery-trigger]'));
-  const dialog = document.querySelector('#gallery-lightbox');
-  const stage = dialog && dialog.querySelector('[data-gallery-stage]');
-  const image = dialog && dialog.querySelector('[data-gallery-image]');
-  const counter = dialog && dialog.querySelector('[data-gallery-counter]');
-  const caption = dialog && dialog.querySelector('[data-gallery-caption]');
-  const loader = dialog && dialog.querySelector('[data-gallery-loader]');
-  const previous = dialog && dialog.querySelector('[data-gallery-prev]');
-  const next = dialog && dialog.querySelector('[data-gallery-next]');
-  const zoomButton = dialog && dialog.querySelector('[data-gallery-zoom]');
-  const closeButton = dialog && dialog.querySelector('[data-gallery-close]');
+const gallery = document.querySelector('[data-photo-gallery]');
 
-  if (!triggers.length || !dialog || !stage || !image || !counter || !caption || !loader || !previous || !next || !zoomButton || !closeButton) return;
+if (gallery) {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const triggers = Array.from(gallery.querySelectorAll('[data-gallery-trigger]'));
+  let lastViewed = null;
 
-  const groups = new Map();
-  triggers.forEach((trigger) => {
-    const name = trigger.dataset.gallery || 'default';
-    const items = groups.get(name) || [];
-    items.push(trigger);
-    groups.set(name, items);
+  const icon = (path) => `<svg class="pswp__icn" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">${path}</svg>`;
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery,
+    children: '[data-gallery-trigger]',
+    pswpModule: () => import('../vendor/photoswipe/photoswipe.esm.min.js'),
+    bgOpacity: 1,
+    loop: false,
+    spacing: 0.12,
+    preload: [1, 2],
+    wheelToZoom: true,
+    imageClickAction: 'zoom',
+    bgClickAction: false,
+    tapAction: 'toggle-controls',
+    doubleTapAction: 'zoom',
+    clickToCloseNonZoomable: false,
+    returnFocus: false,
+    initialZoomLevel: 'fit',
+    secondaryZoomLevel: (level) => level.initial * 1.5,
+    maxZoomLevel: (level) => level.initial * 3,
+    paddingFn: () => ({ top: 64, bottom: 68, left: 24, right: 24 }),
+    showAnimationDuration: reducedMotion.matches ? 0 : 260,
+    hideAnimationDuration: reducedMotion.matches ? 0 : 220,
+    zoomAnimationDuration: reducedMotion.matches ? 0 : 260,
+    easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+    closeTitle: 'Close photograph viewer',
+    zoomTitle: 'Toggle 150% zoom',
+    arrowPrevTitle: 'Previous photograph',
+    arrowNextTitle: 'Next photograph',
+    indexIndicatorSep: ' / ',
+    arrowPrevSVG: icon('<path d="m15 5-7 7 7 7"/>'),
+    arrowNextSVG: icon('<path d="m9 5 7 7-7 7"/>'),
+    closeSVG: icon('<path d="M6 6l12 12M18 6 6 18"/>'),
+    zoomSVG: icon('<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5M10.5 7.5v6M7.5 10.5h6"/>')
   });
 
-  let items = [];
-  let index = 0;
-  let opener = null;
-  let scale = 1;
-  let translateX = 0;
-  let translateY = 0;
-  let renderFrame = null;
-  let gesture = null;
-  let lastTap = null;
-  const pointers = new Map();
+  lightbox.on('uiRegister', () => {
+    lightbox.pswp.ui.registerElement({
+      name: 'zoom-range',
+      className: 'pswp__zoom-range',
+      tagName: 'div',
+      appendTo: 'root',
+      order: 8,
+      html: '<label><span>Zoom</span><input type="range" min="100" max="300" value="100" step="1" aria-label="Photo zoom, 100 percent"></label><output aria-hidden="true">100%</output>',
+      onInit: (element, pswp) => {
+        const input = element.querySelector('input');
+        const output = element.querySelector('output');
+        if (!input || !output) return;
 
-  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-  const isOpen = () => dialog.open || dialog.hasAttribute('open');
+        const update = () => {
+          const slide = pswp.currSlide;
+          if (!slide) return;
+          const relativeZoom = Math.round((slide.currZoomLevel / slide.zoomLevels.initial) * 100);
+          const value = Math.min(300, Math.max(100, relativeZoom));
+          input.value = String(value);
+          input.setAttribute('aria-label', `Photo zoom, ${value} percent`);
+          output.value = `${value}%`;
+        };
 
-  const queueRender = () => {
-    if (renderFrame !== null) return;
-    renderFrame = window.requestAnimationFrame(() => {
-      image.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${scale})`;
-      stage.classList.toggle('is-zoomed', scale > 1.01);
-      zoomButton.setAttribute('aria-label', scale > 1.01 ? 'Reset zoom' : 'Zoom in');
-      zoomButton.setAttribute('title', scale > 1.01 ? 'Reset zoom' : 'Zoom in');
-      renderFrame = null;
-    });
-  };
-
-  const clampTranslation = () => {
-    if (scale <= 1.01) {
-      scale = 1;
-      translateX = 0;
-      translateY = 0;
-      return;
-    }
-
-    const stageBounds = stage.getBoundingClientRect();
-    const maxX = Math.max(0, (image.offsetWidth * scale - stageBounds.width) / 2);
-    const maxY = Math.max(0, (image.offsetHeight * scale - stageBounds.height) / 2);
-    translateX = clamp(translateX, -maxX, maxX);
-    translateY = clamp(translateY, -maxY, maxY);
-  };
-
-  const resetTransform = () => {
-    scale = 1;
-    translateX = 0;
-    translateY = 0;
-    queueRender();
-  };
-
-  const updateControls = () => {
-    counter.textContent = `${String(index + 1).padStart(2, '0')} / ${String(items.length).padStart(2, '0')}`;
-    previous.disabled = index === 0;
-    next.disabled = index === items.length - 1;
-  };
-
-  const preload = (item) => {
-    if (!item) return;
-    const source = item.dataset.gallerySource;
-    if (!source) return;
-    const preloadImage = new Image();
-    preloadImage.src = source;
-  };
-
-  const setImage = () => {
-    const item = items[index];
-    const thumbnail = item.querySelector('img');
-    const source = item.dataset.gallerySource || (thumbnail && thumbnail.currentSrc);
-    const alt = item.dataset.galleryAlt || (thumbnail && thumbnail.alt) || '';
-
-    resetTransform();
-    image.alt = alt;
-    image.classList.remove('is-loaded');
-    loader.hidden = false;
-    caption.textContent = alt;
-    image.src = source;
-    updateControls();
-    preload(items[index - 1]);
-    preload(items[index + 1]);
-  };
-
-  const show = () => {
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    if (scrollbarWidth > 0) document.body.style.paddingRight = `${scrollbarWidth}px`;
-    if (typeof dialog.showModal === 'function') dialog.showModal();
-    else dialog.setAttribute('open', '');
-    document.body.classList.add('has-gallery-open');
-  };
-
-  const close = ({ returnFocus = true } = {}) => {
-    if (!isOpen()) return;
-    pointers.clear();
-    gesture = null;
-    resetTransform();
-    document.body.classList.remove('has-gallery-open');
-    document.body.style.removeProperty('padding-right');
-
-    if (typeof dialog.close === 'function') dialog.close();
-    else dialog.removeAttribute('open');
-
-    window.setTimeout(() => {
-      image.removeAttribute('src');
-      image.classList.remove('is-loaded');
-      caption.textContent = '';
-      if (returnFocus && opener) opener.focus();
-    }, 0);
-  };
-
-  const move = (offset) => {
-    const nextIndex = index + offset;
-    if (nextIndex < 0 || nextIndex >= items.length) return;
-    index = nextIndex;
-    setImage();
-  };
-
-  const open = (trigger) => {
-    const group = trigger.dataset.gallery || 'default';
-    items = groups.get(group) || [];
-    index = items.indexOf(trigger);
-    opener = trigger;
-    setImage();
-    show();
-    window.setTimeout(() => dialog.focus({ preventScroll: true }), 0);
-  };
-
-  const zoomAt = (clientX, clientY, targetScale) => {
-    const bounds = stage.getBoundingClientRect();
-    const focalX = clientX - bounds.left - bounds.width / 2;
-    const focalY = clientY - bounds.top - bounds.height / 2;
-    const nextScale = clamp(targetScale, 1, 3);
-    const ratio = nextScale / scale;
-
-    translateX = focalX - (focalX - translateX) * ratio;
-    translateY = focalY - (focalY - translateY) * ratio;
-    scale = nextScale;
-    clampTranslation();
-    queueRender();
-  };
-
-  const beginPan = (point, { suppressTap = false, target = null, pointerType = '' } = {}) => {
-    gesture = {
-      type: 'pan',
-      startX: point.x,
-      startY: point.y,
-      originX: translateX,
-      originY: translateY,
-      startedAt: performance.now(),
-      suppressTap,
-      target,
-      pointerType
-    };
-  };
-
-  const distance = (first, second) => Math.hypot(second.x - first.x, second.y - first.y);
-  const centroid = (first, second) => ({ x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 });
-
-  const beginPinch = () => {
-    const [first, second] = Array.from(pointers.values());
-    if (!first || !second) return;
-    const bounds = stage.getBoundingClientRect();
-    const center = centroid(first, second);
-    gesture = {
-      type: 'pinch',
-      distance: distance(first, second),
-      scale,
-      translateX,
-      translateY,
-      focalX: center.x - bounds.left - bounds.width / 2,
-      focalY: center.y - bounds.top - bounds.height / 2
-    };
-  };
-
-  const updateGesture = () => {
-    const active = Array.from(pointers.values());
-    if (active.length >= 2) {
-      if (!gesture || gesture.type !== 'pinch') beginPinch();
-      if (!gesture) return;
-
-      const [first, second] = active;
-      const bounds = stage.getBoundingClientRect();
-      const center = centroid(first, second);
-      const nextScale = clamp(gesture.scale * (distance(first, second) / gesture.distance), 1, 3);
-      const focalX = center.x - bounds.left - bounds.width / 2;
-      const focalY = center.y - bounds.top - bounds.height / 2;
-      const sourceX = (gesture.focalX - gesture.translateX) / gesture.scale;
-      const sourceY = (gesture.focalY - gesture.translateY) / gesture.scale;
-
-      scale = nextScale;
-      translateX = focalX - sourceX * scale;
-      translateY = focalY - sourceY * scale;
-      clampTranslation();
-      queueRender();
-      return;
-    }
-
-    if (!gesture || gesture.type !== 'pan' || !active[0]) return;
-    const point = active[0];
-    const deltaX = point.x - gesture.startX;
-    const deltaY = point.y - gesture.startY;
-
-    if (scale > 1.01) {
-      translateX = gesture.originX + deltaX;
-      translateY = gesture.originY + deltaY;
-      clampTranslation();
-    } else {
-      translateX = clamp(deltaX * 0.25, -42, 42);
-      translateY = 0;
-    }
-    queueRender();
-  };
-
-  const handleTap = (event) => {
-    const now = performance.now();
-    const nextTap = { time: now, x: event.clientX, y: event.clientY };
-    const isDoubleTap = lastTap
-      && now - lastTap.time < 280
-      && Math.hypot(nextTap.x - lastTap.x, nextTap.y - lastTap.y) < 24;
-
-    if (isDoubleTap) {
-      zoomAt(event.clientX, event.clientY, scale > 1.01 ? 1 : 2);
-      lastTap = null;
-    } else {
-      lastTap = nextTap;
-    }
-  };
-
-  const finishPointer = (event, cancelled = false) => {
-    const completedGesture = gesture;
-    pointers.delete(event.pointerId);
-
-    if (pointers.size >= 2) {
-      beginPinch();
-      return;
-    }
-
-    if (pointers.size === 1) {
-      beginPan(Array.from(pointers.values())[0], { suppressTap: true });
-      return;
-    }
-
-    stage.classList.remove('is-interacting');
-    gesture = null;
-    if (!completedGesture || completedGesture.type !== 'pan') {
-      clampTranslation();
-      queueRender();
-      return;
-    }
-
-    const deltaX = event.clientX - completedGesture.startX;
-    const deltaY = event.clientY - completedGesture.startY;
-    const distanceMoved = Math.hypot(deltaX, deltaY);
-    const elapsed = performance.now() - completedGesture.startedAt;
-    const isTap = !cancelled && !completedGesture.suppressTap && elapsed < 260 && distanceMoved < 12;
-    const isSwipe = !cancelled && scale <= 1.01 && Math.abs(deltaX) > 56 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4;
-
-    if (isSwipe) move(deltaX > 0 ? -1 : 1);
-    else if (isTap && completedGesture.target === stage && completedGesture.pointerType !== 'touch') close();
-    else if (isTap) handleTap(event);
-    else {
-      clampTranslation();
-      queueRender();
-    }
-  };
-
-  triggers.forEach((trigger) => {
-    trigger.addEventListener('click', () => open(trigger));
-  });
-
-  closeButton.addEventListener('click', () => close());
-  previous.addEventListener('click', () => move(-1));
-  next.addEventListener('click', () => move(1));
-  zoomButton.addEventListener('click', () => {
-    const bounds = stage.getBoundingClientRect();
-    zoomAt(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2, scale > 1.01 ? 1 : 2);
-  });
-  image.addEventListener('load', () => {
-    loader.hidden = true;
-    image.classList.add('is-loaded');
-    clampTranslation();
-    queueRender();
-  });
-  image.addEventListener('error', () => {
-    loader.hidden = true;
-    caption.textContent = 'This photograph could not be loaded.';
-  });
-  dialog.addEventListener('cancel', (event) => {
-    event.preventDefault();
-    close();
-  });
-  dialog.addEventListener('click', (event) => {
-    if (event.target === dialog) close();
-  });
-
-  stage.addEventListener('pointerdown', (event) => {
-    if (event.pointerType !== 'touch' && event.button !== 0) return;
-    stage.setPointerCapture(event.pointerId);
-    pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
-    if (pointers.size === 1) beginPan(
-      { x: event.clientX, y: event.clientY },
-      { target: event.target, pointerType: event.pointerType }
-    );
-    else beginPinch();
-    stage.classList.add('is-interacting');
-    event.preventDefault();
-  });
-
-  stage.addEventListener('pointermove', (event) => {
-    if (!pointers.has(event.pointerId)) return;
-    pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
-    updateGesture();
-    event.preventDefault();
-  });
-
-  stage.addEventListener('pointerup', (event) => finishPointer(event));
-  stage.addEventListener('pointercancel', (event) => finishPointer(event, true));
-  stage.addEventListener('wheel', (event) => {
-    if (!isOpen()) return;
-    event.preventDefault();
-    zoomAt(event.clientX, event.clientY, scale * (event.deltaY < 0 ? 1.14 : 0.88));
-  }, { passive: false });
-
-  document.addEventListener('keydown', (event) => {
-    if (!isOpen()) return;
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      close();
-      return;
-    }
-    if (event.key === 'ArrowLeft') {
-      event.preventDefault();
-      move(-1);
-      return;
-    }
-    if (event.key === 'ArrowRight') {
-      event.preventDefault();
-      move(1);
-      return;
-    }
-    if (event.key === 'Tab') {
-      const focusable = [zoomButton, closeButton, previous, next].filter((button) => !button.disabled);
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (!first || !last) return;
-      if (document.activeElement === dialog) {
-        event.preventDefault();
-        (event.shiftKey ? last : first).focus();
-      } else if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
+        input.addEventListener('input', () => {
+          const slide = pswp.currSlide;
+          if (!slide) return;
+          const target = slide.zoomLevels.initial * (Number(input.value) / 100);
+          slide.zoomTo(target, pswp.getViewportCenterPoint(), 0);
+        });
+        input.addEventListener('pointerdown', (event) => event.stopPropagation());
+        input.addEventListener('click', (event) => event.stopPropagation());
+        pswp.on('zoomPanUpdate', update);
+        pswp.on('change', update);
+        update();
       }
-    }
+    });
   });
-})();
+
+  lightbox.on('change', () => {
+    lastViewed = lightbox.pswp?.currSlide?.data?.element || null;
+  });
+
+  lightbox.on('close', () => {
+    lastViewed = lightbox.pswp?.currSlide?.data?.element || lastViewed;
+    if (lastViewed) lastViewed.scrollIntoView({ block: 'center', inline: 'nearest' });
+  });
+
+  lightbox.on('destroy', () => {
+    if (!lastViewed) return;
+    window.requestAnimationFrame(() => lastViewed.focus({ preventScroll: true }));
+  });
+
+  lightbox.init();
+
+  // The source link remains a usable full-size image if modules are unavailable.
+  triggers.forEach((trigger) => trigger.removeAttribute('data-gallery-pending'));
+}
