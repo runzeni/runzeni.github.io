@@ -1,0 +1,62 @@
+---
+layout: default
+title: Text enlarger
+description: Make a short message fill the screen.
+breadcrumb_title: Text enlarger
+permalink: /misc/text/
+text_enlarger: true
+---
+
+<section class="text-enlarger" data-text-enlarger data-font="sans" data-palette="site">
+  <header class="text-tool-intro">
+    <h1>Text enlarger</h1>
+  </header>
+
+  <div class="text-stage" data-text-stage>
+    <button class="text-stage__copy" type="button" data-text-copy aria-label="Copy message" title="Copy">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="1.5"/><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-10A1.5 1.5 0 0 0 3 5.5v10A1.5 1.5 0 0 0 4.5 17H8"/></svg>
+    </button>
+
+    <div class="text-stage__canvas" data-text-canvas>
+      <div class="text-stage__message" data-text-message data-empty="true" data-placeholder="Lorem ipsum dolor sit amet." contenteditable="plaintext-only" role="textbox" aria-label="Message" aria-placeholder="Lorem ipsum dolor sit amet." aria-multiline="true" spellcheck="true"></div>
+    </div>
+
+    <div class="text-controls" data-text-controls role="group" aria-label="Text controls">
+      <div class="text-controls__actions">
+        <button class="text-control" type="button" data-text-font aria-label="Use serif font">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19h4M7 19 12 5l5 14M15 19h4M9 14h6"/></svg>
+          <span data-text-font-label>Sans</span>
+        </button>
+
+        <button class="text-control is-active" type="button" data-text-fit aria-pressed="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="1"/><path d="m8 16 4-8 4 8M9.5 13h5"/></svg>
+          <span>Fit</span>
+        </button>
+
+        <button class="text-control" type="button" data-text-color aria-label="Change color">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z"/></svg>
+          <span>Color</span>
+        </button>
+
+        <button class="text-control" type="button" data-text-rotate aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.35 5.65"/><path d="M20 4v7h-7"/></svg>
+          <span>Rotate</span>
+        </button>
+
+        <button class="text-control text-control--present" type="button" data-text-present>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+          <span data-text-present-label>Full screen</span>
+        </button>
+      </div>
+
+      <div class="text-controls__size">
+        <span>Size</span>
+        <input type="range" min="24" max="320" value="120" step="1" data-text-size aria-label="Text size">
+        <output data-text-size-output>Auto</output>
+        <button type="button" data-text-reset>Reset</button>
+      </div>
+    </div>
+
+    <p class="text-tool-status" data-text-status aria-live="polite"></p>
+  </div>
+</section>

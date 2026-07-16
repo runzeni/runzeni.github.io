@@ -28,3 +28,16 @@ permalink: /misc/
     {% endfor %}
   </div>
 </section>
+
+<section class="misc-section" aria-labelledby="playground-heading">
+  <h2 class="misc-section-title" id="playground-heading">Playground</h2>
+  <div class="misc-grid">
+    <a href="{{ '/misc/text/' | relative_url }}" class="misc-card misc-card-link">
+      <div class="misc-card-header">
+        <h3>Text enlarger</h3>
+        <span class="misc-status">Tool</span>
+      </div>
+      <p class="misc-excerpt">Make a short message fill the screen.</p>
+    </a>
+  </div>
+</section>

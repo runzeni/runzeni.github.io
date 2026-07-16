@@ -140,6 +140,28 @@
   font: 11px var(--font-sans);
 }
 
+.colorimetry-widget .chart-locus {
+  stroke: var(--color-text);
+  stroke-width: 1.8;
+}
+
+.colorimetry-widget .chart-locus--purples {
+  stroke: var(--color-text-light);
+  stroke-dasharray: 3 3;
+  stroke-width: 1.25;
+}
+
+.colorimetry-widget .chart-locus-focus {
+  fill: var(--color-bg);
+  stroke: var(--color-text);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.colorimetry-widget .chart-locus-focus__center {
+  fill: var(--color-text);
+}
+
 @media (min-width: 640px) {
   .colorimetry-widget__controls {
     grid-template-columns: minmax(12rem, 0.8fr) 1.2fr;

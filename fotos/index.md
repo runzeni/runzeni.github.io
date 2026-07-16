@@ -15,10 +15,11 @@ gallery: true
   </div>
 </header>
 
-<section class="portfolio-grid" data-photo-gallery aria-label="Selected photographs">
-  {% for photo in site.data.portfolio.photos %}
+{% assign selected_photos = site.data.portfolio.photos | sort: 'sequence' %}
+<section class="portfolio-sequence" data-photo-gallery aria-label="Selected photographs">
+  {% for photo in selected_photos %}
     {% assign thumbnail = photo.src | replace: '/assets/img/', '/assets/img/derived/' | replace: '.jpg', '.webp' %}
-    <a class="portfolio-item portfolio-item--{{ photo.layout }}" href="{{ thumbnail | relative_url }}" data-gallery-trigger data-pswp-width="{{ photo.width }}" data-pswp-height="{{ photo.height }}" aria-label="Open photograph {{ forloop.index }} of {{ forloop.length }}: {{ photo.alt | escape }}">
+    <a class="portfolio-item portfolio-item--{{ photo.placement }}" style="--sequence-row: {{ photo.row }}" href="{{ thumbnail | relative_url }}" data-gallery-trigger data-pswp-width="{{ photo.width }}" data-pswp-height="{{ photo.height }}" aria-label="Open photograph {{ forloop.index }} of {{ forloop.length }}: {{ photo.alt | escape }}">
       <span class="portfolio-item__frame">
         <img src="{{ thumbnail | relative_url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt | escape }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" decoding="async" sizes="(max-width: 620px) 100vw, (max-width: 960px) 50vw, 62vw"{% if forloop.first %} fetchpriority="high"{% endif %}>
       </span>

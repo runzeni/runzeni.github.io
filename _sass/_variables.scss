@@ -77,10 +77,10 @@
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
   --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.25);
 
-  /* Glass effect */
-  --glass-blur: 10px;
-  --glass-bg: rgba(254, 254, 254, 0.75);
-  --glass-bg-heavy: rgba(254, 254, 254, 0.95);
+  /* Blur surfaces */
+  --glass-blur: 32px;
+  --glass-bg: rgba(254, 254, 254, 0.58);
+  --glass-bg-heavy: rgba(254, 254, 254, 0.82);
 }
 
 /* Dark mode (inverted ink/paper) */
@@ -95,27 +95,22 @@
   --color-lightbox-bg: rgba(0, 0, 0, 0.97);
   --color-progress: var(--color-mid);
   --color-background-secondary: rgba(255, 255, 255, 0.04);
-  --glass-bg: rgba(15, 15, 15, 0.5);
-  --glass-bg-heavy: rgba(15, 15, 15, 0.95);
+  --glass-bg: rgba(15, 15, 15, 0.46);
+  --glass-bg-heavy: rgba(15, 15, 15, 0.8);
 }
 
-/* Reduce transparency mode (solid backgrounds, no blur) */
+/* Solid mode: fully opaque surfaces with no backdrop processing. */
 [data-reduce-transparency="on"] {
-  --glass-bg: var(--color-header-bg);
-  --glass-bg-heavy: var(--color-header-bg);
+  --glass-bg: var(--color-bg);
+  --glass-bg-heavy: var(--color-bg);
   --glass-blur: 0px;
-
-  * {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
 }
 
 /* Respect OS-level reduced transparency preference */
 @media (prefers-reduced-transparency: reduce) {
   :root {
-    --glass-bg: var(--color-header-bg);
-    --glass-bg-heavy: var(--color-header-bg);
+    --glass-bg: var(--color-bg);
+    --glass-bg-heavy: var(--color-bg);
     --glass-blur: 0px;
   }
 

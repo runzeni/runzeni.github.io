@@ -205,23 +205,30 @@ colorimetry_interactive: true
       <strong>Critical Understanding:</strong> An IDT is NOT just a LUT. It's a mathematical transform (matrix + curve + white point adaptation) specific to each camera model. This is why you need the correct IDT for your camera—guessing creates color shifts.
     </blockquote>
 
-    <figure class="colorimetry-widget" data-colorimetry-widget="gamut-coordinates" aria-labelledby="gamut-coordinates-title">
+    <figure class="colorimetry-widget" data-colorimetry-widget="gamut-coordinates" data-locus-url="{{ '/assets/data/cie-1931-2deg-5nm.json' | relative_url }}" aria-labelledby="gamut-coordinates-title">
       <p class="colorimetry-widget__eyebrow">Interactive study</p>
       <h4 class="colorimetry-widget__title" id="gamut-coordinates-title">Primary-coordinate explorer</h4>
-      <p class="colorimetry-widget__note">Toggle named primary triangles on a chromaticity-coordinate plane. It intentionally omits a spectral-locus drawing, so it cannot imply a measured gamut area.</p>
+      <p class="colorimetry-widget__note">Compare named primary triangles against the CIE 1931 2° spectral locus. Move through wavelength to inspect the official chromaticity coordinates.</p>
       <div class="colorimetry-widget__canvas">
         <svg data-gamut-svg role="img" aria-labelledby="gamut-coordinates-svg-title gamut-coordinates-svg-description"></svg>
       </div>
-      <fieldset class="colorimetry-widget__checkboxes">
-        <legend class="visually-hidden">Show gamut primary coordinates</legend>
-        <label><input data-gamut-toggle type="checkbox" value="rec709" checked>Rec.709</label>
-        <label><input data-gamut-toggle type="checkbox" value="rec2020">Rec.2020</label>
-        <label><input data-gamut-toggle type="checkbox" value="ap1" checked>ACES AP1</label>
-        <label><input data-gamut-toggle type="checkbox" value="ap0">ACES AP0</label>
-      </fieldset>
+      <div class="colorimetry-widget__controls">
+        <label class="colorimetry-widget__control" for="locus-wavelength">
+          <span>Wavelength</span>
+          <output class="colorimetry-widget__output" id="locus-wavelength-output" data-locus-wavelength-output></output>
+          <input id="locus-wavelength" data-locus-wavelength type="range" min="360" max="700" step="5" value="555">
+        </label>
+        <fieldset class="colorimetry-widget__checkboxes">
+          <legend class="visually-hidden">Show gamut primary coordinates</legend>
+          <label><input data-gamut-toggle type="checkbox" value="rec709" checked>Rec.709</label>
+          <label><input data-gamut-toggle type="checkbox" value="rec2020">Rec.2020</label>
+          <label><input data-gamut-toggle type="checkbox" value="ap1" checked>ACES AP1</label>
+          <label><input data-gamut-toggle type="checkbox" value="ap0">ACES AP0</label>
+        </fieldset>
+      </div>
       <p class="colorimetry-widget__readout" data-gamut-readout role="status" aria-live="polite"></p>
       <noscript><p class="colorimetry-widget__fallback">JavaScript is off. The AP0 and AP1 coordinate tables above remain the source for this comparison.</p></noscript>
-      <figcaption>Figure 4.1: Primary-coordinate comparison. AP0/AP1 values follow the tables above; Rec.709 and Rec.2020 are standard reference primaries.</figcaption>
+      <figcaption>Figure 4.1: Primary-coordinate comparison. The spectral locus uses the <a href="https://doi.org/10.25039/CIE.DS.mifmy4x4">CIE 1931 2° dataset</a>, sampled here at 5 nm; AP0/AP1 values follow the tables above.</figcaption>
     </figure>
 
   </section>

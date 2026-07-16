@@ -26,15 +26,45 @@
     if (!button || !labels[value]) return;
     button.setAttribute('aria-label', labels[value].aria);
     button.setAttribute('title', labels[value].title);
+    button.setAttribute('aria-pressed', String(labels[value].pressed));
+    const visibleLabel = query('.menu-control-label', button);
+    if (visibleLabel) visibleLabel.textContent = labels[value].label;
   };
+
+  let copyConfirmationTimer = null;
+  const showCopyConfirmation = (message = 'Copied') => {
+    const host = document.fullscreenElement || document.body;
+    let notification = query('.copy-notification');
+    if (!notification) {
+      notification = document.createElement('div');
+      notification.className = 'copy-notification';
+      notification.setAttribute('role', 'status');
+      notification.setAttribute('aria-live', 'polite');
+    }
+    if (notification.parentElement !== host) host.appendChild(notification);
+
+    window.clearTimeout(copyConfirmationTimer);
+    notification.textContent = message;
+    notification.classList.remove('hide');
+    window.requestAnimationFrame(() => notification.classList.add('show'));
+    copyConfirmationTimer = window.setTimeout(() => {
+      notification.classList.remove('show');
+      notification.classList.add('hide');
+    }, 1200);
+  };
+  window.siteCopyConfirmation = showCopyConfirmation;
 
   const setPreference = (attribute, key, value, animate) => {
     const apply = () => {
       root.setAttribute(attribute, value);
       storage.set(key, value);
+      window.dispatchEvent(new CustomEvent('sitepreferencechange', {
+        detail: { attribute, value }
+      }));
     };
 
-    if (animate && document.startViewTransition) {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (animate && document.startViewTransition && !reduceMotion) {
       document.startViewTransition(apply);
       return;
     }
@@ -51,19 +81,19 @@
         animate: true,
         next: (value) => value === 'dark' ? 'light' : 'dark',
         labels: {
-          light: { aria: 'Switch to dark mode', title: 'Switch to dark mode (D)' },
-          dark: { aria: 'Switch to light mode', title: 'Switch to light mode (D)' }
+          light: { label: 'Light', pressed: false, aria: 'Switch to dark mode', title: 'Switch to dark mode (D)' },
+          dark: { label: 'Dark', pressed: true, aria: 'Switch to light mode', title: 'Switch to light mode (D)' }
         }
       },
       {
         id: 'monochrome-toggle',
         attribute: 'data-monochrome',
         key: 'monochrome',
-        animate: false,
+        animate: true,
         next: (value) => value === 'true' ? 'false' : 'true',
         labels: {
-          false: { aria: 'Switch to monochrome mode', title: 'Switch to B&W mode (M)' },
-          true: { aria: 'Switch to color mode', title: 'Switch to color mode (M)' }
+          false: { label: 'Color', pressed: false, aria: 'Switch to monochrome mode', title: 'Switch to B&W mode (M)' },
+          true: { label: 'B&W', pressed: true, aria: 'Switch to color mode', title: 'Switch to color mode (M)' }
         }
       },
       {
@@ -73,8 +103,8 @@
         animate: false,
         next: (value) => value === 'on' ? 'off' : 'on',
         labels: {
-          off: { aria: 'Reduce transparency', title: 'Reduce transparency (G)' },
-          on: { aria: 'Restore transparency', title: 'Restore transparency (G)' }
+          off: { label: 'Blur', pressed: false, aria: 'Use solid surfaces', title: 'Use solid surfaces (G)' },
+          on: { label: 'Solid', pressed: true, aria: 'Use blurred surfaces', title: 'Use blurred surfaces (G)' }
         }
       }
     ];
@@ -107,6 +137,7 @@
   const initMenu = () => {
     const button = query('#menu-toggle');
     const menu = query('#site-menu');
+    const scrim = query('#menu-scrim');
     const header = query('#site-header');
     if (!button || !menu || !header) return { close() {} };
 
@@ -132,15 +163,25 @@
 
     const setOpen = (open) => {
       menu.classList.toggle('menu-open', open);
+      scrim?.classList.toggle('menu-open', open);
       button.classList.toggle('menu-open', open);
       header.classList.toggle('menu-active', open);
+      document.body.classList.toggle('menu-is-open', open);
       button.setAttribute('aria-expanded', String(open));
       button.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
       setInert(!open);
     };
 
     setOpen(false);
-    button.addEventListener('click', () => setOpen(!menu.classList.contains('menu-open')));
+    button.addEventListener('click', () => {
+      const opening = !menu.classList.contains('menu-open');
+      setOpen(opening);
+      if (opening) window.requestAnimationFrame(() => query(focusableSelector, menu)?.focus());
+    });
+    scrim?.addEventListener('click', () => {
+      setOpen(false);
+      button.focus();
+    });
     menu.addEventListener('click', (event) => {
       if (event.target.closest('a')) setOpen(false);
     });
@@ -192,7 +233,6 @@
 
   const initCodeHeaders = () => {
     const copyIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
-    const checkIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
     const canCopy = Boolean(navigator.clipboard && navigator.clipboard.writeText);
 
     const language = (wrapper) => {
@@ -217,12 +257,7 @@
       copy.addEventListener('click', async () => {
         try {
           await navigator.clipboard.writeText(code.textContent);
-          copy.innerHTML = checkIcon;
-          copy.classList.add('copied');
-          window.setTimeout(() => {
-            copy.innerHTML = copyIcon;
-            copy.classList.remove('copied');
-          }, 1600);
+          showCopyConfirmation('Copied');
         } catch (error) {
           copy.setAttribute('aria-label', 'Unable to copy code');
         }

@@ -10,7 +10,13 @@
         {% assign crumb_path = crumb_path | append: '/' | append: crumb %}
         <span class="breadcrumb-separator" aria-hidden="true">/</span>
         {% if forloop.last %}
-          {% assign current_label = page.breadcrumb_title | default: page.title | default: crumb | replace: '-', ' ' | capitalize %}
+          {% if page.breadcrumb_title %}
+            {% assign current_label = page.breadcrumb_title %}
+          {% elsif page.title %}
+            {% assign current_label = page.title %}
+          {% else %}
+            {% assign current_label = crumb | replace: '-', ' ' | capitalize %}
+          {% endif %}
           <span class="breadcrumb-item breadcrumb-current" aria-current="page">{{ current_label }}</span>
         {% else %}
           {% assign crumb_url = crumb_path | append: '/' %}

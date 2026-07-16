@@ -149,7 +149,10 @@
     const svg = widget.querySelector('[data-gamut-svg]');
     const readout = widget.querySelector('[data-gamut-readout]');
     const toggles = Array.from(widget.querySelectorAll('[data-gamut-toggle]'));
-    if (!svg || !readout || !toggles.length) return;
+    const wavelengthInput = widget.querySelector('[data-locus-wavelength]');
+    const wavelengthOutput = widget.querySelector('[data-locus-wavelength-output]');
+    let spectralCoordinates = [];
+    if (!svg || !readout || !toggles.length || !wavelengthInput || !wavelengthOutput) return;
 
     const render = () => {
       const enabled = gamutDefinitions.filter((gamut) => toggles.some((toggle) => toggle.value === gamut.id && toggle.checked));
@@ -157,7 +160,7 @@
       const title = svgElement('title', { id: 'gamut-coordinates-svg-title' });
       title.textContent = 'Gamut chromaticity-coordinate comparison';
       const description = svgElement('desc', { id: 'gamut-coordinates-svg-description' });
-      description.textContent = `A coordinate-plane comparison of ${enabled.map((gamut) => gamut.label).join(', ') || 'no'} gamut triangles. The plot intentionally does not depict the CIE spectral locus.`;
+      description.textContent = `A CIE 1931 chromaticity diagram comparing ${enabled.map((gamut) => gamut.label).join(', ') || 'no'} gamut triangles with the spectral locus.`;
       svg.append(title, description);
       const frame = chartFrame(svg, {
         xMinimum: -0.05,
@@ -167,6 +170,29 @@
         xLabel: 'x chromaticity coordinate',
         yLabel: 'y chromaticity coordinate'
       });
+
+      if (spectralCoordinates.length) {
+        const locusPoints = spectralCoordinates
+          .map(([, x, y]) => `${frame.x(x).toFixed(2)},${frame.y(y).toFixed(2)}`)
+          .join(' ');
+        svg.append(svgElement('polyline', {
+          points: locusPoints,
+          fill: 'none',
+          class: 'chart-locus',
+          'vector-effect': 'non-scaling-stroke',
+          'aria-hidden': 'true'
+        }));
+        const first = spectralCoordinates[0];
+        const last = spectralCoordinates[spectralCoordinates.length - 1];
+        svg.append(svgElement('line', {
+          x1: frame.x(first[1]), y1: frame.y(first[2]),
+          x2: frame.x(last[1]), y2: frame.y(last[2]),
+          class: 'chart-locus chart-locus--purples',
+          'vector-effect': 'non-scaling-stroke',
+          'aria-hidden': 'true'
+        }));
+      }
+
       enabled.forEach((gamut) => {
         const points = gamut.primaries.map(([x, y]) => `${frame.x(x).toFixed(2)},${frame.y(y).toFixed(2)}`).join(' ');
         const polygon = svgElement('polygon', {
@@ -187,14 +213,49 @@
           cx: frame.x(gamut.white[0]), cy: frame.y(gamut.white[1]), r: 3.5, fill: 'var(--color-bg)', stroke: gamut.color, 'stroke-width': 1.75, 'aria-hidden': 'true'
         }));
       });
+
+      const wavelength = Number(wavelengthInput.value);
+      const selected = spectralCoordinates.find(([value]) => value === wavelength);
+      if (selected) {
+        svg.append(
+          svgElement('circle', {
+            cx: frame.x(selected[1]), cy: frame.y(selected[2]), r: 6,
+            class: 'chart-locus-focus', 'aria-hidden': 'true'
+          }),
+          svgElement('circle', {
+            cx: frame.x(selected[1]), cy: frame.y(selected[2]), r: 2.5,
+            class: 'chart-locus-focus__center', 'aria-hidden': 'true'
+          })
+        );
+        wavelengthOutput.textContent = `${wavelength} nm`;
+      }
       const names = enabled.map((gamut) => gamut.label);
-      readout.textContent = names.length
-        ? `Showing ${names.join(', ')}. This is a coordinate comparison only; it intentionally omits the CIE spectral locus and is not a gamut-area measurement.`
-        : 'Choose a gamut to show its primary coordinates.';
+      const wavelengthText = selected
+        ? `${wavelength} nm: x ${selected[1].toFixed(4)}, y ${selected[2].toFixed(4)}.`
+        : 'Spectral-locus data unavailable.';
+      readout.textContent = `${wavelengthText} ${names.length ? `Showing ${names.join(', ')}.` : 'Choose a gamut to compare.'} Triangle area in xy is not a perceptual gamut-volume measurement.`;
     };
 
     toggles.forEach((toggle) => toggle.addEventListener('change', render));
+    wavelengthInput.addEventListener('input', render);
     render();
+
+    const locusUrl = widget.dataset.locusUrl;
+    if (locusUrl) {
+      fetch(locusUrl)
+        .then((response) => {
+          if (!response.ok) throw new Error(`CIE data request failed: ${response.status}`);
+          return response.json();
+        })
+        .then((data) => {
+          spectralCoordinates = Array.isArray(data.coordinates) ? data.coordinates : [];
+          render();
+        })
+        .catch(() => {
+          spectralCoordinates = [];
+          render();
+        });
+    }
   };
 
   document.querySelectorAll('[data-colorimetry-widget="transfer-curves"]').forEach(initializeTransferCurves);

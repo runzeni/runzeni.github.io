@@ -1,5 +1,84 @@
 import PhotoSwipeLightbox from '../vendor/photoswipe/photoswipe-lightbox.esm.min.js';
 
+const justifiedGallery = document.querySelector('[data-justified-gallery]');
+
+if (justifiedGallery) {
+  const items = Array.from(justifiedGallery.querySelectorAll('[data-gallery-trigger]'));
+  let frame = 0;
+
+  const placeRow = (row, top, containerWidth, gap, targetHeight, justify) => {
+    const ratioTotal = row.reduce((total, item) => total + item.ratio, 0);
+    const availableWidth = containerWidth - gap * (row.length - 1);
+    const naturalHeight = availableWidth / ratioTotal;
+    const height = justify ? naturalHeight : Math.min(targetHeight, naturalHeight);
+    let left = 0;
+
+    row.forEach((item, index) => {
+      const width = index === row.length - 1 && justify
+        ? containerWidth - left
+        : height * item.ratio;
+      Object.assign(item.element.style, {
+        top: `${top}px`,
+        left: `${left}px`,
+        width: `${width}px`,
+        height: `${height}px`
+      });
+      left += width + gap;
+    });
+
+    return height;
+  };
+
+  const layout = () => {
+    const containerWidth = justifiedGallery.clientWidth;
+    if (!containerWidth) return;
+
+    const compact = containerWidth < 620;
+    const gap = compact ? 6 : 10;
+    const targetHeight = compact ? 138 : Math.min(250, Math.max(190, containerWidth * 0.19));
+    const rows = [];
+    let row = [];
+    let ratioTotal = 0;
+
+    items.forEach((element) => {
+      const width = Number(element.dataset.pswpWidth) || 1;
+      const height = Number(element.dataset.pswpHeight) || 1;
+      const item = { element, ratio: width / height };
+      row.push(item);
+      ratioTotal += item.ratio;
+
+      if ((ratioTotal * targetHeight) + gap * (row.length - 1) >= containerWidth) {
+        rows.push(row);
+        row = [];
+        ratioTotal = 0;
+      }
+    });
+    if (row.length) rows.push(row);
+
+    let top = 0;
+    rows.forEach((currentRow, index) => {
+      const isLast = index === rows.length - 1;
+      top += placeRow(currentRow, top, containerWidth, gap, targetHeight, !isLast);
+      if (!isLast) top += gap;
+    });
+
+    justifiedGallery.style.height = `${Math.ceil(top)}px`;
+    justifiedGallery.classList.add('is-justified');
+  };
+
+  const scheduleLayout = () => {
+    window.cancelAnimationFrame(frame);
+    frame = window.requestAnimationFrame(layout);
+  };
+
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(scheduleLayout).observe(justifiedGallery);
+  } else {
+    window.addEventListener('resize', scheduleLayout, { passive: true });
+  }
+  scheduleLayout();
+}
+
 const gallery = document.querySelector('[data-photo-gallery]');
 
 if (gallery) {
@@ -8,12 +87,14 @@ if (gallery) {
   let lastViewed = null;
 
   const icon = (path) => `<svg class="pswp__icn" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">${path}</svg>`;
+  const colorIcon = '<svg class="pswp__color-icon pswp__color-icon--color" viewBox="0 0 24 24" aria-hidden="true"><circle class="color-red" cx="12" cy="8" r="5"></circle><circle class="color-blue" cx="8.5" cy="14" r="5"></circle><circle class="color-yellow" cx="15.5" cy="14" r="5"></circle></svg><svg class="pswp__color-icon pswp__color-icon--bw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 3v18"></path><path d="M12 3a9 9 0 0 1 0 18" fill="currentColor" opacity=".28"></path></svg>';
+  const blurEnabled = () => document.documentElement.dataset.reduceTransparency !== 'on';
 
   const lightbox = new PhotoSwipeLightbox({
     gallery,
     children: '[data-gallery-trigger]',
     pswpModule: () => import('../vendor/photoswipe/photoswipe.esm.min.js'),
-    bgOpacity: 1,
+    bgOpacity: blurEnabled() ? 0.88 : 1,
     loop: false,
     spacing: 0.12,
     preload: [1, 2],
@@ -44,6 +125,28 @@ if (gallery) {
   });
 
   lightbox.on('uiRegister', () => {
+    lightbox.pswp.ui.registerElement({
+      name: 'monochrome',
+      className: 'pswp__button--monochrome',
+      tagName: 'button',
+      appendTo: 'bar',
+      order: 8,
+      html: colorIcon,
+      onInit: (element) => {
+        const update = () => {
+          const monochrome = document.documentElement.dataset.monochrome === 'true';
+          element.classList.toggle('is-monochrome', monochrome);
+          element.setAttribute('aria-label', monochrome ? 'View photographs in color' : 'View photographs in black and white');
+          element.setAttribute('title', monochrome ? 'Color' : 'B&W');
+          element.setAttribute('aria-pressed', String(monochrome));
+        };
+        element.type = 'button';
+        element.addEventListener('click', () => document.querySelector('#monochrome-toggle')?.click());
+        window.addEventListener('sitepreferencechange', update);
+        update();
+      }
+    });
+
     lightbox.pswp.ui.registerElement({
       name: 'zoom-range',
       className: 'pswp__zoom-range',
@@ -81,8 +184,22 @@ if (gallery) {
     });
   });
 
+  window.addEventListener('sitepreferencechange', (event) => {
+    if (event.detail?.attribute !== 'data-reduce-transparency' || !lightbox.pswp) return;
+    const opacity = blurEnabled() ? 0.88 : 1;
+    lightbox.pswp.options.bgOpacity = opacity;
+    lightbox.pswp.applyBgOpacity(1);
+  });
+
   lightbox.on('change', () => {
     lastViewed = lightbox.pswp?.currSlide?.data?.element || null;
+    window.requestAnimationFrame(() => {
+      const counter = document.querySelector('.pswp__counter');
+      const currentIndex = lightbox.pswp?.currIndex;
+      if (!counter || currentIndex === undefined) return;
+      const digits = Math.max(2, String(triggers.length).length);
+      counter.textContent = `${String(currentIndex + 1).padStart(digits, '0')} / ${String(triggers.length).padStart(digits, '0')}`;
+    });
   });
 
   lightbox.on('close', () => {

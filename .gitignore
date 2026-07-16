@@ -12,4 +12,5 @@
 Gemfile.lock
 
 # AI / Editor
+/AGENTS.md
 /.claude/

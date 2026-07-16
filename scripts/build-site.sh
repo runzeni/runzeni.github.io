@@ -39,5 +39,5 @@ case "$command" in
 esac
 
 ruby scripts/build-photo-manifest.rb
-bash scripts/build-photo-derivatives.sh --clean
+bash scripts/build-photo-derivatives.sh
 exec bundle exec jekyll "$command" "$@"
