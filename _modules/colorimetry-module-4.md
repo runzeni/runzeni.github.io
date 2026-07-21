@@ -3,7 +3,7 @@ title: "Module 4: ACES & Modern Color Management"
 series: colorimetry
 module_number: 4
 slug: module-4
-permalink: /misc/colorimetry/module-4/
+permalink: /notes/colorimetry/module-4/
 date: 2025-12-10
 description: "ACES architecture, AP0/AP1 working spaces, gamut compression, and practical workflows."
 math: true
@@ -382,7 +382,7 @@ colorimetry_interactive: true
       <li>Mansencal, T. et al. (2020). "OpenColorIO: A Color Management Framework for Visual Effects and Animation." <em>ACM Transactions on Graphics</em>, 39(4), Article 135.</li>
       <li>Sobotka, T. & Haarm, P. (2016). <em>ACES Output Transforms</em>. Academy ACES Technical Documentation.</li>
       <li>Blender Foundation (2023). <em>AgX Display Transform Documentation</em>. Available at: docs.blender.org</li>
-      <li>Academy ACES Central: <a href="https://acescentral.com" target="_blank">acescentral.com</a> (Official forums and technical resources)</li>
+      <li>Academy ACES Central: <a href="https://acescentral.com" target="_blank" rel="noopener noreferrer">acescentral.com</a> (Official forums and technical resources)</li>
     </ul>
   </section>
 

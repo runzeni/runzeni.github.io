@@ -2,7 +2,7 @@
 title: "Mathematical Appendix"
 series: colorimetry
 slug: appendix-mathematics
-permalink: /misc/colorimetry/appendix-mathematics/
+permalink: /notes/colorimetry/appendix-mathematics/
 description: "Comprehensive mathematical reference for all formulas used in the Modern Color Science series"
 math: true
 ---

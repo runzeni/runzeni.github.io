@@ -2,9 +2,9 @@
   url: /
 - title: Fotos
   url: /fotos/
-- title: Cine
-  url: /cine/
-- title: Notes & playground
-  url: /misc/
-- title: Protocol
+- title: Protocols
   url: /protocols/
+- title: Notes
+  url: /notes/
+- title: Misc
+  url: /misc/

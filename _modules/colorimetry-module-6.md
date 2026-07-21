@@ -3,7 +3,7 @@ title: "Module 6: Camera Architectures & Case Studies"
 series: colorimetry
 module_number: 6
 slug: module-6
-permalink: /misc/colorimetry/module-6/
+permalink: /notes/colorimetry/module-6/
 date: 2025-12-10
 description: "ARRI's LogC pipeline, RED IPP2 vs ACES, and RAW demosaicing mechanics."
 math: true

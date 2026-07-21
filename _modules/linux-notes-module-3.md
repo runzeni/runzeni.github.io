@@ -3,7 +3,7 @@ title: "Module 3: Practice — Bioinformatics"
 series: linux-notes
 module_number: 3
 slug: module-3
-permalink: /misc/linux-notes/module-3/
+permalink: /notes/linux-notes/module-3/
 date: 2026-02-23
 description: "Proteomics analysis in Python — environment setup, key libraries, and sample workflows for class."
 ---

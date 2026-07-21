@@ -3,7 +3,7 @@ title: "Module 1: A Brief History"
 series: linux-notes
 module_number: 1
 slug: module-1
-permalink: /misc/linux-notes/module-1/
+permalink: /notes/linux-notes/module-1/
 date: 2026-02-23
 description: "From Unix to Linux"
 ---

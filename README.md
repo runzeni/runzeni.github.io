@@ -22,19 +22,71 @@ bash scripts/build-site.sh build
 - `_data/profile.yml` is the single source for the home-page bio, links, publications, and presentations.
 - `_data/portfolio.yml` is the curated edit for `/fotos/`.
 - `_photobook/` holds roll metadata; `_data/photobooks.yml` is the generated, checked manifest for each roll's published frames.
-- `cocktails.json` powers Protocol.
-- `_modules/` holds Notes & playground series. The two Colorimetry widgets are intentionally small, source-defined studies rather than image simulations.
+- `cocktails.json` powers Protocols.
+- `_notes/` holds Markdown-first articles; `_modules/` holds longer Notes series. The two Colorimetry widgets are intentionally small, source-defined studies rather than image simulations.
+
+## Writing an article
+
+Copy `_drafts/article-template.md` to `_notes/a-short-filename.md`, replace the
+front matter, and write the body as ordinary Markdown. The shared `article`
+layout supplies the title, date, breadcrumb, typography, responsive tables,
+figure captions, code-copy controls, and optional MathJax support.
+
+The only required field is `title`; `description`, `date`, `tags`, and
+`math: true` are optional. Published articles appear automatically on `/notes/`.
+Legacy Notes URLs under `/misc/` are generated from `_data/redirects.yml` so
+existing bookmarks continue to work after a section move.
 
 ## Photos
 
-Original scans stay in `assets/img/2022`, `2023`, `2024`, and `portfolio`; they are excluded from the published artifact. WebP renditions are generated locally into ignored `assets/img/derived` and are generated again by the deploy workflow before Jekyll builds the published artifact. `bash scripts/build-site.sh` prepares both the frame manifest and WebPs before Jekyll starts.
+Original scans stay in numeric `assets/img/<year>/` folders or `assets/img/portfolio/`; they are excluded from the published artifact. WebP renditions are generated locally into ignored `assets/img/derived` and are generated again by the deploy workflow before Jekyll builds the published artifact. `bash scripts/build-site.sh` prepares both the frame manifest and WebPs before Jekyll starts.
 
-After adding or replacing original scans, refresh the manifest, review and commit `_data/photobooks.yml`, then build:
+### Add to Selected works
+
+1. Prefer an existing original in `assets/img/<year>/<roll>/`; do not copy it
+   into `portfolio` if it is already part of an archived roll. Put standalone
+   selected-work originals in `assets/img/portfolio/`.
+2. Add one record to `_data/portfolio.yml`. Supply the source path, unique
+   `sequence`, editorial `row` and `placement`, pixel `width` and `height`, and
+   useful `alt` text. Placements are `lead`, `full`, `feature`, `left`, `right`,
+   `inset-left`, `inset-right`, and `ending`.
+3. Run `bash scripts/build-site.sh serve`. It renders only new or changed WebPs;
+   the ignored `assets/img/derived/` files are never committed.
+
+Use ImageMagick when dimensions are not known:
+
+```sh
+magick identify -format '%w %h\n' "assets/img/path/to/photo.jpg"
+```
+
+### Add a full roll to the archive
+
+1. Create `assets/img/<year>/<roll-folder>/` and place the roll's JPG, JPEG, or
+   PNG files there in the filename order in which they should appear.
+2. Copy an existing `_photobook/*.md` file and update `title`, `film`, `year`,
+   `date`, `image_dir`, and the unique URL `slug`. `camera` is optional. Archive
+   covers are sampled at build time, so no fixed cover is required.
+3. Build or serve the site. The manifest builder records every frame and its
+   dimensions; the derivative builder automatically recognizes future numeric
+   year folders.
+4. Review and commit the originals, the new `_photobook` file, and the updated
+   `_data/photobooks.yml`. Do not commit `_site/` or `assets/img/derived/`.
+
+The explicit refresh commands are:
 
 ```sh
 ruby scripts/build-photo-manifest.rb
 bash scripts/build-site.sh build
 ```
+
+### Cine stills plan
+
+Keep Cine within Fotos but separate from film rolls. When the first finished
+set is ready, store originals under `assets/img/cine/<project-slug>/`, describe
+the ordered stills in `_data/cine.yml`, and render a project-level sequence at
+`/fotos/#cine` with the same lightbox and derivative pipeline. Use one short
+project note rather than captions under every frame. Add that structure only
+when a real set exists; until then the current restrained placeholder remains.
 
 ## Deployment
 

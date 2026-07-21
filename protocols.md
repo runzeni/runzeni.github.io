@@ -1,13 +1,13 @@
 ---
 layout: default
-title: Protocol
+title: Protocols
 description: A searchable collection of cocktail notes curated by Runze Ni.
 permalink: /protocols/
 protocol: true
 ---
 
 <header class="gallery-header">
-  <h1 class="gallery-title">Protocol</h1>
+  <h1 class="gallery-title">Protocols</h1>
   <p class="gallery-subtitle">{{ site.data.cocktails.cocktails | size }} cocktail notes, searchable by spirit or ingredient.</p>
 </header>
 

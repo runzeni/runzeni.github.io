@@ -3,7 +3,7 @@ title: "Module 2: The Basics"
 series: linux-notes
 module_number: 2
 slug: module-2
-permalink: /misc/linux-notes/module-2/
+permalink: /notes/linux-notes/module-2/
 date: 2026-02-23
 description: "Essential commands for navigating the filesystem, manipulating files, and getting things done in the terminal."
 ---

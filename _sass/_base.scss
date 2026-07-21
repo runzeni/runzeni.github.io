@@ -4,7 +4,7 @@
 
 /* === Image Filters === */
 img:not(.no-filter) {
-  transition: filter var(--duration-fast) ease-in;
+  transition: filter 320ms var(--transition-smooth);
 }
 
 [data-monochrome="true"] img:not(.no-filter) {
@@ -32,6 +32,29 @@ body {
   margin: 0;
   padding-top: var(--header-height);
   overflow-x: hidden;
+  transition: background-color 320ms var(--transition-smooth), color 320ms var(--transition-smooth);
+}
+
+@media (pointer: coarse) {
+  img:not(.no-filter) {
+    transition: none;
+  }
+
+  main {
+    transition: opacity 180ms ease;
+  }
+
+  .preference-is-changing main {
+    opacity: 0.92;
+  }
+
+  .preference-is-changing body,
+  .preference-is-changing .site-header,
+  .preference-is-changing .site-menu-dropdown,
+  .preference-is-changing .site-breadcrumb,
+  .preference-is-changing .pswp__bg {
+    transition-duration: 320ms;
+  }
 }
 
 img {
@@ -176,7 +199,7 @@ mark {
   }
 
   /* Hide UI elements */
-  .site-header, .site-menu-dropdown, .gallery-lightbox, .scroll-progress, .sticky-nav,
+  .site-header, .site-menu-dropdown, .scroll-progress, .sticky-nav, .notes-outline,
   .shortcuts-overlay, .module-navigation, .module-nav, .no-print, button,
   .portfolio-grid, .portfolio-sequence, .contact-sheet-grid { display: none !important; }
 

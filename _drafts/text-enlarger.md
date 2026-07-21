@@ -63,7 +63,7 @@ Use feature detection for Fullscreen and Screen Wake Lock. Orientation locking s
 ## Decisions implemented
 
 1. Public name: Text enlarger.
-2. Route: `/misc/text/`, linked from Playground.
+2. Route: `/misc/text/`, linked from Misc.
 3. One editable surface becomes the presentation surface.
 4. No presets or instructional copy; a non-content placeholder demonstrates the interaction without becoming part of the message.
 5. Full screen requests the browser mode, uses an in-page fallback, keeps message geometry fixed as controls fade, and requests screen wake lock when available.

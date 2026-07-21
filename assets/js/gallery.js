@@ -87,6 +87,7 @@ if (gallery) {
   let lastViewed = null;
 
   const icon = (path) => `<svg class="pswp__icn" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">${path}</svg>`;
+  const themeIcon = '<svg class="pswp__theme-icon pswp__theme-icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg><svg class="pswp__theme-icon pswp__theme-icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20.5 14.3A8.5 8.5 0 0 1 9.7 3.5a8.5 8.5 0 1 0 10.8 10.8z"></path></svg>';
   const colorIcon = '<svg class="pswp__color-icon pswp__color-icon--color" viewBox="0 0 24 24" aria-hidden="true"><circle class="color-red" cx="12" cy="8" r="5"></circle><circle class="color-blue" cx="8.5" cy="14" r="5"></circle><circle class="color-yellow" cx="15.5" cy="14" r="5"></circle></svg><svg class="pswp__color-icon pswp__color-icon--bw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 3v18"></path><path d="M12 3a9 9 0 0 1 0 18" fill="currentColor" opacity=".28"></path></svg>';
   const blurEnabled = () => document.documentElement.dataset.reduceTransparency !== 'on';
 
@@ -106,7 +107,7 @@ if (gallery) {
     clickToCloseNonZoomable: false,
     returnFocus: false,
     initialZoomLevel: 'fit',
-    secondaryZoomLevel: (level) => level.initial * 1.5,
+    secondaryZoomLevel: (level) => level.initial * 2,
     maxZoomLevel: (level) => level.initial * 3,
     paddingFn: () => ({ top: 64, bottom: 68, left: 24, right: 24 }),
     showAnimationDuration: reducedMotion.matches ? 0 : 260,
@@ -114,7 +115,7 @@ if (gallery) {
     zoomAnimationDuration: reducedMotion.matches ? 0 : 260,
     easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
     closeTitle: 'Close photograph viewer',
-    zoomTitle: 'Toggle 150% zoom',
+    zoomTitle: 'Toggle 200% zoom',
     arrowPrevTitle: 'Previous photograph',
     arrowNextTitle: 'Next photograph',
     indexIndicatorSep: ' / ',
@@ -126,13 +127,36 @@ if (gallery) {
 
   lightbox.on('uiRegister', () => {
     lightbox.pswp.ui.registerElement({
+      name: 'theme',
+      className: 'pswp__button--theme',
+      tagName: 'button',
+      appendTo: 'bar',
+      order: 7,
+      html: themeIcon,
+      onInit: (element, pswp) => {
+        const update = () => {
+          const dark = document.documentElement.dataset.theme === 'dark';
+          element.classList.toggle('is-dark', dark);
+          element.setAttribute('aria-label', dark ? 'Use light mode' : 'Use dark mode');
+          element.setAttribute('title', dark ? 'Light' : 'Dark');
+          element.setAttribute('aria-pressed', String(dark));
+        };
+        element.type = 'button';
+        element.addEventListener('click', () => document.querySelector('#header-theme-toggle')?.click());
+        window.addEventListener('sitepreferencechange', update);
+        pswp.on('destroy', () => window.removeEventListener('sitepreferencechange', update));
+        update();
+      }
+    });
+
+    lightbox.pswp.ui.registerElement({
       name: 'monochrome',
       className: 'pswp__button--monochrome',
       tagName: 'button',
       appendTo: 'bar',
       order: 8,
       html: colorIcon,
-      onInit: (element) => {
+      onInit: (element, pswp) => {
         const update = () => {
           const monochrome = document.documentElement.dataset.monochrome === 'true';
           element.classList.toggle('is-monochrome', monochrome);
@@ -143,6 +167,7 @@ if (gallery) {
         element.type = 'button';
         element.addEventListener('click', () => document.querySelector('#monochrome-toggle')?.click());
         window.addEventListener('sitepreferencechange', update);
+        pswp.on('destroy', () => window.removeEventListener('sitepreferencechange', update));
         update();
       }
     });

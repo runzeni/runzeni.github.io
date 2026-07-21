@@ -3,7 +3,7 @@ title: "Module 2: Measuring Color (History & Standards)"
 series: colorimetry
 module_number: 2
 slug: module-2
-permalink: /misc/colorimetry/module-2/
+permalink: /notes/colorimetry/module-2/
 date: 2025-12-10
 description: "From early color-matching experiments to the CIE 1931 XYZ standard, perceptual uniformity, and the analog legacy of film."
 math: true

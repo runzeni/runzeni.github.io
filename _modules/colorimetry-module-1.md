@@ -3,7 +3,7 @@ title: "Module 1: The Hardware of Sight"
 series: colorimetry
 module_number: 1
 slug: module-1
-permalink: /misc/colorimetry/module-1/
+permalink: /notes/colorimetry/module-1/
 date: 2025-12-10
 description: "How biological vision works — from photons to perception — and why it matters for digital color."
 math: true

@@ -3,7 +3,7 @@ title: "Module 3: The Digital Image Pipeline"
 series: colorimetry
 module_number: 3
 slug: module-3
-permalink: /misc/colorimetry/module-3/
+permalink: /notes/colorimetry/module-3/
 date: 2025-12-10
 description: "Scene-referred vs. display-referred workflows, color models, transfer functions, and the view transform."
 math: true

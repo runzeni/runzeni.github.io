@@ -1,0 +1,33 @@
+---
+layout: default
+---
+
+{% assign series_items = site.modules | where: 'series', page.series | where_exp: 'item', 'item.module_number' | sort: 'module_number' %}
+
+<header class="article-landing-header series-header">
+  {% if page.kicker %}<p class="article-kicker">{{ page.kicker }}</p>{% endif %}
+  <h1>{{ page.title }}</h1>
+  {% if page.description %}<p class="article-landing-subtitle">{{ page.description }}</p>{% endif %}
+  <p class="series-count">{{ series_items.size }} modules</p>
+</header>
+
+{% if content != '' %}
+  <div class="series-introduction article-content">{{ content }}</div>
+{% endif %}
+
+<nav class="series-index" aria-label="{{ page.title }} modules">
+  <ol>
+    {% for item in series_items %}
+      <li>
+        <a href="{{ item.url | relative_url }}" class="series-index-link">
+          <span class="series-index-number">{{ item.module_number }}</span>
+          <span class="series-index-main">
+            <span class="series-index-title">{{ item.short_title | default: item.title }}</span>
+            {% if item.description %}<span class="series-index-description">{{ item.description }}</span>{% endif %}
+          </span>
+          <span class="series-index-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ol>
+</nav>

@@ -3,7 +3,7 @@ title: "Module 5: The Display Ecosystem"
 series: colorimetry
 module_number: 5
 slug: module-5
-permalink: /misc/colorimetry/module-5/
+permalink: /notes/colorimetry/module-5/
 date: 2025-12-10
 description: "HDR standards (PQ/HLG), viewing environment effects, and system color management across platforms."
 ---

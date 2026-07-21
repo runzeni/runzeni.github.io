@@ -22,8 +22,11 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#fefefe" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0f0f0f" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#fefefe">
+    <script>
+      document.querySelector('meta[name="theme-color"]').content =
+        document.documentElement.getAttribute('data-theme') === 'dark' ? '#0f0f0f' : '#fefefe';
+    </script>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data:; connect-src 'self'; frame-src 'self';">
 
     {% seo %}
@@ -66,6 +69,10 @@
         <button id="menu-toggle" class="menu-toggle header-button" type="button" aria-label="Open navigation" aria-controls="site-menu" aria-expanded="false" title="Menu">
           <span class="hamburger" aria-hidden="true"><span></span><span></span></span>
         </button>
+        <button id="header-theme-toggle" class="theme-toggle header-button header-theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode (D)">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
       </div>
 
       <div class="site-title">
@@ -100,6 +107,13 @@
 
     <main id="main-content" tabindex="-1">
       {% include breadcrumb.html %}
+      {% if section == 'notes' and page.url != '/notes/' %}
+        <aside class="notes-outline" id="notes-outline" aria-label="On this page" hidden>
+          <a class="notes-outline-back" href="{{ '/notes/' | relative_url }}"><span aria-hidden="true">←</span> All notes</a>
+          <p class="notes-outline-label">On this page</p>
+          <ol class="notes-outline-list" id="notes-outline-list"></ol>
+        </aside>
+      {% endif %}
       {{ content }}
     </main>
 
@@ -110,6 +124,11 @@
       {% if section == 'fotos' %}
         <a href="{{ '/fotos/archive/' | relative_url }}" class="sticky-nav-button" id="section-nav-button" aria-label="View photo archive" title="Archive">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        </a>
+      {% endif %}
+      {% if section == 'notes' and page.url != '/notes/' %}
+        <a href="{{ '/notes/' | relative_url }}" class="sticky-nav-button" id="section-nav-button" aria-label="Back to all notes" title="All notes">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12M6 12h12M6 17h8"></path></svg>
         </a>
       {% endif %}
       <button class="sticky-nav-button" id="scroll-bottom" type="button" aria-label="Scroll to bottom" title="Go to bottom">

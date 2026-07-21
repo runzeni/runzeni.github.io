@@ -51,9 +51,17 @@ render_source() {
   rendered=$((rendered + 1))
 }
 
-while IFS= read -r -d '' source; do
-  render_source "$source"
-done < <(find "$source_dir/2022" "$source_dir/2023" "$source_dir/2024" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) -print0)
+bulk_dirs=()
+for directory in "$source_dir"/[0-9][0-9][0-9][0-9]; do
+  [[ -d "$directory" ]] && bulk_dirs+=("$directory")
+done
+[[ -d "$source_dir/cine" ]] && bulk_dirs+=("$source_dir/cine")
+
+if (( ${#bulk_dirs[@]} > 0 )); then
+  while IFS= read -r -d '' source; do
+    render_source "$source"
+  done < <(find "${bulk_dirs[@]}" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) -print0)
+fi
 
 # Only the curated Fotos edit needs portfolio-directory renditions. The archive
 # already serves the year-directory copies, so this avoids publishing duplicates.

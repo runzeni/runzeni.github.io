@@ -1,0 +1,29 @@
+---
+layout: default
+---
+
+<article class="article-page">
+  <header class="article-header">
+    {% if page.kicker %}<p class="article-kicker">{{ page.kicker }}</p>{% endif %}
+    <h1>{{ page.title }}</h1>
+    {% if page.description %}<p class="article-dek">{{ page.description }}</p>{% endif %}
+    {% if page.date or page.updated or page.reading_time %}
+      <p class="article-meta">
+        {% if page.date %}<time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%B %-d, %Y' }}</time>{% endif %}
+        {% if page.updated %}<span aria-hidden="true">·</span> Updated <time datetime="{{ page.updated | date_to_xmlschema }}">{{ page.updated | date: '%B %-d, %Y' }}</time>{% endif %}
+        {% if page.reading_time %}<span aria-hidden="true">·</span> {{ page.reading_time }}{% endif %}
+      </p>
+    {% endif %}
+  </header>
+
+  <div class="article-content">
+    {{ content }}
+  </div>
+
+  {% if page.tags %}
+    <footer class="article-footer" aria-label="Article topics">
+      <span>Filed under</span>
+      <ul>{% for tag in page.tags %}<li>{{ tag }}</li>{% endfor %}</ul>
+    </footer>
+  {% endif %}
+</article>

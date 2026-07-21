@@ -6,6 +6,7 @@
 
 /* === Custom Properties === */
 :root {
+  color-scheme: light;
   /* Base palette (shared values) */
   --color-ink: #1a1a1a;
   --color-paper: #fefefe;
@@ -85,6 +86,7 @@
 
 /* Dark mode (inverted ink/paper) */
 [data-theme="dark"] {
+  color-scheme: dark;
   --color-bg: #0f0f0f;
   --color-text: var(--color-mid);
   --color-text-medium: #d7d7d7;

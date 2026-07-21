@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Runze Ni
-description: Renal physiology, photography, cocktail notes, and working studies by Runze Ni.
+description: Photos & working studies by Runze.
 hide_breadcrumb: true
 ---
 
@@ -10,18 +10,17 @@ hide_breadcrumb: true
 <div class="landing-container">
   <nav class="quick-nav-buttons" aria-label="Portfolio sections">
     <a href="{{ '/fotos/' | relative_url }}" class="quick-nav-btn">Fotos</a>
-    <a href="{{ '/cine/' | relative_url }}" class="quick-nav-btn">Cine</a>
-    <a href="{{ '/protocols/' | relative_url }}" class="quick-nav-btn">Protocol</a>
-    <a href="{{ '/misc/' | relative_url }}" class="quick-nav-btn">Notes</a>
+    <a href="{{ '/protocols/' | relative_url }}" class="quick-nav-btn">Protocols</a>
+    <a href="{{ '/notes/' | relative_url }}" class="quick-nav-btn">Notes</a>
+    <a href="{{ '/misc/' | relative_url }}" class="quick-nav-btn">Misc</a>
   </nav>
 
   <section class="hero-section" id="hero-section">
     <h1 class="hero-title">{{ profile.name }}</h1>
     <p class="hero-subtitle">{{ profile.title }} · {{ profile.tagline }}</p>
     <p class="hero-contact">
-      <a href="mailto:{{ profile.email }}">{{ profile.email }}</a> ·
-      <a href="{{ profile.links.scholar }}" target="_blank" rel="noopener noreferrer">Google Scholar</a> ·
-      <a href="{{ profile.links.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <button type="button" class="text-link" data-copy-email data-copy-value="{{ profile.email }}" aria-label="Copy {{ profile.email }}">{{ profile.email }}</button> ·
+      <a href="{{ profile.links.scholar }}" target="_blank" rel="noopener noreferrer">Google Scholar</a>
     </p>
   </section>
 </div>

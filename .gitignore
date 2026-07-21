@@ -9,6 +9,7 @@
 # Ruby / Bundler
 /vendor/
 /.bundle/
+/.venv/
 Gemfile.lock
 
 # AI / Editor

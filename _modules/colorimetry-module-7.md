@@ -3,7 +3,7 @@ title: "Module 7: Computational Color & Advanced DIT Dev"
 series: colorimetry
 module_number: 7
 slug: module-7
-permalink: /misc/colorimetry/module-7/
+permalink: /notes/colorimetry/module-7/
 date: 2025-12-10
 description: "Working notes on color matching, LUT mathematics, and the boundary between image transforms and real security."
 math: true
@@ -199,10 +199,10 @@ math: true
     <h2>References & Further Reading</h2>
     <ul>
       <li>Bookstein, F.L. (1989). "Principal Warps: Thin-Plate Splines and the Decomposition of Deformations." <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em>, 11(6), 567-585.</li>
-      <li>Mansencal, T. et al. (2019). <em>Colour Science for Python</em>. Available at: <a href="https://github.com/colour-science/colour" target="_blank">github.com/colour-science/colour</a></li>
+      <li>Mansencal, T. et al. (2019). <em>Colour Science for Python</em>. Available at: <a href="https://github.com/colour-science/colour" target="_blank" rel="noopener noreferrer">github.com/colour-science/colour</a></li>
       <li>Malvar, H.S., He, L.W., & Cutler, R. (2004). "High-Quality Linear Interpolation for Demosaicing of Bayer-Patterned Color Images." <em>IEEE ICASSP</em>, 3, 485-488.</li>
       <li>Kasson, J.M. & Plouffe, W. (1992). "An Analysis of Selected Computer Interchange Color Spaces." <em>ACM Transactions on Graphics</em>, 11(4), 373-405.</li>
-      <li>OpenColorIO Project. <em>OCIO Configurations and LUT Formats</em>. Available at: <a href="https://opencolorio.org" target="_blank">opencolorio.org</a></li>
+      <li>OpenColorIO Project. <em>OCIO Configurations and LUT Formats</em>. Available at: <a href="https://opencolorio.org" target="_blank" rel="noopener noreferrer">opencolorio.org</a></li>
     </ul>
   </section>
 

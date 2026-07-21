@@ -2,7 +2,7 @@
 title: Regarding Colorimetry
 series: colorimetry
 slug: index
-permalink: /misc/colorimetry/
+permalink: /notes/colorimetry/
 layout: default
 description: Working notes on color science, from biology to ACES.
 ---
@@ -24,15 +24,15 @@ description: Working notes on color science, from biology to ACES.
   <h3>Resources</h3>
   <p>Full outline for print/PDF, plus a math reference appendix.</p>
   <div class="series-resources-links">
-    <a href="{{ '/misc/colorimetry/comprehensive-outline/' | relative_url }}" class="series-start-button">Print Outline</a>
-    <a href="{{ '/misc/colorimetry/appendix-mathematics/' | relative_url }}" class="series-resource-link">Math Appendix</a>
+    <a href="{{ '/notes/colorimetry/comprehensive-outline/' | relative_url }}" class="series-start-button">Print Outline</a>
+    <a href="{{ '/notes/colorimetry/appendix-mathematics/' | relative_url }}" class="series-resource-link">Math Appendix</a>
   </div>
 </div>
 
 <div class="module-grid">
 
   <article class="module-card">
-    <a href="{{ '/misc/colorimetry/module-1/' | relative_url }}" class="module-card-link">
+    <a href="{{ '/notes/colorimetry/module-1/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 1</span>
       </div>
@@ -57,7 +57,7 @@ description: Working notes on color science, from biology to ACES.
   </article>
 
   <article class="module-card">
-    <a href="{{ '/misc/colorimetry/module-2/' | relative_url }}" class="module-card-link">
+    <a href="{{ '/notes/colorimetry/module-2/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 2</span>
       </div>
@@ -81,7 +81,7 @@ description: Working notes on color science, from biology to ACES.
   </article>
 
   <article class="module-card">
-    <a href="{{ '/misc/colorimetry/module-3/' | relative_url }}" class="module-card-link">
+    <a href="{{ '/notes/colorimetry/module-3/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 3</span>
       </div>
@@ -104,7 +104,7 @@ description: Working notes on color science, from biology to ACES.
   </article>
 
   <article class="module-card">
-    <a href="{{ '/misc/colorimetry/module-4/' | relative_url }}" class="module-card-link">
+    <a href="{{ '/notes/colorimetry/module-4/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 4</span>
       </div>
@@ -126,7 +126,7 @@ description: Working notes on color science, from biology to ACES.
   </article>
 
   <article class="module-card">
-    <a href="{{ '/misc/colorimetry/module-5/' | relative_url }}" class="module-card-link">
+    <a href="{{ '/notes/colorimetry/module-5/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 5</span>
       </div>
@@ -148,7 +148,7 @@ description: Working notes on color science, from biology to ACES.
   </article>
 
   <article class="module-card">
-    <a href="{{ '/misc/colorimetry/module-6/' | relative_url }}" class="module-card-link">
+    <a href="{{ '/notes/colorimetry/module-6/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 6</span>
       </div>
@@ -170,7 +170,7 @@ description: Working notes on color science, from biology to ACES.
   </article>
 
   <article class="module-card">
-    <a href="{{ '/misc/colorimetry/module-7/' | relative_url }}" class="module-card-link">
+    <a href="{{ '/notes/colorimetry/module-7/' | relative_url }}" class="module-card-link">
       <div class="module-card-header">
         <span class="module-number">Module 7</span>
       </div>
@@ -197,7 +197,7 @@ description: Working notes on color science, from biology to ACES.
   <p class="series-footer-text">
     This series assumes familiarity with basic color terminology and motion picture workflows. Mathematical formulas are rendered with MathJax.
   </p>
-  <a href="{{ '/misc/colorimetry/module-1/' | relative_url }}" class="series-start-button">
+  <a href="{{ '/notes/colorimetry/module-1/' | relative_url }}" class="series-start-button">
     Start with Module 1 →
   </a>
 </div>

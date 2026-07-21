@@ -26,3 +26,9 @@ gallery: true
     </a>
   {% endfor %}
 </section>
+
+<section class="article-note fotos-cine" id="cine" aria-labelledby="cine-heading">
+  <p class="gallery-kicker">Moving image</p>
+  <h2 id="cine-heading">Cine</h2>
+  <p>Color studies, stills, and short moving-image work are in preparation.</p>
+</section>

@@ -1,43 +1,39 @@
 ---
 layout: default
-title: Notes & playground
-description: Articles, working notes, and experiments by Runze Ni.
-breadcrumb_title: Notes
+title: Misc
+description: Small tools and interactive studies by Runze Ni.
 permalink: /misc/
 ---
 
 <header class="gallery-header">
-  <h1 class="gallery-title">Notes & playground</h1>
-  <p class="gallery-subtitle">Articles, explorations, and experiments that are ready to share.</p>
+  <h1 class="gallery-title">Misc</h1>
+  <p class="gallery-subtitle">Small utilities and interactive studies.</p>
 </header>
 
-<section class="misc-section" aria-labelledby="notes-heading">
-  <h2 class="misc-section-title" id="notes-heading">Notes</h2>
-  <div class="misc-grid">
-    {% assign index_pages = site.modules | where: 'slug', 'index' | sort: 'title' %}
-    {% for item in index_pages %}
-      {% assign series_modules = site.modules | where: 'series', item.series | where_exp: 'module', 'module.module_number' | sort: 'module_number' %}
-      <a href="{{ item.url | relative_url }}" class="misc-card misc-card-link">
-        <div class="misc-card-header">
-          <h3>{{ item.title }}</h3>
-          {% if item.date %}<span class="misc-date">{{ item.date | date: '%b %Y' }}</span>{% endif %}
-        </div>
-        <p class="misc-excerpt">{{ item.description | default: '' }}</p>
-        {% if series_modules.size > 0 %}<span class="misc-module-count">{{ series_modules.size }} modules</span>{% endif %}
-      </a>
-    {% endfor %}
-  </div>
-</section>
-
-<section class="misc-section" aria-labelledby="playground-heading">
-  <h2 class="misc-section-title" id="playground-heading">Playground</h2>
+<section class="misc-section" aria-label="Tools and studies">
   <div class="misc-grid">
     <a href="{{ '/misc/text/' | relative_url }}" class="misc-card misc-card-link">
       <div class="misc-card-header">
-        <h3>Text enlarger</h3>
-        <span class="misc-status">Tool</span>
+        <h2>Text enlarger</h2>
+        <span class="misc-status">Utility</span>
       </div>
       <p class="misc-excerpt">Make a short message fill the screen.</p>
+    </a>
+
+    <a href="{{ '/notes/colorimetry/module-3/#transfer-curves-title' | relative_url }}" class="misc-card misc-card-link">
+      <div class="misc-card-header">
+        <h2>Transfer curves</h2>
+        <span class="misc-status">Study</span>
+      </div>
+      <p class="misc-excerpt">Compare display encoding curves and gamma values.</p>
+    </a>
+
+    <a href="{{ '/notes/colorimetry/module-4/#gamut-coordinates-title' | relative_url }}" class="misc-card misc-card-link">
+      <div class="misc-card-header">
+        <h2>Gamut coordinates</h2>
+        <span class="misc-status">Study</span>
+      </div>
+      <p class="misc-excerpt">Inspect RGB primaries against the CIE spectral locus.</p>
     </a>
   </div>
 </section>

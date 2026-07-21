@@ -27,9 +27,12 @@ collections:
   photobook:
     output: true
     permalink: /fotos/archive/:slug/
+  notes:
+    output: true
+    permalink: /notes/:slug/
   modules:
     output: true
-    permalink: /misc/:name/
+    permalink: /notes/:name/
 
 defaults:
   - scope:
@@ -43,6 +46,11 @@ defaults:
       type: modules
     values:
       layout: module
+  - scope:
+      path: ""
+      type: notes
+    values:
+      layout: article
 
 plugins:
   - jekyll-seo-tag

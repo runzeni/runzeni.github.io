@@ -2,7 +2,7 @@
 title: "Comprehensive Outline"
 series: colorimetry
 slug: comprehensive-outline
-permalink: /misc/colorimetry/comprehensive-outline/
+permalink: /notes/colorimetry/comprehensive-outline/
 breadcrumb_class: no-print
 description: "Complete outline of the colorimetry series"
 ---
@@ -223,5 +223,5 @@ Color science is the intersection of:
 <footer style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border); color: var(--color-text-light); font-size: var(--text-sm);">
   <p><strong>Regarding Colorimetry</strong></p>
   <p>By Runze Ni • December 2025</p>
-  <p><a href="{{ '/misc/colorimetry/' | relative_url }}">runzeni.github.io/misc/colorimetry</a></p>
+  <p><a href="{{ '/notes/colorimetry/' | relative_url }}">runzeni.github.io/notes/colorimetry</a></p>
 </footer>
