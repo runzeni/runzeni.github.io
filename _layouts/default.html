@@ -1,4 +1,14 @@
 {% assign section = page.url | split: '/' | slice: 1 | first | default: 'home' %}
+{% assign notes_parent_url = '/notes/' %}
+{% assign notes_parent_label = 'All notes' %}
+{% if page.series and page.slug != 'index' %}
+  {% assign notes_series_documents = site.modules | where: 'series', page.series %}
+  {% assign notes_series_overview = notes_series_documents | where: 'slug', 'index' | first %}
+  {% if notes_series_overview %}
+    {% assign notes_parent_url = notes_series_overview.url %}
+    {% assign notes_parent_label = notes_series_overview.title %}
+  {% endif %}
+{% endif %}
 <!doctype html>
 <html lang="{{ site.lang | default: 'en' }}" data-theme="light" data-monochrome="false" data-reduce-transparency="off" data-section="{{ section }}">
   <head>
@@ -70,8 +80,7 @@
           <span class="hamburger" aria-hidden="true"><span></span><span></span></span>
         </button>
         <button id="header-theme-toggle" class="theme-toggle header-button header-theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode (D)">
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg class="icon-theme" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="theme-sun"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></g><path class="theme-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
         </button>
       </div>
 
@@ -87,18 +96,15 @@
       <div class="menu-controls">
         <p class="menu-controls__title">Display</p>
         <button id="theme-toggle" class="theme-toggle header-button" type="button" aria-label="Switch to dark mode" title="Switch to dark mode (D)">
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          <svg class="icon-theme" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g class="theme-sun"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></g><path class="theme-moon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
           <span class="menu-control-label">Light</span>
         </button>
         <button id="monochrome-toggle" class="monochrome-toggle header-button" type="button" aria-label="Switch to monochrome mode" title="Switch to B&W mode (M)">
           <svg class="icon-color" viewBox="0 0 24 24" aria-hidden="true"><circle class="color-red" cx="12" cy="8" r="5"></circle><circle class="color-blue" cx="8.5" cy="14" r="5"></circle><circle class="color-yellow" cx="15.5" cy="14" r="5"></circle></svg>
-          <svg class="icon-bw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 2v20"></path><path d="M12 2a10 10 0 0 1 0 20" fill="currentColor" opacity=".3"></path></svg>
           <span class="menu-control-label">Color</span>
         </button>
         <button id="reduce-transparency-toggle" class="reduce-transparency-toggle header-button" type="button" aria-label="Use solid surfaces" title="Use solid surfaces (G)">
-          <svg class="icon-transparency-on" viewBox="0 0 24 24" aria-hidden="true"><rect class="glass-pane-back" x="3" y="5" width="13" height="15" rx="2"></rect><rect class="glass-pane-front" x="8" y="3" width="13" height="15" rx="2"></rect></svg>
-          <svg class="icon-transparency-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" fill="currentColor"></rect></svg>
+          <svg class="icon-glass" viewBox="0 0 24 24" aria-hidden="true"><rect class="glass-pane-back" x="3" y="5" width="13" height="15" rx="2"></rect><rect class="glass-pane-front" x="8" y="3" width="13" height="15" rx="2"></rect><rect class="glass-overlap" x="8" y="5" width="8" height="13" rx="1.5"></rect></svg>
           <span class="menu-control-label">Blur</span>
         </button>
       </div>
@@ -109,9 +115,17 @@
       {% include breadcrumb.html %}
       {% if section == 'notes' and page.url != '/notes/' %}
         <aside class="notes-outline" id="notes-outline" aria-label="On this page" hidden>
-          <a class="notes-outline-back" href="{{ '/notes/' | relative_url }}"><span aria-hidden="true">←</span> All notes</a>
-          <p class="notes-outline-label">On this page</p>
-          <ol class="notes-outline-list" id="notes-outline-list"></ol>
+          <details class="notes-outline-disclosure" id="notes-outline-details">
+            <summary class="notes-outline-summary">
+              <span class="notes-outline-summary-label">On this page</span>
+              <span class="notes-outline-current" id="notes-outline-current">Sections</span>
+            </summary>
+            <div class="notes-outline-panel">
+              <a class="notes-outline-back" href="{{ notes_parent_url | relative_url }}"><span aria-hidden="true">←</span> {{ notes_parent_label }}</a>
+              <p class="notes-outline-label">On this page</p>
+              <ol class="notes-outline-list" id="notes-outline-list"></ol>
+            </div>
+          </details>
         </aside>
       {% endif %}
       {{ content }}
@@ -127,7 +141,7 @@
         </a>
       {% endif %}
       {% if section == 'notes' and page.url != '/notes/' %}
-        <a href="{{ '/notes/' | relative_url }}" class="sticky-nav-button" id="section-nav-button" aria-label="Back to all notes" title="All notes">
+        <a href="{{ notes_parent_url | relative_url }}" class="sticky-nav-button" id="section-nav-button" aria-label="Back to {{ notes_parent_label }}" title="{{ notes_parent_label }}">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12M6 12h12M6 17h8"></path></svg>
         </a>
       {% endif %}

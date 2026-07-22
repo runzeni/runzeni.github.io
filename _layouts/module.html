@@ -20,11 +20,9 @@ layout: default
       <p class="article-kicker">{{ page.series_title | default: series_overview.title }} · Module {{ page.module_number }} of {{ series_items.size }}</p>
       <h1>{{ page.short_title | default: page.title }}</h1>
       {% if page.description %}<p class="article-dek">{{ page.description }}</p>{% endif %}
-      {% if page.updated or page.reading_time %}
+      {% if page.updated %}
         <p class="article-meta">
-          {% if page.updated %}Updated <time datetime="{{ page.updated | date_to_xmlschema }}">{{ page.updated | date: '%B %-d, %Y' }}</time>{% endif %}
-          {% if page.updated and page.reading_time %}<span aria-hidden="true">·</span>{% endif %}
-          {% if page.reading_time %}{{ page.reading_time }}{% endif %}
+          Updated <time datetime="{{ page.updated | date_to_xmlschema }}">{{ page.updated | date: '%B %-d, %Y' }}</time>
         </p>
       {% endif %}
     </header>

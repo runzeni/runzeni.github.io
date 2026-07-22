@@ -10,6 +10,7 @@ main {
   margin: 0 auto;
   padding: 0 2rem;
   min-height: 100vh;
+  min-height: 100svh;
 }
 
 /* Content-led pages may use the wider canvas while their reading blocks stay narrow. */
@@ -63,10 +64,8 @@ main {
   align-items: center;
   gap: 1rem;
   padding: 0 clamp(0.75rem, 2vw, 1.5rem);
-  transition: background-color 520ms var(--transition-smooth),
-              border-color var(--duration-base) ease,
-              backdrop-filter 520ms var(--transition-smooth),
-              -webkit-backdrop-filter 520ms var(--transition-smooth);
+  transition: background-color var(--theme-duration) var(--theme-ease),
+              border-color var(--theme-duration) var(--theme-ease);
 }
 
 .site-header.menu-active {
@@ -116,31 +115,38 @@ main {
   transition: opacity var(--duration-slow) ease, transform var(--duration-slow) ease;
 }
 
-/* Theme toggle animations */
-.theme-toggle .icon-sun {
+/* One fixed canvas prevents the sun/moon swap from changing icon geometry. */
+.theme-toggle .icon-theme { transform-origin: center; }
+
+.theme-toggle .theme-sun,
+.theme-toggle .theme-moon {
+  transition: opacity var(--theme-duration) var(--theme-ease);
+}
+
+.theme-toggle .theme-sun {
   opacity: 1;
-  transform: rotate(0deg) scale(1);
 }
 
-.theme-toggle .icon-moon {
+.theme-toggle .theme-moon {
   opacity: 0;
-  transform: rotate(180deg) scale(0.5);
 }
 
-[data-theme="dark"] .theme-toggle .icon-sun {
+[data-theme="dark"] .theme-toggle .theme-sun {
   opacity: 0;
-  transform: rotate(-180deg) scale(0.5);
 }
 
-[data-theme="dark"] .theme-toggle .icon-moon {
+[data-theme="dark"] .theme-toggle .theme-moon {
   opacity: 1;
-  transform: rotate(0deg) scale(1);
 }
 
-/* Monochrome toggle animations */
+/* The same color mark persists in B&W mode; only its material changes. */
 .monochrome-toggle .icon-color {
   opacity: 1;
-  transform: scale(1);
+  filter: grayscale(0);
+  transform: rotate(0deg) scale(1);
+  transform-origin: center;
+  transition: filter var(--theme-duration) var(--theme-ease),
+              transform var(--theme-duration) var(--theme-ease);
 }
 
 .icon-color circle { mix-blend-mode: multiply; }
@@ -152,70 +158,43 @@ main {
   mix-blend-mode: screen;
 }
 
-.monochrome-toggle .icon-bw {
-  opacity: 0;
-  transform: scale(0.5);
-}
-
-/* Slightly brighter in light mode for better visibility */
-[data-theme="light"] .monochrome-toggle .icon-color { opacity: 1; }
-
 [data-monochrome="true"] .monochrome-toggle .icon-color {
-  opacity: 0;
-  transform: scale(0.5);
+  filter: grayscale(1);
+  transform: rotate(180deg) scale(0.9);
 }
 
-[data-monochrome="true"] .monochrome-toggle .icon-bw {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Ensure icon-color stays hidden on hover in monochrome mode */
-[data-monochrome="true"] .monochrome-toggle:hover .icon-color {
-  opacity: 0;
-  transform: scale(0.5);
-}
-
-/* Hover effect in monochrome mode */
-[data-monochrome="true"] .monochrome-toggle:hover .icon-bw {
-  opacity: 1;
-  filter: brightness(1.25);
-}
-
-/* Reduce transparency toggle animations */
-.reduce-transparency-toggle .icon-transparency-on {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.icon-transparency-on rect {
+/* Solid mode inks the overlap in the existing glass mark. */
+.icon-glass .glass-pane-back,
+.icon-glass .glass-pane-front {
   stroke: currentColor;
   stroke-width: 1.5;
 }
 
-.icon-transparency-on .glass-pane-back {
+.icon-glass .glass-pane-back {
   fill: #7ab5ce;
   fill-opacity: 0.28;
 }
 
-.icon-transparency-on .glass-pane-front {
+.icon-glass .glass-pane-front {
   fill: #d9eff6;
   fill-opacity: 0.42;
 }
 
-.reduce-transparency-toggle .icon-transparency-off {
+.icon-glass .glass-overlap {
+  fill: currentColor;
+  stroke: none;
   opacity: 0;
-  transform: scale(0.5);
+  transition: opacity var(--theme-duration) var(--theme-ease);
 }
 
-[data-reduce-transparency="on"] .reduce-transparency-toggle .icon-transparency-on {
-  opacity: 0;
-  transform: scale(0.5);
+[data-reduce-transparency="on"] .reduce-transparency-toggle .glass-overlap {
+  opacity: 0.92;
 }
 
-[data-reduce-transparency="on"] .reduce-transparency-toggle .icon-transparency-off {
-  opacity: 1;
-  transform: scale(1);
+[data-reduce-transparency="on"] .site-header,
+[data-reduce-transparency="on"] .site-menu-dropdown,
+[data-reduce-transparency="on"] .sticky-nav-button {
+  animation: glassFilterToSolid 0s linear var(--theme-duration) both;
 }
 
 /* === Hamburger Menu === */
@@ -270,7 +249,7 @@ main {
 .site-title-link {
   color: var(--color-text);
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 600;
   font-size: var(--text-sm);
   line-height: var(--leading-tight);
   text-transform: uppercase;
@@ -323,10 +302,12 @@ main {
 
 /* === Dropdown Menu === */
 .site-menu-dropdown {
+  --surface-blur-active: calc(var(--glass-active-blur) * 1.5);
   position: fixed;
   top: var(--header-height);
   left: 0;
   width: min(28rem, calc(100vw - 2rem));
+  height: calc(100vh - var(--header-height));
   height: calc(100dvh - var(--header-height));
   z-index: z('dropdown');
   border-right: 1px solid var(--color-border);
@@ -340,10 +321,9 @@ main {
   transform: translateX(-100%);
   box-shadow: 0.9rem 0 2.5rem rgba(0, 0, 0, 0.08);
   transition: transform 280ms var(--transition-smooth), visibility 0s linear 280ms,
-              background-color var(--duration-slower) ease, border-color var(--duration-slower) ease,
-              box-shadow var(--duration-slower) ease,
-              backdrop-filter 520ms var(--transition-smooth),
-              -webkit-backdrop-filter 520ms var(--transition-smooth);
+              background-color var(--theme-duration) var(--theme-ease),
+              border-color var(--theme-duration) var(--theme-ease),
+              box-shadow 220ms ease;
 }
 
 [data-reduce-transparency="on"] .site-menu-dropdown {
@@ -411,6 +391,12 @@ body.menu-is-open { overflow: hidden; }
   color: var(--color-text-light);
 }
 
+.site-nav-label {
+  display: inline-block;
+  transform-origin: left center;
+  transition: transform var(--duration-base) var(--transition-smooth);
+}
+
 .site-menu-dropdown .site-nav-active a::after {
   content: 'Current';
   color: var(--color-text-light);
@@ -421,6 +407,12 @@ body.menu-is-open { overflow: hidden; }
 
 .site-menu-dropdown.menu-open .site-nav-item a:hover {
   color: var(--color-text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-menu-dropdown.menu-open .site-nav-item a:hover .site-nav-label {
+    transform: scale(1.03);
+  }
 }
 
 /* === Menu Controls (Color & Glass toggles inside hamburger menu) === */
@@ -470,6 +462,7 @@ body.menu-is-open { overflow: hidden; }
 .menu-control-label {
   grid-column: 2;
   justify-self: start;
+  width: 2.75rem;
 }
 
 .menu-controls .header-button[aria-pressed="true"] {
@@ -515,9 +508,8 @@ body:has(.quick-nav-buttons) #section-nav-button {
   cursor: pointer;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   transition: transform var(--duration-base) ease, box-shadow var(--duration-base) ease,
-              background-color 520ms var(--transition-smooth), border-color var(--duration-slower) ease,
-              backdrop-filter 520ms var(--transition-smooth),
-              -webkit-backdrop-filter 520ms var(--transition-smooth);
+              background-color var(--theme-duration) var(--theme-ease),
+              border-color var(--theme-duration) var(--theme-ease);
 }
 
 .sticky-nav-button svg {
@@ -569,8 +561,8 @@ body:has(.quick-nav-buttons) #section-nav-button {
 
 /* === Footer === */
 .site-footer {
-  margin-top: clamp(3rem, 5vw, 5rem);
-  padding: clamp(2rem, 4vw, 3rem) 0 2rem;
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+  padding: clamp(1.4rem, 3vw, 2rem) 0 1.15rem;
   border-top: 1px solid var(--color-border);
   color: var(--color-text-light);
   font-size: var(--text-xs);
@@ -589,18 +581,18 @@ body:has(.quick-nav-buttons) #section-nav-button {
   display: grid;
   grid-template-columns: auto auto;
   justify-content: space-evenly;
-  gap: clamp(5rem, 6vw, 4rem);
-  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(4rem, 6vw, 5rem);
+  margin-bottom: clamp(0.9rem, 2vw, 1.35rem);
 }
 
-.footer-section h3 {
+.footer-section h2 {
+  margin: 0 0 0.55rem;
   font-size: var(--text-xs);
   line-height: var(--leading-tight);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--color-text);
-  margin-bottom: 0.75rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .footer-section ul {
@@ -610,7 +602,7 @@ body:has(.quick-nav-buttons) #section-nav-button {
 }
 
 .footer-section li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.3rem;
 }
 
 .footer-section a,
@@ -638,7 +630,7 @@ body:has(.quick-nav-buttons) #section-nav-button {
 
 .footer-bottom {
   text-align: center;
-  padding-top: clamp(1.25rem, 3vw, 2rem);
+  padding-top: 0.85rem;
   border-top: 1px solid var(--color-border);
   font-size: var(--text-xs);
   line-height: var(--leading-normal);
@@ -646,7 +638,7 @@ body:has(.quick-nav-buttons) #section-nav-button {
 }
 
 .footer-bottom p {
-  margin: 0.35rem 0;
+  margin: 0.15rem 0;
   color: var(--color-text-light);
 }
 
@@ -714,7 +706,7 @@ a.breadcrumb-item:hover::after {
   color: var(--color-text-light);
   opacity: 0.5;
   user-select: none;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 /* Mobile responsive adjustments */
@@ -763,16 +755,6 @@ a.breadcrumb-item:hover::after {
   main,
   .footer-content {
     padding: 0 1rem;
-  }
-
-  /* Mobile footer: combine location + powered line */
-  .footer-bottom p:nth-child(2),
-  .footer-bottom p:nth-child(3) {
-    display: inline;
-  }
-
-  .footer-bottom p:nth-child(2)::after {
-    content: ' \2022  ';
   }
 
   .header-button {
@@ -829,91 +811,8 @@ a.breadcrumb-item:hover::after {
 @media (prefers-reduced-motion: reduce) {
   .site-menu-dropdown,
   .menu-scrim,
-  .hamburger span { transition: none; }
-}
+  .hamburger span,
+  .site-nav-label { transition: none; }
 
-/* ================================================================
-   ARCHIVE — Thumbnail Grid
-   ================================================================ */
-.archive-header {
-  margin-bottom: 2rem;
-}
-
-.archive-year {
-  margin-bottom: 3rem;
-}
-
-.archive-year h2 {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: var(--text-xl);
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.year-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-.roll-card {
-  display: block;
-  border-radius: 8px;
-  overflow: hidden;
-  background: var(--color-surface, var(--color-bg));
-  border: 1px solid var(--color-border);
-  text-decoration: none;
-  color: var(--color-text);
-  transition: transform var(--duration-base) var(--transition-smooth),
-              box-shadow var(--duration-base) var(--transition-smooth);
-}
-
-.roll-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-}
-
-.roll-thumb {
-  height: 200px;
-  background-size: cover;
-  background-position: center;
-  background-color: var(--color-border);
-}
-
-.roll-thumb-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.roll-info {
-  padding: 0.75rem 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.roll-film {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: var(--text-sm);
-}
-
-.roll-location {
-  font-family: var(--font-sans);
-  font-size: var(--text-xs);
-  color: var(--color-text-muted, var(--color-text));
-  opacity: 0.7;
-}
-
-@media (max-width: 640px) {
-  .year-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .roll-thumb {
-    height: 180px;
-  }
+  .site-menu-dropdown.menu-open .site-nav-item a:hover .site-nav-label { transform: none; }
 }

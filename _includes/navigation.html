@@ -7,7 +7,7 @@
       {% assign active = true %}
     {% endif %}
     <li class="site-nav-item{% if active %} site-nav-active{% endif %}">
-      <a href="{{ link.url | relative_url }}"{% if active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+      <a href="{{ link.url | relative_url }}"{% if active %} aria-current="page"{% endif %}><span class="site-nav-label">{{ link.title }}</span></a>
     </li>
   {% endfor %}
 </ul>

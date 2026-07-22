@@ -54,31 +54,62 @@
   };
   window.siteCopyConfirmation = showCopyConfirmation;
 
-  const setPreference = (attribute, key, value, animate) => {
-    const apply = () => {
-      root.setAttribute(attribute, value);
-      storage.set(key, value);
-      if (attribute === 'data-theme') {
-        const themeColor = query('meta[name="theme-color"]');
-        if (themeColor) themeColor.content = value === 'dark' ? '#0f0f0f' : '#fefefe';
-      }
-      window.dispatchEvent(new CustomEvent('sitepreferencechange', {
-        detail: { attribute, value }
-      }));
-    };
+  const applyPreference = (attribute, key, value, persist = true) => {
+    root.setAttribute(attribute, value);
+    if (persist) storage.set(key, value);
+    window.dispatchEvent(new CustomEvent('sitepreferencechange', {
+      detail: { attribute, value }
+    }));
+  };
+
+  let activeThemeTransition = null;
+  let activeThemeIcon = null;
+  let activeThemeOrigin = null;
+  let themeChangeId = 0;
+  const clearThemeIconTransition = () => {
+    activeThemeIcon?.style.removeProperty('view-transition-name');
+    activeThemeIcon = null;
+  };
+  const setThemePreference = (value, persist = true, origin = null) => {
+    const themeColor = query('meta[name="theme-color"]');
+    if (themeColor) themeColor.content = value === 'dark' ? '#0f0f0f' : '#fefefe';
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
-    if (animate && document.startViewTransition && !reduceMotion && !coarsePointer) {
-      document.startViewTransition(apply);
+    if (reduceMotion || !document.startViewTransition) {
+      activeThemeTransition?.skipTransition();
+      clearThemeIconTransition();
+      root.classList.remove('theme-is-transitioning');
+      applyPreference('data-theme', 'theme', value, persist);
+      activeThemeTransition = null;
+      activeThemeOrigin = null;
       return;
     }
 
-    if (animate && !reduceMotion) {
-      root.classList.add('preference-is-changing');
-      window.setTimeout(() => root.classList.remove('preference-is-changing'), 360);
+    activeThemeTransition?.skipTransition();
+    clearThemeIconTransition();
+
+    activeThemeOrigin = origin;
+    const icon = origin?.querySelector('.icon-theme');
+    if (icon) {
+      icon.style.viewTransitionName = 'active-theme-icon';
+      activeThemeIcon = icon;
     }
-    apply();
+
+    const apply = () => applyPreference('data-theme', 'theme', value, persist);
+    const changeId = ++themeChangeId;
+    let transition = null;
+    const finish = () => {
+      if (changeId !== themeChangeId) return;
+      root.classList.remove('theme-is-transitioning');
+      clearThemeIconTransition();
+      if (activeThemeTransition === transition) activeThemeTransition = null;
+      activeThemeOrigin = null;
+    };
+
+    root.classList.add('theme-is-transitioning');
+    transition = document.startViewTransition(apply);
+    activeThemeTransition = transition;
+    transition.finished.then(finish, finish);
   };
 
   const initPreferences = () => {
@@ -87,7 +118,6 @@
         selector: '.theme-toggle',
         attribute: 'data-theme',
         key: 'theme',
-        animate: true,
         next: (value) => value === 'dark' ? 'light' : 'dark',
         labels: {
           light: { label: 'Light', pressed: false, aria: 'Switch to dark mode', title: 'Switch to dark mode (D)' },
@@ -98,7 +128,6 @@
         selector: '.monochrome-toggle',
         attribute: 'data-monochrome',
         key: 'monochrome',
-        animate: true,
         next: (value) => value === 'true' ? 'false' : 'true',
         labels: {
           false: { label: 'Color', pressed: false, aria: 'Switch to monochrome mode', title: 'Switch to B&W mode (M)' },
@@ -109,7 +138,6 @@
         selector: '.reduce-transparency-toggle',
         attribute: 'data-reduce-transparency',
         key: 'reduceTransparency',
-        animate: false,
         next: (value) => value === 'on' ? 'off' : 'on',
         labels: {
           off: { label: 'Blur', pressed: false, aria: 'Use solid surfaces', title: 'Use solid surfaces (G)' },
@@ -118,24 +146,45 @@
       }
     ];
 
+    const activate = (preference, origin) => {
+      const value = preference.next(root.getAttribute(preference.attribute));
+      if (preference.attribute === 'data-theme') setThemePreference(value, true, origin);
+      else applyPreference(preference.attribute, preference.key, value);
+      queryAll(preference.selector).forEach((button) => updateLabel(button, preference.labels, value));
+    };
+
+    /* A document View Transition suppresses normal hit testing. Route a rapid
+       repeat tap within the initiating control back to that control. */
+    document.addEventListener('click', (event) => {
+      if (!root.classList.contains('theme-is-transitioning') || !activeThemeOrigin) return;
+      if (activeThemeOrigin.contains(event.target)) return;
+
+      const rect = activeThemeOrigin.getBoundingClientRect();
+      const withinOrigin = event.clientX >= rect.left && event.clientX <= rect.right
+        && event.clientY >= rect.top && event.clientY <= rect.bottom;
+      if (!withinOrigin) return;
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      activate(preferences[0], activeThemeOrigin);
+    }, true);
+
     preferences.forEach((preference) => {
-      const buttons = queryAll(preference.selector);
-      buttons.forEach((button) => {
+      queryAll(preference.selector).forEach((button) => {
         updateLabel(button, preference.labels, root.getAttribute(preference.attribute));
-        button.addEventListener('click', () => {
-          const value = preference.next(root.getAttribute(preference.attribute));
-          setPreference(preference.attribute, preference.key, value, preference.animate);
-          buttons.forEach((item) => updateLabel(item, preference.labels, value));
-        });
+        button.addEventListener('click', () => activate(preference, button));
       });
+    });
+
+    window.addEventListener('sitepreferenceactivate', (event) => {
+      const preference = preferences.find((item) => item.attribute === event.detail?.attribute);
+      if (preference) activate(preference, event.detail?.origin || null);
     });
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleSchemeChange = (event) => {
       if (storage.get('theme')) return;
-      root.setAttribute('data-theme', event.matches ? 'dark' : 'light');
-      const themeColor = query('meta[name="theme-color"]');
-      if (themeColor) themeColor.content = event.matches ? '#0f0f0f' : '#fefefe';
+      setThemePreference(event.matches ? 'dark' : 'light', false);
       queryAll(preferences[0].selector).forEach((button) => {
         updateLabel(button, preferences[0].labels, root.getAttribute('data-theme'));
       });
@@ -291,12 +340,17 @@
 
   const initNotesOutline = () => {
     const outline = query('#notes-outline');
+    const details = query('#notes-outline-details');
     const list = query('#notes-outline-list');
+    const current = query('#notes-outline-current');
     const content = query('.article-content') || query('.module-content');
-    if (!outline || !list || !content) return;
+    if (!outline || !details || !list || !current || !content) return;
 
     const headings = queryAll('h2', content).filter((heading) => !heading.closest('.module-toc'));
     if (headings.length < 2) return;
+
+    // Let the article title lead; the compact outline then docks as readers scroll.
+    content.before(outline);
 
     const headingId = (heading, index) => {
       if (heading.id) return heading.id;
@@ -328,22 +382,30 @@
     });
 
     const links = queryAll('a', list);
+    const summary = query('summary', details);
+    const desktopOutline = window.matchMedia('(min-width: 1240px) and (hover: hover) and (pointer: fine)');
     let activeIndex = -1;
     let frame = null;
 
     const setActive = (index) => {
       if (index === activeIndex) return;
       activeIndex = index;
+      current.textContent = headings[index].textContent.trim();
       links.forEach((link, linkIndex) => {
         if (linkIndex === index) link.setAttribute('aria-current', 'location');
         else link.removeAttribute('aria-current');
       });
     };
 
+    const syncMode = () => {
+      details.open = desktopOutline.matches;
+    };
+
     const render = () => {
       frame = null;
       const headerHeight = Number.parseFloat(getComputedStyle(root).getPropertyValue('--header-height')) || 50;
-      const threshold = headerHeight + 40;
+      const outlineOffset = desktopOutline.matches ? 40 : (summary?.getBoundingClientRect().height || 44) + 16;
+      const threshold = headerHeight + outlineOffset;
       let nextIndex = 0;
       headings.forEach((heading, index) => {
         if (heading.getBoundingClientRect().top <= threshold) nextIndex = index;
@@ -358,11 +420,26 @@
       if (frame === null) frame = window.requestAnimationFrame(render);
     };
 
+    setActive(0);
+    syncMode();
     outline.hidden = false;
     root.classList.add('notes-outline-ready');
     window.addEventListener('scroll', schedule, { passive: true });
     window.addEventListener('resize', schedule, { passive: true });
-    links.forEach((link, index) => link.addEventListener('click', () => setActive(index)));
+    if (desktopOutline.addEventListener) desktopOutline.addEventListener('change', syncMode);
+    else desktopOutline.addListener(syncMode);
+    links.forEach((link, index) => link.addEventListener('click', () => {
+      setActive(index);
+      if (!desktopOutline.matches) details.open = false;
+    }));
+    document.addEventListener('click', (event) => {
+      if (!desktopOutline.matches && details.open && !outline.contains(event.target)) details.open = false;
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || desktopOutline.matches || !details.open) return;
+      details.open = false;
+      summary?.focus();
+    });
     schedule();
   };
 

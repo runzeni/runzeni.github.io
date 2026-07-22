@@ -8,7 +8,6 @@ slug: module-1
 permalink: /notes/python-notes/module-1/
 markdown_module: true
 updated: 2026-07-21
-reading_time: 13 min read
 description: The small set of language patterns I need to turn an idea into a clear, reusable program.
 ---
 

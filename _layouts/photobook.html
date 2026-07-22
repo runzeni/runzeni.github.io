@@ -22,9 +22,8 @@ layout: default
     {% for photo in roll_files %}
       {% assign image_count = image_count | plus: 1 %}
       {% capture alt %}{{ page.film }} photograph from {{ title_parts.last }} — frame {{ image_count }}{% endcapture %}
-      <a class="contact-sheet-item" href="{{ photo.src | relative_url }}" data-gallery-trigger data-pswp-width="{{ photo.width }}" data-pswp-height="{{ photo.height }}" aria-label="Open photograph: {{ alt | strip | escape }}">
+      <a class="contact-sheet-item" href="{{ photo.src | relative_url }}" data-gallery-trigger data-pswp-width="{{ photo.width }}" data-pswp-height="{{ photo.height }}">
         <img src="{{ photo.src | relative_url }}" alt="{{ alt | strip | escape }}" width="{{ photo.width }}" height="{{ photo.height }}" loading="{% if image_count == 1 %}eager{% else %}lazy{% endif %}" decoding="async" sizes="(max-width: 760px) 50vw, 33vw"{% if image_count == 1 %} fetchpriority="high"{% endif %}>
-        <span class="contact-sheet-index" aria-hidden="true">{{ image_count | prepend: '0' | slice: -2, 2 }}</span>
       </a>
     {% else %}
       <p class="gallery-empty">This roll is being prepared for the archive.</p>

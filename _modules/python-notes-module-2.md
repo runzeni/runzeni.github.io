@@ -8,7 +8,6 @@ slug: module-2
 permalink: /notes/python-notes/module-2/
 markdown_module: true
 updated: 2026-07-21
-reading_time: 16 min read
 description: Environments, project structure, arrays, tables, statistics, figures, and tests without hidden state.
 ---
 

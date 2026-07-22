@@ -8,7 +8,6 @@ slug: module-4
 permalink: /notes/python-notes/module-4/
 markdown_module: true
 updated: 2026-07-21
-reading_time: 15 min read
 description: The current proteomics and bulk RNA-seq toolchains, plus a sample-aware blueprint for future scRNA-seq work.
 ---
 

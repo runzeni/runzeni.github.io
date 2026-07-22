@@ -104,7 +104,8 @@
   width: 100%;
   height: auto;
   object-fit: contain;
-  transition: opacity 260ms ease;
+  transition: opacity 260ms ease,
+              filter var(--theme-duration) var(--theme-ease);
 }
 
 .portfolio-item:hover img,
@@ -152,22 +153,6 @@
   object-fit: cover;
 }
 
-.contact-sheet-index {
-  position: absolute;
-  right: 0.4rem;
-  bottom: 0.35rem;
-  padding: 0.18rem 0.3rem;
-  background: rgba(0, 0, 0, 0.58);
-  color: rgba(255, 255, 255, 0.9);
-  font: 400 0.58rem/1 var(--font-mono);
-  letter-spacing: 0.05em;
-  opacity: 0;
-  transition: opacity 160ms ease;
-}
-
-.contact-sheet-item:hover .contact-sheet-index,
-.contact-sheet-item:focus-visible .contact-sheet-index { opacity: 1; }
-
 @media (max-width: 620px) {
   [data-section="fotos"] .gallery-header {
     display: block;
@@ -201,26 +186,30 @@
 
 /* PhotoSwipe is vendored locally; these rules make it belong to this site. */
 .pswp {
-  --pswp-bg: var(--color-bg);
+  --pswp-bg: var(--glass-bg);
   --pswp-placeholder-bg: var(--color-background-secondary);
   --pswp-icon-color: var(--color-text);
   --pswp-icon-color-secondary: var(--color-text);
   z-index: z('modal');
   color: var(--color-text);
   font-family: var(--font-sans);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+}
+
+[data-reduce-transparency="on"] .pswp {
+  animation: glassFilterToSolid 0s linear var(--theme-duration) both;
 }
 
 .pswp__bg {
-  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
-  transition: background-color 520ms var(--transition-smooth),
-              backdrop-filter 520ms var(--transition-smooth),
-              -webkit-backdrop-filter 520ms var(--transition-smooth);
+  background: var(--pswp-bg);
+  transition: background-color var(--theme-duration) var(--theme-ease);
 }
 
-[data-reduce-transparency="on"] .pswp__bg { opacity: 1 !important; }
-
-.pswp__img { filter: drop-shadow(0 1rem 2.25rem rgba(0, 0, 0, 0.2)); }
+/* Restore the shared B&W transition inside the touch-optimized viewer. */
+.pswp .pswp__img {
+  transition: filter var(--theme-duration) var(--theme-ease);
+}
 
 .pswp .pswp__top-bar {
   height: 4rem;
@@ -329,12 +318,8 @@
   border-radius: 2px;
   background: var(--glass-bg-heavy);
   color: var(--color-text);
-  backdrop-filter: blur(var(--glass-blur)) saturate(150%);
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
   transform: translateX(-50%);
-  transition: background-color 520ms var(--transition-smooth),
-              backdrop-filter 520ms var(--transition-smooth),
-              -webkit-backdrop-filter 520ms var(--transition-smooth);
+  transition: background-color var(--theme-duration) var(--theme-ease);
 }
 
 .pswp__zoom-range label {
@@ -356,10 +341,9 @@
   cursor: ew-resize;
 }
 
-.pswp__button--theme,
-.pswp__button--monochrome {
+.pswp__button--preference {
   position: relative;
-  width: 3.5rem;
+  width: 3.25rem;
   height: 3.5rem;
   border: 0;
   background: transparent;
@@ -367,51 +351,20 @@
   cursor: pointer;
 }
 
-.pswp__theme-icon {
+.pswp__button--preference.reduce-transparency-toggle { margin-right: 0.35rem; }
+
+.pswp__button--preference > svg {
   position: absolute;
-  inset: 1.05rem;
+  top: 1.05rem;
+  left: 0.925rem;
   width: 1.4rem;
   height: 1.4rem;
+}
+
+.pswp__button--preference .icon-theme {
   stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: opacity 180ms ease, transform 220ms var(--transition-smooth);
-}
-
-.pswp__theme-icon--moon,
-.pswp__button--theme.is-dark .pswp__theme-icon--sun {
-  opacity: 0;
-  transform: rotate(90deg) scale(0.65);
-}
-
-.pswp__button--theme.is-dark .pswp__theme-icon--moon {
-  opacity: 1;
-  transform: rotate(0) scale(1);
-}
-
-.pswp__color-icon {
-  position: absolute;
-  inset: 1.05rem;
-  width: 1.4rem;
-  height: 1.4rem;
-  transition: opacity 180ms ease, transform 220ms var(--transition-smooth);
-}
-
-.pswp__color-icon circle { mix-blend-mode: multiply; }
-[data-theme="dark"] .pswp__color-icon circle { mix-blend-mode: screen; }
-.pswp__color-icon .color-red { fill: #dc5548; }
-.pswp__color-icon .color-blue { fill: #487bc7; }
-.pswp__color-icon .color-yellow { fill: #e5bd42; }
-
-.pswp__color-icon--bw,
-.pswp__button--monochrome.is-monochrome .pswp__color-icon--color {
-  opacity: 0;
-  transform: scale(0.65);
-}
-
-.pswp__button--monochrome.is-monochrome .pswp__color-icon--bw {
-  opacity: 1;
-  transform: scale(1);
 }
 
 .pswp__zoom-range output {
@@ -439,8 +392,6 @@
     border: 1px solid var(--color-border);
     background: var(--glass-bg-heavy);
     opacity: 0.82;
-    backdrop-filter: blur(var(--glass-blur)) saturate(150%);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%);
   }
 
   .pswp__button--arrow--prev {
@@ -464,55 +415,61 @@
     margin: 0;
     transform: translate(-50%, -50%);
   }
-
-  .contact-sheet-index { opacity: 0.72; }
 }
 
 /* Archive index: the same editorial system, with metadata kept secondary. */
+.archive-header { margin-bottom: 2rem; }
+
 .archive-year {
   margin-bottom: clamp(3rem, 7vw, 6rem);
 }
 
 .archive-year h2 {
   margin: 0 0 1.25rem;
-  padding-bottom: 0.65rem;
+  padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--color-border);
-  color: var(--color-text-light);
-  font: 500 var(--text-xs)/1 var(--font-mono);
-  letter-spacing: 0.08em;
+  color: var(--color-text);
+  font: 400 clamp(3rem, 8vw, 5.5rem)/0.88 var(--font-serif);
+  font-variant-numeric: lining-nums;
+  letter-spacing: -0.055em;
 }
 
 .year-grid {
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(2rem, 4vw, 4rem) clamp(1rem, 2.4vw, 2rem);
 }
 
 .roll-card {
+  display: block;
   border: 0;
   border-radius: 0;
   background: transparent;
+  color: var(--color-text);
   box-shadow: none;
-}
-
-.roll-card:hover {
-  transform: none;
-  box-shadow: none;
+  text-decoration: none;
 }
 
 .roll-card:hover .roll-thumb img { opacity: 0.9; }
 
 .roll-info {
+  display: flex;
+  flex-direction: column;
   padding: 0.8rem 0 0;
   gap: 0.25rem;
 }
 
 .roll-film {
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
   font-weight: 500;
   line-height: 1.25;
 }
 
 .roll-location {
   color: var(--color-text-light);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
   opacity: 1;
 }
 
@@ -547,14 +504,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 260ms ease;
-}
-
-.footer-section h2 {
-  margin: 0 0 0.75rem;
-  font: 600 var(--text-xs)/var(--leading-tight) var(--font-sans);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  transition: opacity 260ms ease,
+              filter var(--theme-duration) var(--theme-ease);
 }
 
 .gallery-kicker {

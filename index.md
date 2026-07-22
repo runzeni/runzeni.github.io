@@ -48,7 +48,10 @@ hide_breadcrumb: true
   <h2 id="publications">Selected publications</h2>
   <ul>
     {% for item in profile.publications %}
-      <li><a href="https://doi.org/{{ item.doi }}" target="_blank" rel="noopener noreferrer"><strong>{{ item.title }}</strong></a> <em>{{ item.citation }}</em> doi:{{ item.doi }}</li>
+      <li>
+        {% if item.doi %}<a href="https://doi.org/{{ item.doi }}" target="_blank" rel="noopener noreferrer"><strong>{{ item.title }}</strong></a>{% elsif item.url %}<a href="{{ item.url }}" target="_blank" rel="noopener noreferrer"><strong>{{ item.title }}</strong></a>{% else %}<strong>{{ item.title }}</strong>{% endif %}
+        <em>{{ item.citation }}</em>{% if item.doi %} doi:{{ item.doi }}{% elsif item.identifier %} {{ item.identifier }}{% endif %}
+      </li>
     {% endfor %}
   </ul>
 </section>

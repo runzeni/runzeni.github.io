@@ -5,7 +5,6 @@ photos:
     placement: inset-left
     width: 1440
     height: 1920
-    layout: portrait
     alt: Sunlight across the water with two silhouetted benches and birds overhead.
   - src: "/assets/img/portfolio/20240102-000044 copy-web.jpg"
     sequence: 4
@@ -13,7 +12,6 @@ photos:
     placement: full
     width: 1920
     height: 1284
-    layout: wide
     alt: A busy indoor public market beneath a brick barrel vault.
   - src: "/assets/img/portfolio/20240102-000049 2 copy-web.jpg"
     sequence: 16
@@ -21,7 +19,6 @@ photos:
     placement: inset-left
     width: 1284
     height: 1920
-    layout: portrait
     alt: A curved lakeside path framed by two old-fashioned lamps.
   - src: "/assets/img/portfolio/20240102-000049 3 copy-web.jpg"
     sequence: 12
@@ -29,7 +26,6 @@ photos:
     placement: right
     width: 1920
     height: 1284
-    layout: standard
     alt: An open roadside garage facing a low mountain under a blue sky.
   - src: "/assets/img/portfolio/20240102-000051 2 copy-web.jpg"
     sequence: 8
@@ -37,7 +33,6 @@ photos:
     placement: left
     width: 1920
     height: 1284
-    layout: standard
     alt: A green mountain valley under low cloud.
   - src: "/assets/img/portfolio/20240102-000051 copy-web.jpg"
     sequence: 13
@@ -45,7 +40,6 @@ photos:
     placement: inset-left
     width: 1284
     height: 1920
-    layout: portrait
     alt: The Euclid Beach Park sign above a bench and a bright shoreline.
   - src: "/assets/img/portfolio/20240102-000054 copy-web.jpg"
     sequence: 2
@@ -53,7 +47,6 @@ photos:
     placement: inset-left
     width: 1284
     height: 1920
-    layout: portrait
     alt: A glass-roofed arcade viewed from a marble staircase.
   - src: "/assets/img/portfolio/20240102-000055 copy-web.jpg"
     sequence: 6
@@ -61,7 +54,6 @@ photos:
     placement: inset-right
     width: 1284
     height: 1920
-    layout: portrait
     alt: Low sun reflecting across choppy water near a distant shore.
   - src: "/assets/img/portfolio/20240102-000056 2 copy-web.jpg"
     sequence: 14
@@ -69,7 +61,6 @@ photos:
     placement: inset-right
     width: 1284
     height: 1920
-    layout: portrait
     alt: Cyclists and walkers crossing a steel truss bridge at sunset.
   - src: "/assets/img/portfolio/20240102-000056 3 copy-web.jpg"
     sequence: 1
@@ -77,7 +68,6 @@ photos:
     placement: lead
     width: 1920
     height: 1284
-    layout: wide
     alt: A double exposure of broad green leaves, a city bus, and a glasshouse roof.
   - src: "/assets/img/portfolio/20240102-000057 copy-web.jpg"
     sequence: 7
@@ -85,7 +75,6 @@ photos:
     placement: feature
     width: 1285
     height: 1920
-    layout: portrait
     alt: Jagged mountains reflected in a dark lake beneath a bright sky.
   - src: "/assets/img/portfolio/20240102-000060 2 copy-web.jpg"
     sequence: 9
@@ -93,7 +82,6 @@ photos:
     placement: right
     width: 1920
     height: 1285
-    layout: standard
     alt: Two walkers following a path through a mountain meadow at sunset.
   - src: "/assets/img/portfolio/20240102-000060 copy-web.jpg"
     sequence: 18
@@ -101,7 +89,6 @@ photos:
     placement: ending
     width: 1285
     height: 1920
-    layout: portrait
     alt: A pianist playing in a department store decorated for the holidays.
   - src: "/assets/img/portfolio/20240102-000061 copy-web.jpg"
     sequence: 10
@@ -109,7 +96,6 @@ photos:
     placement: full
     width: 1920
     height: 1284
-    layout: standard
     alt: A double exposure of pink daisies layered over a busy city square.
   - src: "/assets/img/portfolio/20240102-000063 copy-web.jpg"
     sequence: 15
@@ -117,7 +103,6 @@ photos:
     placement: full
     width: 1920
     height: 1284
-    layout: standard
     alt: A neoclassical building framed by autumn trees and a lawn.
   - src: "/assets/img/2024/2024_FUJI400_CLE+CHI_Export_Web/20250302-P1485707-web.jpg"
     sequence: 11
@@ -125,7 +110,6 @@ photos:
     placement: left
     width: 1920
     height: 1280
-    layout: standard
     alt: A fire engine crossing a hazy city intersection beneath an overpass.
   - src: "/assets/img/2024/2024_FUJI400_CLE+CHI_Export_Web/20250302-P1485710-web.jpg"
     sequence: 3
@@ -133,7 +117,6 @@ photos:
     placement: inset-right
     width: 1280
     height: 1920
-    layout: portrait
     alt: Two glass office towers rising into a pale sky.
   - src: "/assets/img/2024/2024_FUJI200_CLE_Export_Web/20250302-P1485740-web.jpg"
     sequence: 17
@@ -141,5 +124,4 @@ photos:
     placement: inset-right
     width: 1280
     height: 1920
-    layout: portrait
     alt: A Canada goose and goslings resting on a lawn below a church steeple.

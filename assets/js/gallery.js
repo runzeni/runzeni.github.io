@@ -82,20 +82,21 @@ if (justifiedGallery) {
 const gallery = document.querySelector('[data-photo-gallery]');
 
 if (gallery) {
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const triggers = Array.from(gallery.querySelectorAll('[data-gallery-trigger]'));
-  let lastViewed = null;
-
   const icon = (path) => `<svg class="pswp__icn" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">${path}</svg>`;
-  const themeIcon = '<svg class="pswp__theme-icon pswp__theme-icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4.5"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path></svg><svg class="pswp__theme-icon pswp__theme-icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true"><path d="M20.5 14.3A8.5 8.5 0 0 1 9.7 3.5a8.5 8.5 0 1 0 10.8 10.8z"></path></svg>';
-  const colorIcon = '<svg class="pswp__color-icon pswp__color-icon--color" viewBox="0 0 24 24" aria-hidden="true"><circle class="color-red" cx="12" cy="8" r="5"></circle><circle class="color-blue" cx="8.5" cy="14" r="5"></circle><circle class="color-yellow" cx="15.5" cy="14" r="5"></circle></svg><svg class="pswp__color-icon pswp__color-icon--bw" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 3v18"></path><path d="M12 3a9 9 0 0 1 0 18" fill="currentColor" opacity=".28"></path></svg>';
-  const blurEnabled = () => document.documentElement.dataset.reduceTransparency !== 'on';
+  const controlIcons = (selector) => Array.from(document.querySelectorAll(`${selector} > svg`))
+    .map((svg) => svg.outerHTML)
+    .join('');
+  const preferenceControls = [
+    { name: 'theme', source: '#header-theme-toggle', toggleClass: 'theme-toggle', attribute: 'data-theme', order: 7 },
+    { name: 'monochrome', source: '#monochrome-toggle', toggleClass: 'monochrome-toggle', attribute: 'data-monochrome', order: 8 },
+    { name: 'transparency', source: '#reduce-transparency-toggle', toggleClass: 'reduce-transparency-toggle', attribute: 'data-reduce-transparency', order: 9 }
+  ];
 
   const lightbox = new PhotoSwipeLightbox({
     gallery,
     children: '[data-gallery-trigger]',
     pswpModule: () => import('../vendor/photoswipe/photoswipe.esm.min.js'),
-    bgOpacity: blurEnabled() ? 0.88 : 1,
+    bgOpacity: 1,
     loop: false,
     spacing: 0.12,
     preload: [1, 2],
@@ -105,14 +106,14 @@ if (gallery) {
     tapAction: 'toggle-controls',
     doubleTapAction: 'zoom',
     clickToCloseNonZoomable: false,
-    returnFocus: false,
     initialZoomLevel: 'fit',
     secondaryZoomLevel: (level) => level.initial * 2,
     maxZoomLevel: (level) => level.initial * 3,
     paddingFn: () => ({ top: 64, bottom: 68, left: 24, right: 24 }),
-    showAnimationDuration: reducedMotion.matches ? 0 : 260,
-    hideAnimationDuration: reducedMotion.matches ? 0 : 220,
-    zoomAnimationDuration: reducedMotion.matches ? 0 : 260,
+    showHideAnimationType: 'fade',
+    showAnimationDuration: 220,
+    hideAnimationDuration: 180,
+    zoomAnimationDuration: 260,
     easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
     closeTitle: 'Close photograph viewer',
     zoomTitle: 'Toggle 200% zoom',
@@ -126,50 +127,36 @@ if (gallery) {
   });
 
   lightbox.on('uiRegister', () => {
-    lightbox.pswp.ui.registerElement({
-      name: 'theme',
-      className: 'pswp__button--theme',
-      tagName: 'button',
-      appendTo: 'bar',
-      order: 7,
-      html: themeIcon,
-      onInit: (element, pswp) => {
-        const update = () => {
-          const dark = document.documentElement.dataset.theme === 'dark';
-          element.classList.toggle('is-dark', dark);
-          element.setAttribute('aria-label', dark ? 'Use light mode' : 'Use dark mode');
-          element.setAttribute('title', dark ? 'Light' : 'Dark');
-          element.setAttribute('aria-pressed', String(dark));
-        };
-        element.type = 'button';
-        element.addEventListener('click', () => document.querySelector('#header-theme-toggle')?.click());
-        window.addEventListener('sitepreferencechange', update);
-        pswp.on('destroy', () => window.removeEventListener('sitepreferencechange', update));
-        update();
-      }
-    });
+    preferenceControls.forEach((control) => {
+      const source = document.querySelector(control.source);
+      if (!source) return;
 
-    lightbox.pswp.ui.registerElement({
-      name: 'monochrome',
-      className: 'pswp__button--monochrome',
-      tagName: 'button',
-      appendTo: 'bar',
-      order: 8,
-      html: colorIcon,
-      onInit: (element, pswp) => {
-        const update = () => {
-          const monochrome = document.documentElement.dataset.monochrome === 'true';
-          element.classList.toggle('is-monochrome', monochrome);
-          element.setAttribute('aria-label', monochrome ? 'View photographs in color' : 'View photographs in black and white');
-          element.setAttribute('title', monochrome ? 'Color' : 'B&W');
-          element.setAttribute('aria-pressed', String(monochrome));
-        };
-        element.type = 'button';
-        element.addEventListener('click', () => document.querySelector('#monochrome-toggle')?.click());
-        window.addEventListener('sitepreferencechange', update);
-        pswp.on('destroy', () => window.removeEventListener('sitepreferencechange', update));
-        update();
-      }
+      lightbox.pswp.ui.registerElement({
+        name: control.name,
+        className: 'pswp__button--preference',
+        isButton: true,
+        appendTo: 'bar',
+        order: control.order,
+        html: controlIcons(control.source),
+        onClick: (event, element) => window.dispatchEvent(new CustomEvent('sitepreferenceactivate', {
+          detail: { attribute: control.attribute, origin: element }
+        })),
+        onInit: (element, pswp) => {
+          const sync = () => {
+            ['aria-label', 'title', 'aria-pressed'].forEach((attribute) => {
+              const value = source.getAttribute(attribute);
+              if (value === null) element.removeAttribute(attribute);
+              else element.setAttribute(attribute, value);
+            });
+          };
+          const scheduleSync = () => Promise.resolve().then(sync);
+
+          element.classList.add(control.toggleClass);
+          window.addEventListener('sitepreferencechange', scheduleSync);
+          pswp.on('destroy', () => window.removeEventListener('sitepreferencechange', scheduleSync));
+          sync();
+        }
+      });
     });
 
     lightbox.pswp.ui.registerElement({
@@ -209,36 +196,5 @@ if (gallery) {
     });
   });
 
-  window.addEventListener('sitepreferencechange', (event) => {
-    if (event.detail?.attribute !== 'data-reduce-transparency' || !lightbox.pswp) return;
-    const opacity = blurEnabled() ? 0.88 : 1;
-    lightbox.pswp.options.bgOpacity = opacity;
-    lightbox.pswp.applyBgOpacity(1);
-  });
-
-  lightbox.on('change', () => {
-    lastViewed = lightbox.pswp?.currSlide?.data?.element || null;
-    window.requestAnimationFrame(() => {
-      const counter = document.querySelector('.pswp__counter');
-      const currentIndex = lightbox.pswp?.currIndex;
-      if (!counter || currentIndex === undefined) return;
-      const digits = Math.max(2, String(triggers.length).length);
-      counter.textContent = `${String(currentIndex + 1).padStart(digits, '0')} / ${String(triggers.length).padStart(digits, '0')}`;
-    });
-  });
-
-  lightbox.on('close', () => {
-    lastViewed = lightbox.pswp?.currSlide?.data?.element || lastViewed;
-    if (lastViewed) lastViewed.scrollIntoView({ block: 'center', inline: 'nearest' });
-  });
-
-  lightbox.on('destroy', () => {
-    if (!lastViewed) return;
-    window.requestAnimationFrame(() => lastViewed.focus({ preventScroll: true }));
-  });
-
   lightbox.init();
-
-  // The source link remains a usable full-size image if modules are unavailable.
-  triggers.forEach((trigger) => trigger.removeAttribute('data-gallery-pending'));
 }

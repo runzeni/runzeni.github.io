@@ -8,7 +8,6 @@ slug: module-3
 permalink: /notes/python-notes/module-3/
 markdown_module: true
 updated: 2026-07-21
-reading_time: 18 min read
 description: Practical patterns for biological formats, omics tables, provenance, and workflows that remain auditable.
 ---
 
