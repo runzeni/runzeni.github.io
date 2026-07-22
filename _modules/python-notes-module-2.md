@@ -1,12 +1,10 @@
 ---
 title: "Module 2: Reliable scientific data work"
 short_title: Reliable scientific data work
-series_title: Python notes
 series: python-notes
 module_number: 2
 slug: module-2
 permalink: /notes/python-notes/module-2/
-markdown_module: true
 updated: 2026-07-21
 description: Environments, project structure, arrays, tables, statistics, figures, and tests without hidden state.
 ---

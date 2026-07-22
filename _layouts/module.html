@@ -2,83 +2,78 @@
 layout: default
 ---
 
-{% comment %}
-  ============================================================
-  MODULE LAYOUT — The Reader Engine
-  Renders prose content with Previous / Next navigation
-  within the same series, sorted by module_number.
-  ============================================================
-{% endcomment %}
+{% assign series_documents = site.modules | where: 'series', page.series %}
+{% assign series_items = series_documents | where_exp: 'item', 'item.module_number' | sort: 'module_number' %}
+{% assign series_overview = series_documents | where: 'slug', 'index' | first %}
+{% assign series_title = page.series_title | default: series_overview.title %}
 
-{% assign series_documents = site.modules | where: "series", page.series %}
-{% assign series_items = series_documents | where_exp: "item", "item.module_number" | sort: "module_number" %}
-{% assign series_overview = series_documents | where: "slug", "index" | first %}
-
-{% if page.markdown_module %}
-  <article class="article-page module-article">
-    <header class="article-header">
-      <p class="article-kicker">{{ page.series_title | default: series_overview.title }} · Module {{ page.module_number }} of {{ series_items.size }}</p>
-      <h1>{{ page.short_title | default: page.title }}</h1>
-      {% if page.description %}<p class="article-dek">{{ page.description }}</p>{% endif %}
-      {% if page.updated %}
-        <p class="article-meta">
-          Updated <time datetime="{{ page.updated | date_to_xmlschema }}">{{ page.updated | date: '%B %-d, %Y' }}</time>
-        </p>
-      {% endif %}
-    </header>
-    <div class="article-content module-content">
-      {{ content }}
-    </div>
-  </article>
-{% else %}
-  <article class="module-page">
+<article class="article-page module-article">
+  <header class="article-header">
+    <p class="article-kicker">
+      {{ series_title }}{% if page.module_number %} · Module {{ page.module_number }} of {{ series_items.size }}{% else %} · Reference{% endif %}
+    </p>
+    <h1>{{ page.short_title | default: page.title }}</h1>
+    {% if page.description %}<p class="article-dek">{{ page.description }}</p>{% endif %}
+    {% if page.updated or page.date %}
+      <p class="article-meta">
+        {% if page.updated %}Updated {% endif %}<time datetime="{{ page.updated | default: page.date | date_to_xmlschema }}">{{ page.updated | default: page.date | date: '%B %-d, %Y' }}</time>
+      </p>
+    {% endif %}
+  </header>
+  <div class="article-content module-content">
     {{ content }}
-  </article>
-{% endif %}
-
-{% comment %} ---- Series navigation ---- {% endcomment %}
+  </div>
+</article>
 
 {% assign prev_module = nil %}
 {% assign next_module = nil %}
 {% assign found_current = false %}
 
-{% for item in series_items %}
-  {% if found_current %}
-    {% assign next_module = item %}
-    {% break %}
-  {% endif %}
-  {% if item.url == page.url %}
-    {% assign found_current = true %}
-  {% else %}
-    {% assign prev_module = item %}
-  {% endif %}
-{% endfor %}
-
-{% if prev_module or next_module %}
-<nav class="module-navigation" aria-label="Module navigation">
-  <div class="module-nav-container">
-    <div class="module-nav-arrows">
-      {% if prev_module %}
-        <a href="{{ prev_module.url | relative_url }}" class="module-nav-prev" rel="prev">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-          <span>Previous Module</span>
-        </a>
-      {% else %}
-        <span class="module-nav-disabled"></span>
-      {% endif %}
-
-      {% if next_module %}
-        <a href="{{ next_module.url | relative_url }}" class="module-nav-next" rel="next">
-          <span>Next Module</span>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-        </a>
-      {% else %}
-        <span class="module-nav-disabled"></span>
-      {% endif %}
-    </div>
-    {% if series_overview %}
-      <a href="{{ series_overview.url | relative_url }}" class="module-nav-overview">Series overview</a>
+{% if page.module_number %}
+  {% for item in series_items %}
+    {% if found_current %}
+      {% assign next_module = item %}
+      {% break %}
     {% endif %}
-  </div>
-</nav>
+    {% if item.url == page.url %}
+      {% assign found_current = true %}
+    {% else %}
+      {% assign prev_module = item %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% if page.module_number %}
+  {% if prev_module or next_module %}
+    <nav class="module-navigation" aria-label="Module navigation">
+      <div class="module-nav-container">
+        <div class="module-nav-arrows">
+          {% if prev_module %}
+            <a href="{{ prev_module.url | relative_url }}" class="module-nav-prev" rel="prev">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              <span>Previous module</span>
+            </a>
+          {% else %}
+            <span class="module-nav-disabled"></span>
+          {% endif %}
+
+          {% if next_module %}
+            <a href="{{ next_module.url | relative_url }}" class="module-nav-next" rel="next">
+              <span>Next module</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+          {% else %}
+            <span class="module-nav-disabled"></span>
+          {% endif %}
+        </div>
+        {% if series_overview %}<a href="{{ series_overview.url | relative_url }}" class="module-nav-overview">Series overview</a>{% endif %}
+      </div>
+    </nav>
+  {% endif %}
+{% elsif series_overview and page.slug != 'index' %}
+  <nav class="module-navigation" aria-label="Series navigation">
+    <div class="module-nav-container module-nav-container--overview">
+      <a href="{{ series_overview.url | relative_url }}" class="module-nav-overview">Series overview</a>
+    </div>
+  </nav>
 {% endif %}

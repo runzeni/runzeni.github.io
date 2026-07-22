@@ -1,5 +1,6 @@
 ---
 title: "Module 1: A Brief History"
+short_title: "A Brief History"
 series: linux-notes
 module_number: 1
 slug: module-1
@@ -8,39 +9,10 @@ date: 2026-02-23
 description: "From Unix to Linux"
 ---
 
-<header class="module-header">
-  <div class="module-meta">
-    <span class="module-series-badge">Linux Notes</span>
-    <span class="module-number-badge">Module 1 of 3</span>
-  </div>
-  <h1>A Brief History</h1>
-  <div class="module-header-meta">
-    <span class="module-date">February 2026</span>
-  </div>
-</header>
-
-<article class="module-content">
-
-  <div class="module-intro">
-    <p class="lead-paragraph">
-      The command line isn't a relic; it is a deliberately designed tool for complex tasks. It is the standard interface for servers, research clusters, and embedded systems.
-    </p>
-  </div>
-
-  <nav class="module-toc" aria-label="Table of contents">
-    <h2 class="module-toc-title">In This Module</h2>
-    <ul>
-      <li><a href="#section-1-1">1.1 The Unix Philosophy</a></li>
-      <li><a href="#section-1-2">1.2 The Linux Architecture</a></li>
-      <li><a href="#section-1-3">1.3 Distributions (Distros)</a></li>
-      <li><a href="#section-1-4">1.4 The Shell</a></li>
-      <li><a href="#section-1-5">1.5 Why CLI?</a></li>
-    </ul>
-  </nav>
-
-  <section id="section-1-1" class="content-section" markdown="block">
+The command line isn't a relic; it is a deliberately designed tool for complex tasks. It is the standard interface for servers, research clusters, and embedded systems.
 
 ## 1.1 The Unix Philosophy
+{: #section-1-1}
 
 Born at Bell Labs (1969) by Ken Thompson and Dennis Ritchie. Unix introduced the core concepts we use today.
 
@@ -52,11 +24,8 @@ Born at Bell Labs (1969) by Ken Thompson and Dennis Ritchie. Unix introduced the
 - **Text streams:** Programs talk to each other via plain text, not binary formats.
 - **Composability:** Small tools chained together (pipes) solve complex problems.
 
-</section>
-
-<section id="section-1-2" class="content-section" markdown="block">
-
 ## 1.2 The Linux Architecture
+{: #section-1-2}
 
 **GNU (1983):** Richard Stallman created the tools (Compiler, Shell, Editor) but lacked a kernel.
 **Linux (1991):** Linus Torvalds wrote the kernel.
@@ -72,11 +41,8 @@ Combined, they form the operating system: **GNU/Linux**.
 | **Shell (GNU)** | The "translator." Takes your text commands and sends instructions to the Kernel |
 | **Applications** | Web servers, Python scripts, File browsers |
 
-</section>
-
-<section id="section-1-3" class="content-section" markdown="block">
-
 ## 1.3 Distributions (Distros)
+{: #section-1-3}
 
 A "Distro" is the Kernel + Tools + Package Manager bundled together. The main difference for users is **how you install software**.
 
@@ -99,11 +65,8 @@ A "Distro" is the Kernel + Tools + Package Manager bundled together. The main di
 
 > **Class Note:** We are using **Ubuntu**. Key command: `sudo apt install <package>`.
 
-</section>
-
-<section id="section-1-4" class="content-section" markdown="block">
-
 ## 1.4 The Shell
+{: #section-1-4}
 
 The program that interprets your commands.
 
@@ -124,11 +87,8 @@ echo $SHELL
 | **Shell** | The text interpreter running *inside* the window (Bash, Zsh) |
 | **Console** | The physical text display (mostly relevant for servers) |
 
-</section>
-
-<section id="section-1-5" class="content-section" markdown="block">
-
 ## 1.5 Why CLI?
+{: #section-1-5}
 
 Why not just use a GUI?
 
@@ -136,7 +96,3 @@ Why not just use a GUI?
 - **Remote Access (SSH):** Servers don't have monitors. You access them via text.
 - **Resources:** GUIs eat RAM; text is cheap.
 - **Reproducibility (Crucial for Science):** A shell script documents exactly how data was processed. Clicking buttons is not reproducible research.
-
-</section>
-
-</article>

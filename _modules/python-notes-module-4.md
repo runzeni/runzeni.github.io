@@ -1,12 +1,10 @@
 ---
 title: "Module 4: Working omics stack"
 short_title: The omics stack I actually use
-series_title: Python notes
 series: python-notes
 module_number: 4
 slug: module-4
 permalink: /notes/python-notes/module-4/
-markdown_module: true
 updated: 2026-07-21
 description: The current proteomics and bulk RNA-seq toolchains, plus a sample-aware blueprint for future scRNA-seq work.
 ---

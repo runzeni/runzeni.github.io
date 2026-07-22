@@ -1,5 +1,6 @@
 ---
 title: "Module 2: The Basics"
+short_title: "The Basics"
 series: linux-notes
 module_number: 2
 slug: module-2
@@ -8,39 +9,10 @@ date: 2026-02-23
 description: "Essential commands for navigating the filesystem, manipulating files, and getting things done in the terminal."
 ---
 
-<header class="module-header">
-  <div class="module-meta">
-    <span class="module-series-badge">Linux Notes</span>
-    <span class="module-number-badge">Module 2 of 3</span>
-  </div>
-  <h1>The Basics</h1>
-  <div class="module-header-meta">
-    <span class="module-date">February 2026</span>
-  </div>
-</header>
-
-<article class="module-content">
-
-  <div class="module-intro">
-    <p class="lead-paragraph">
-      The reference module: the commands you will use 90% of the time. The goal is to build muscle memory so the terminal feels like a natural extension of your thought process, rather than a barrier to your research.
-    </p>
-  </div>
-
-  <nav class="module-toc" aria-label="Table of contents">
-    <h2 class="module-toc-title">In This Module</h2>
-    <ul>
-      <li><a href="#section-2-1">2.1 Navigation</a></li>
-      <li><a href="#section-2-2">2.2 File Operations</a></li>
-      <li><a href="#section-2-3">2.3 Viewing & Searching</a></li>
-      <li><a href="#section-2-4">2.4 Permissions</a></li>
-      <li><a href="#section-2-5">2.5 Pipes & Redirection</a></li>
-    </ul>
-  </nav>
-
-  <section id="section-2-1" class="content-section" markdown="block">
+The reference module: the commands you will use 90% of the time. The goal is to build muscle memory so the terminal feels like a natural extension of your thought process, rather than a barrier to your research.
 
 ## 2.1 Navigation
+{: #section-2-1}
 
 Linux uses a hierarchical tree structure starting at the root (`/`).
 
@@ -64,11 +36,8 @@ cd -                # previous directory (toggle)
                     # a data directory and a script directory
 ```
 
-</section>
-
-<section id="section-2-2" class="content-section" markdown="block">
-
 ## 2.2 File Operations
+{: #section-2-2}
 
 ### Creating, Copying, Moving, Renaming
 
@@ -102,11 +71,8 @@ rm -ri mydir/           # interactive — asks before every file
 - `*` matches anything (e.g., `*.csv` matches all CSV files)
 - `?` matches exactly one character (e.g., `file?.txt` matches `file1.txt` but not `file10.txt`)
 
-</section>
-
-<section id="section-2-3" class="content-section" markdown="block">
-
 ## 2.3 Viewing & Searching
+{: #section-2-3}
 
 ### Viewing Files
 
@@ -146,11 +112,8 @@ grep -v "error" log.txt
 grep -c ">" sequences.fasta
 ```
 
-</section>
-
-<section id="section-2-4" class="content-section" markdown="block">
-
 ## 2.4 Permissions
+{: #section-2-4}
 
 Every file has a mode string (e.g., `-rwxr-xr--`) defining who can do what.
 
@@ -176,11 +139,8 @@ chmod 644 file.txt        # rw- (6) for owner, r-- (4) for group/others
 chmod 600 private.key     # rw- (6) for owner, --- (0) for group/others
 ```
 
-</section>
-
-<section id="section-2-5" class="content-section" markdown="block">
-
 ## 2.5 Pipes & Redirection
+{: #section-2-5}
 
 ### Redirection
 
@@ -211,7 +171,3 @@ cat data.txt | sort | uniq
 # This is the Unix philosophy in action — small tools chaining
 # together to solve complex problems without a custom script.
 ```
-
-</section>
-
-</article>

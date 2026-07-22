@@ -82,6 +82,11 @@ if (justifiedGallery) {
 const gallery = document.querySelector('[data-photo-gallery]');
 
 if (gallery) {
+  const galleryItems = Array.from(gallery.querySelectorAll('[data-gallery-trigger]'));
+  let returnTarget = null;
+  let keyboardInput = false;
+  document.addEventListener('keydown', () => { keyboardInput = true; }, true);
+  document.addEventListener('pointerdown', () => { keyboardInput = false; }, true);
   const icon = (path) => `<svg class="pswp__icn" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">${path}</svg>`;
   const controlIcons = (selector) => Array.from(document.querySelectorAll(`${selector} > svg`))
     .map((svg) => svg.outerHTML)
@@ -109,6 +114,7 @@ if (gallery) {
     initialZoomLevel: 'fit',
     secondaryZoomLevel: (level) => level.initial * 2,
     maxZoomLevel: (level) => level.initial * 3,
+    returnFocus: false,
     paddingFn: () => ({ top: 64, bottom: 68, left: 24, right: 24 }),
     showHideAnimationType: 'fade',
     showAnimationDuration: 220,
@@ -124,6 +130,22 @@ if (gallery) {
     arrowNextSVG: icon('<path d="m9 5 7 7-7 7"/>'),
     closeSVG: icon('<path d="M6 6l12 12M18 6 6 18"/>'),
     zoomSVG: icon('<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5M10.5 7.5v6M7.5 10.5h6"/>')
+  });
+
+  lightbox.on('change', () => {
+    returnTarget = galleryItems[lightbox.pswp?.currIndex] || null;
+  });
+
+  lightbox.on('destroy', () => {
+    const target = returnTarget;
+    returnTarget = null;
+    if (!target?.isConnected) return;
+
+    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    window.requestAnimationFrame(() => {
+      if (keyboardInput) target.focus({ preventScroll: true });
+      target.scrollIntoView({ behavior, block: 'center', inline: 'nearest' });
+    });
   });
 
   lightbox.on('uiRegister', () => {

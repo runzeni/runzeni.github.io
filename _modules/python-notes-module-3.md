@@ -1,12 +1,10 @@
 ---
 title: "Module 3: Bioinformatics"
 short_title: Bioinformatics without hidden assumptions
-series_title: Python notes
 series: python-notes
 module_number: 3
 slug: module-3
 permalink: /notes/python-notes/module-3/
-markdown_module: true
 updated: 2026-07-21
 description: Practical patterns for biological formats, omics tables, provenance, and workflows that remain auditable.
 ---

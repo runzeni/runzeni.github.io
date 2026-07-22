@@ -1,12 +1,10 @@
 ---
 title: "Module 1: Core Python"
 short_title: Core Python that stays readable
-series_title: Python notes
 series: python-notes
 module_number: 1
 slug: module-1
 permalink: /notes/python-notes/module-1/
-markdown_module: true
 updated: 2026-07-21
 description: The small set of language patterns I need to turn an idea into a clear, reusable program.
 ---

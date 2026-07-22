@@ -1,12 +1,10 @@
 ---
 title: "Module 5: Useful Python commands"
 short_title: Useful Python commands, from first check to deep diagnosis
-series_title: Python notes
 series: python-notes
 module_number: 5
 slug: module-5
 permalink: /notes/python-notes/module-5/
-markdown_module: true
 updated: 2026-07-21
 description: A practical command ladder for running, inspecting, testing, debugging, profiling, and automating Python without losing track of the environment.
 ---

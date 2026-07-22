@@ -1,73 +1,41 @@
 ---
-layout: default
+layout: home
 title: Runze Ni
 description: Photos & working studies by Runze.
 hide_breadcrumb: true
 ---
 
-{% assign profile = site.data.profile %}
+## About
 
-<div class="landing-container">
-  <nav class="quick-nav-buttons" aria-label="Portfolio sections">
-    <a href="{{ '/fotos/' | relative_url }}" class="quick-nav-btn">Fotos</a>
-    <a href="{{ '/protocols/' | relative_url }}" class="quick-nav-btn">Protocols</a>
-    <a href="{{ '/notes/' | relative_url }}" class="quick-nav-btn">Notes</a>
-    <a href="{{ '/misc/' | relative_url }}" class="quick-nav-btn">Misc</a>
-  </nav>
+I study how acute kidney injury propagates across organ systems. My work focuses on tubuloglomerular feedback, injury thresholds, and the translation of mechanistic findings across mouse, porcine, and human-relevant models.
 
-  <section class="hero-section" id="hero-section">
-    <h1 class="hero-title">{{ profile.name }}</h1>
-    <p class="hero-subtitle">{{ profile.title }} · {{ profile.tagline }}</p>
-    <p class="hero-contact">
-      <button type="button" class="text-link" data-copy-email data-copy-value="{{ profile.email }}" aria-label="Copy {{ profile.email }}">{{ profile.email }}</button> ·
-      <a href="{{ profile.links.scholar }}" target="_blank" rel="noopener noreferrer">Google Scholar</a>
-    </p>
-  </section>
-</div>
+## Education
 
-<section class="profile-section" aria-labelledby="about">
-  <h2 id="about">About</h2>
-  <p>{{ profile.about }}</p>
-</section>
+**PhD student, Medical Sciences** — University of South Florida, Morsani College of Medicine, Tampa, FL (2026–present)
 
-<section class="profile-section" aria-labelledby="education">
-  <h2 id="education">Education</h2>
-  {% for item in profile.education %}
-    <p><strong>{{ item.degree }}</strong><br>{{ item.institution }}, {{ item.location }} ({{ item.years }})</p>
-  {% endfor %}
-</section>
+**BSc, Biology and Chemistry** — Case Western Reserve University, Cleveland, OH (2020–2024)
 
-<section class="profile-section" aria-labelledby="experience">
-  <h2 id="experience">Research experience</h2>
-  {% for item in profile.experience %}
-    <p><strong>{{ item.role }}</strong><br>{{ item.institution }} ({{ item.years }}){% if item.detail %}<br><em>{{ item.detail }}</em>{% endif %}</p>
-  {% endfor %}
-</section>
+## Research experience
 
-<section class="profile-section" aria-labelledby="publications">
-  <h2 id="publications">Selected publications</h2>
-  <ul>
-    {% for item in profile.publications %}
-      <li>
-        {% if item.doi %}<a href="https://doi.org/{{ item.doi }}" target="_blank" rel="noopener noreferrer"><strong>{{ item.title }}</strong></a>{% elsif item.url %}<a href="{{ item.url }}" target="_blank" rel="noopener noreferrer"><strong>{{ item.title }}</strong></a>{% else %}<strong>{{ item.title }}</strong>{% endif %}
-        <em>{{ item.citation }}</em>{% if item.doi %} doi:{{ item.doi }}{% elsif item.identifier %} {{ item.identifier }}{% endif %}
-      </li>
-    {% endfor %}
-  </ul>
-</section>
+**Research Scientist** — USF Health, Morsani College of Medicine (2024–present), *Ruisheng Liu Lab*
 
-<section class="profile-section" aria-labelledby="presentations">
-  <h2 id="presentations">Selected presentations</h2>
-  <ul>
-    {% for item in profile.presentations %}
-      <li>{% if item.doi %}<a href="https://doi.org/{{ item.doi }}" target="_blank" rel="noopener noreferrer"><strong>{{ item.title }}</strong></a>{% else %}<strong>{{ item.title }}</strong>{% endif %} <em>{{ item.event }}</em></li>
-    {% endfor %}
-  </ul>
-</section>
+**Undergraduate Researcher** — Case Western Reserve University (2023–2024), *Claudia Mizutani Lab*
 
-<section class="profile-section" aria-labelledby="projects">
-  <h2 id="projects">Current work</h2>
-  <ul>
-    {% for project in profile.projects %}<li>{{ project }}</li>{% endfor %}
-  </ul>
-</section>
+## Selected publications
+
+- [**Acute kidney injury disrupts cardiac remodeling via SerpinA3N**](https://pubmed.ncbi.nlm.nih.gov/41000646/) — *Journal of the American Heart Association.* 2026; Accepted for publication. PMID: 41000646
+- [**ER stress-mediated impairment of hepatic lipid export is associated with steatosis in AKI-induced remote liver injury**](https://doi.org/10.1038/s41598-026-59445-3) — *Scientific Reports.* 2026; Article in Press. Published online 29 June 2026. doi:10.1038/s41598-026-59445-3
+- [**Macula densa-specific NOS1 knockout determines susceptibility to ischemic acute kidney injury**](https://doi.org/10.1042/CS20258807) — *Clinical Science.* 2026;140(4):589–605. doi:10.1042/CS20258807
+- [**Acute Kidney Injury Induces Lung Damage via Mitochondrial DAMPs by Activating TREM-1 and cGAS-STING Pathways**](https://doi.org/10.3390/cells14211716) — *Cells.* 2025;14(21):1716. doi:10.3390/cells14211716
+
+## Selected presentations
+
+- [**AKI Initiates Hepatic Inflammation and Fibrogenic Signaling via Altered TLR4 Signaling Axis**](https://doi.org/10.1681/ASN.2025qq47jv2z) — *ASN Kidney Week 2025 · Poster presentation*
+- [**Enhanced Tubuloglomerular Feedback by Specific Deletion of Macula Densa NOS1 Enhances AKI by Activating Inflammatory and Fibrogenic Factors**](https://doi.org/10.1681/ASN.2025x2dxrk84) — *ASN Kidney Week 2025 · Oral presentation*
+- **The Drosophila DPP/BMP-4 Gradient Formation in the Embryo is Dependent on Cell Constriction Mediated by Frazzled, Presenilin, and E-Cadherin** — *The Allied Genetics Conference, 2024*
+
+## Current work
+
+- Severity thresholds in AKI and mesenteric vascular reprogramming
+- Single-nephron micropuncture measurements of single-nephron GFR and tubuloglomerular feedback
+- Cardiac transplantation-induced multiorgan injury in large-animal models

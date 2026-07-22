@@ -1,5 +1,6 @@
 ---
 title: "Module 3: Practice — Bioinformatics"
+short_title: "Practice — Bioinformatics"
 series: linux-notes
 module_number: 3
 slug: module-3
@@ -8,42 +9,12 @@ date: 2026-02-23
 description: "Proteomics analysis in Python — environment setup, key libraries, and sample workflows for class."
 ---
 
-<header class="module-header">
-  <div class="module-meta">
-    <span class="module-series-badge">Linux Notes</span>
-    <span class="module-number-badge">Module 3 of 3</span>
-  </div>
-  <h1>Practice: Bioinformatics</h1>
-  <div class="module-header-meta">
-    <span class="module-date">February 2026</span>
-  </div>
-</header>
+Putting the command line to work — proteomics analysis in Python.
 
-<article class="module-content">
-
-  <div class="module-intro">
-    <p class="lead-paragraph">
-      Putting the command line to work — proteomics analysis in Python.
-    </p>
-    <p>
-      This module is my running notebook for the computational side of biology class. The focus is on proteomics (mass spectrometry data, protein identification, quantification), but the setup and patterns apply to most bioinformatics work. I'll keep adding to this as the course goes on.
-    </p>
-  </div>
-
-  <nav class="module-toc" aria-label="Table of contents">
-    <h2 class="module-toc-title">In This Module</h2>
-    <ul>
-      <li><a href="#section-3-1">3.1 Environment Setup</a></li>
-      <li><a href="#section-3-2">3.2 Key Libraries</a></li>
-      <li><a href="#section-3-3">3.3 Loading & Inspecting Data</a></li>
-      <li><a href="#section-3-4">3.4 Filtering & Analysis</a></li>
-      <li><a href="#section-3-5">3.5 Visualization</a></li>
-    </ul>
-  </nav>
-
-  <section id="section-3-1" class="content-section" markdown="block">
+This module is my running notebook for the computational side of biology class. The focus is on proteomics (mass spectrometry data, protein identification, quantification), but the setup and patterns apply to most bioinformatics work. I'll keep adding to this as the course goes on.
 
 ## 3.1 Environment Setup
+{: #section-3-1}
 
 Rule number one: **never install packages into your system Python**. Always use a virtual environment or conda.
 
@@ -92,11 +63,8 @@ pip install -r requirements.txt
 
 > **My note:** I use conda because half the tools in bioinformatics have weird C dependencies that pip can't handle. Save yourself the headache.
 
-  </section>
-
-  <section id="section-3-2" class="content-section" markdown="block">
-
 ## 3.2 Key Libraries
+{: #section-3-2}
 
 Quick reference for the Python libraries I keep reaching for.
 
@@ -132,11 +100,8 @@ pip install pandas numpy scipy matplotlib seaborn \
 # Note: pyopenms via pip can be tricky, conda is easier
 ```
 
-  </section>
-
-  <section id="section-3-3" class="content-section" markdown="block">
-
 ## 3.3 Loading & Inspecting Data
+{: #section-3-3}
 
 Mass spectrometry data comes in various formats. Here are the most common ones and how to open them.
 
@@ -219,11 +184,8 @@ print(df.head())
 print(df.describe())
 ```
 
-  </section>
-
-  <section id="section-3-4" class="content-section" markdown="block">
-
 ## 3.4 Filtering & Analysis
+{: #section-3-4}
 
 Raw search results need filtering. The standard approach is FDR (False Discovery Rate) control using a target-decoy strategy.
 
@@ -292,11 +254,8 @@ print(groups_df.head(10))
 
 > **My note:** This is a simplified version. Real tools like ProteinProphet or Percolator do much more sophisticated grouping and rescoring. But this helps understand what's happening under the hood.
 
-  </section>
-
-  <section id="section-3-5" class="content-section" markdown="block">
-
 ## 3.5 Visualization
+{: #section-3-5}
 
 Plots I keep making for class assignments and lab reports.
 
@@ -397,7 +356,3 @@ def abundance_heatmap(df, sample_cols, protein_col='protein',
 > **My note:** These are templates — I copy-paste and adapt for each assignment. The volcano plot in particular comes up in almost every proteomics paper.
 
 This module will keep growing as I work through more class material. The goal is to have a personal reference I can quickly search through instead of digging through lecture slides.
-
-  </section>
-
-</article>

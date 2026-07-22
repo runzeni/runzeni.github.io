@@ -232,10 +232,14 @@
     };
 
     setOpen(false);
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (event) => {
       const opening = !menu.classList.contains('menu-open');
       setOpen(opening);
-      if (opening) window.requestAnimationFrame(() => query(focusableSelector, menu)?.focus());
+      // Pointer users keep their focus on the menu button. Keyboard activation
+      // moves into the panel, where the first link is the useful next stop.
+      if (opening && event.detail === 0) {
+        window.requestAnimationFrame(() => query(focusableSelector, menu)?.focus({ preventScroll: true }));
+      }
     });
     scrim?.addEventListener('click', () => {
       setOpen(false);
@@ -246,7 +250,8 @@
     });
     document.addEventListener('click', (event) => {
       if (!menu.classList.contains('menu-open')) return;
-      if (menu.contains(event.target) || button.contains(event.target)) return;
+      const persistentControl = event.target.closest?.('[data-menu-persistent]');
+      if (menu.contains(event.target) || button.contains(event.target) || persistentControl) return;
       setOpen(false);
     });
     document.addEventListener('keydown', (event) => {

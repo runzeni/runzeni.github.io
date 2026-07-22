@@ -1,32 +1,14 @@
 ---
-title: "Comprehensive Outline"
+title: "Regarding Colorimetry: comprehensive outline"
 series: colorimetry
 slug: comprehensive-outline
 permalink: /notes/colorimetry/comprehensive-outline/
-breadcrumb_class: no-print
-description: "Complete outline of the colorimetry series"
+layout: article
+kicker: Color science reference
+description: Complete outline of the colorimetry series.
+date: 2025-12-10
+printable: true
 ---
-<style>
-@media print {
-  .site-breadcrumb, nav, .no-print { display: none; }
-  body { font-size: 11pt; }
-  h1 { page-break-before: always; }
-  h1:first-of-type { page-break-before: avoid; }
-  h2 { page-break-after: avoid; }
-}
-</style>
-<div class="no-print" style="text-align: right; margin: 1rem 0;">
-  <button type="button" data-print-page style="padding: 0.5rem 1.5rem; background: transparent; color: var(--color-text); border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer; font-weight: 500; font-size: var(--text-sm); transition: all 0.2s ease;">
-    Print
-  </button>
-</div>
-
-<article class="article-content" markdown="1">
-
-<header style="text-align: center; margin: 2rem 0 3rem;">
-  <h1 style="margin-bottom: 0.5rem;">Regarding Colorimetry</h1>
-  <p style="font-size: var(--text-lg); color: var(--color-text-light);">Comprehensive Outline</p>
-</header>
 
 * * *
 
@@ -217,11 +199,3 @@ Color science is the intersection of:
 **The DIT's Role:** Translator between emotion and data, between sensor and screen.
 
 * * *
-
-</article>
-
-<footer style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--color-border); color: var(--color-text-light); font-size: var(--text-sm);">
-  <p><strong>Regarding Colorimetry</strong></p>
-  <p>By Runze Ni • December 2025</p>
-  <p><a href="{{ '/notes/colorimetry/' | relative_url }}">runzeni.github.io/notes/colorimetry</a></p>
-</footer>

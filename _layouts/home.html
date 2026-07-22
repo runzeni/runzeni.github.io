@@ -1,0 +1,26 @@
+---
+layout: default
+---
+
+{% assign profile = site.data.profile %}
+
+<div class="landing-container">
+  <nav class="quick-nav-buttons" aria-label="Portfolio sections">
+    {% for link in site.data.navigation %}
+      {% unless link.url == '/' %}<a href="{{ link.url | relative_url }}" class="quick-nav-btn">{{ link.title }}</a>{% endunless %}
+    {% endfor %}
+  </nav>
+
+  <section class="hero-section" id="hero-section">
+    <h1 class="hero-title">{{ profile.name }}</h1>
+    <p class="hero-subtitle">{{ profile.title }} · {{ profile.tagline }}</p>
+    <p class="hero-contact">
+      <button type="button" class="text-link" data-copy-email data-copy-value="{{ profile.email }}" aria-label="Copy {{ profile.email }}">{{ profile.email }}</button> ·
+      <a href="{{ profile.links.scholar }}" target="_blank" rel="noopener noreferrer">Google Scholar</a>
+    </p>
+  </section>
+</div>
+
+<article class="home-profile article-content">
+  {{ content }}
+</article>
