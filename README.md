@@ -22,8 +22,22 @@ bash scripts/build-site.sh build
 - `_data/profile.yml` is the single source for the home-page bio, links, publications, and presentations.
 - `_data/portfolio.yml` is the curated edit for `/fotos/`.
 - `_photobook/` holds roll metadata; `_data/photobooks.yml` is the generated, checked manifest for each roll's published frames.
-- `cocktails.json` powers Protocols.
+- `_data/cocktails.json` is the single source for the server-rendered, searchable Protocols collection.
 - `_notes/` holds Markdown-first articles; `_modules/` holds longer Notes series. The two Colorimetry widgets are intentionally small, source-defined studies rather than image simulations.
+
+## Editing Protocols
+
+Edit recipes only in `_data/cocktails.json`. Jekyll renders every ingredient and
+quantity through `_includes/cocktail-card.html`; `assets/js/cocktails.js` filters
+those existing cards in place. There is no second public JSON endpoint or
+client-side card template to keep synchronized.
+
+## Display preferences
+
+Theme, B&W, and Blur/Solid share the tokens in `_sass/_variables.scss` and the
+preference controller in `assets/js/main.js`. Gallery controls delegate to that
+same controller. Keep new surfaces on the shared color and glass variables
+instead of adding page-specific theme rules.
 
 ## Writing an article
 

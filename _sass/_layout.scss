@@ -20,9 +20,6 @@ main {
   max-width: 1120px;
 }
 
-[data-section="protocols"] .breadcrumb-nav,
-[data-section="notes"] .breadcrumb-nav,
-[data-section="misc"] .breadcrumb-nav,
 [data-section="protocols"] .gallery-header,
 [data-section="notes"] .gallery-header,
 [data-section="misc"] .gallery-header {
@@ -63,7 +60,6 @@ main {
   align-items: center;
   gap: 1rem;
   padding: 0 clamp(0.75rem, 2vw, 1.5rem);
-  transition: background-color var(--theme-duration) var(--theme-ease);
 }
 
 .site-header::after {
@@ -75,7 +71,6 @@ main {
   height: 1px;
   background: var(--color-border);
   pointer-events: none;
-  transition: background-color var(--theme-duration) var(--theme-ease);
 }
 
 .site-header.menu-active::after { background: var(--color-text-light); }
@@ -99,7 +94,7 @@ main {
   align-items: center;
   justify-content: center;
   color: var(--color-text);
-  transition: opacity var(--duration-base) ease, background var(--duration-base) ease;
+  transition: opacity var(--duration-base) ease;
   position: relative;
   width: 44px;
   height: 44px;
@@ -123,28 +118,43 @@ main {
   transition: opacity var(--duration-slow) ease, transform var(--duration-slow) ease;
 }
 
-/* One fixed canvas prevents the sun/moon swap from changing icon geometry. */
-.theme-toggle .icon-theme { transform-origin: center; }
+/* One fixed canvas keeps every preference icon still while its mark changes. */
+.theme-toggle .icon-theme {
+  transform: rotate(0deg);
+  transform-origin: center;
+  transition: transform var(--theme-duration) var(--theme-ease);
+}
 
 .theme-toggle .theme-sun,
 .theme-toggle .theme-moon {
-  transition: opacity var(--theme-duration) var(--theme-ease);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity var(--theme-duration) var(--theme-ease),
+              transform var(--theme-duration) var(--theme-ease);
 }
 
 .theme-toggle .theme-sun {
   opacity: 1;
+  transform: scale(1);
 }
 
 .theme-toggle .theme-moon {
   opacity: 0;
+  transform: rotate(-180deg) scale(0.88);
+}
+
+[data-theme="dark"] .theme-toggle .icon-theme {
+  transform: rotate(180deg);
 }
 
 [data-theme="dark"] .theme-toggle .theme-sun {
   opacity: 0;
+  transform: scale(0.88);
 }
 
 [data-theme="dark"] .theme-toggle .theme-moon {
   opacity: 1;
+  transform: rotate(-180deg) scale(1);
 }
 
 /* The same color mark persists in B&W mode; only its material changes. */
@@ -197,12 +207,6 @@ main {
 
 [data-reduce-transparency="on"] .reduce-transparency-toggle .glass-overlap {
   opacity: 0.92;
-}
-
-[data-reduce-transparency="on"] .site-header,
-[data-reduce-transparency="on"] .site-menu-dropdown,
-[data-reduce-transparency="on"] .sticky-nav-button {
-  animation: glassFilterToSolid 0s linear var(--theme-duration) both;
 }
 
 /* === Hamburger Menu === */
@@ -280,7 +284,6 @@ main {
   font-weight: 600;
   color: var(--color-text);
   text-decoration: none;
-  transition: color var(--duration-fast) ease, background var(--duration-fast) ease;
   font-family: var(--font-sans);
   position: relative;
   padding: 0.5rem 0.75rem;
@@ -310,7 +313,6 @@ main {
 
 /* === Dropdown Menu === */
 .site-menu-dropdown {
-  --surface-blur-active: calc(var(--glass-active-blur) * 1.5);
   position: fixed;
   top: var(--header-height);
   left: 0;
@@ -329,8 +331,6 @@ main {
   transform: translateX(-100%);
   box-shadow: 0.9rem 0 2.5rem rgba(0, 0, 0, 0.08);
   transition: transform 280ms var(--transition-smooth), visibility 0s linear 280ms,
-              background-color var(--theme-duration) var(--theme-ease),
-              border-color var(--theme-duration) var(--theme-ease),
               box-shadow 220ms ease;
 }
 
@@ -376,7 +376,6 @@ body.menu-is-open { overflow: hidden; }
   margin: 0;
   padding: 0;
   border-bottom: 1px solid var(--color-border);
-  transition: border-color var(--duration-slower) ease;
 }
 
 .site-menu-dropdown .site-nav-item a {
@@ -392,7 +391,6 @@ body.menu-is-open { overflow: hidden; }
   font-weight: 400;
   padding: 0.8rem 0;
   font-family: var(--font-serif);
-  transition: color var(--duration-base) ease;
 }
 
 .site-menu-dropdown .site-nav-item:not(.site-nav-active) a {
@@ -430,7 +428,6 @@ body.menu-is-open { overflow: hidden; }
   margin-top: auto;
   padding-top: 1.5rem;
   border-top: 1px solid var(--color-border);
-  transition: border-color var(--duration-slower) ease;
 }
 
 .menu-controls__title {
@@ -516,8 +513,6 @@ body:has(.quick-nav-buttons) #section-nav-button {
   text-decoration: none;
   cursor: pointer;
   box-shadow: none;
-  transition: background-color var(--theme-duration) var(--theme-ease),
-              border-color var(--theme-duration) var(--theme-ease);
 }
 
 .sticky-nav-button svg {
@@ -560,7 +555,6 @@ body:has(.quick-nav-buttons) #section-nav-button {
   font-size: var(--text-xs);
   line-height: var(--leading-normal);
   font-family: var(--font-sans);
-  transition: border-color 0.6s ease;
 }
 
 .footer-content {
@@ -601,7 +595,7 @@ body:has(.quick-nav-buttons) #section-nav-button {
 .footer-email-button {
   color: var(--color-text-light);
   text-decoration: none;
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition: transform 0.2s ease;
   display: inline-block;
 }
 
@@ -626,7 +620,6 @@ body:has(.quick-nav-buttons) #section-nav-button {
   border-top: 1px solid var(--color-border);
   font-size: var(--text-xs);
   line-height: var(--leading-normal);
-  transition: border-color 0.6s ease;
 }
 
 .footer-bottom p {
@@ -660,7 +653,6 @@ body:has(.quick-nav-buttons) #section-nav-button {
   color: var(--color-text-light);
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.2s ease;
   position: relative;
   padding: 0.25rem 0;
 }

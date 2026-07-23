@@ -1,9 +1,0 @@
-{
-  "manifest_version": 2,
-  "name": "Runze Ni Portfolio",
-  "short_name": "Runze Ni",
-  "description": "Photography portfolio and research",
-  "theme_color": "#fefefe",
-  "background_color": "#fefefe",
-  "display": "standalone"
-}

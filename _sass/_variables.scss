@@ -4,6 +4,19 @@
 // Variables, Custom Properties & Mixins
 // ==============================================
 
+/* Typed tokens let one root transition update every themed surface. */
+@property --color-bg { syntax: '<color>'; inherits: true; initial-value: #fefefe; }
+@property --color-text { syntax: '<color>'; inherits: true; initial-value: #1a1a1a; }
+@property --color-text-medium { syntax: '<color>'; inherits: true; initial-value: #333; }
+@property --color-text-light { syntax: '<color>'; inherits: true; initial-value: #555; }
+@property --color-border { syntax: '<color>'; inherits: true; initial-value: #dedede; }
+@property --color-accent { syntax: '<color>'; inherits: true; initial-value: #1a1a1a; }
+@property --color-progress { syntax: '<color>'; inherits: true; initial-value: #1a1a1a; }
+@property --color-background-secondary { syntax: '<color>'; inherits: true; initial-value: rgba(0, 0, 0, 0.02); }
+@property --glass-bg { syntax: '<color>'; inherits: true; initial-value: rgba(254, 254, 254, 0.58); }
+@property --glass-bg-heavy { syntax: '<color>'; inherits: true; initial-value: rgba(254, 254, 254, 0.82); }
+@property --glass-blur { syntax: '<length>'; inherits: true; initial-value: 32px; }
+
 /* === Custom Properties === */
 :root {
   color-scheme: light;
@@ -18,20 +31,11 @@
   --color-text-medium: #333;
   --color-text-light: #555;
   --color-border: #dedede;
-  --color-header-bg: rgba(254, 254, 254, 0.98);
   --color-accent: var(--color-ink);
-  --color-lightbox-bg: rgba(255, 255, 255, 0.97);
   --color-progress: var(--color-ink);
   --color-background-secondary: rgba(0, 0, 0, 0.02);
 
-  /* Scientific palette */
-  --color-sci-red: #d73027;
-  --color-sci-green: #31a354;
-  --color-sci-blue: #4575b4;
-  --color-sci-cyan: #5ab4ac;
-  --color-sci-magenta: #c51b8a;
   --color-sci-yellow-marker: #F3CF6D;
-  --color-sci-purple: #8856a7;
 
   /* Spacing */
   --header-height: 50px;
@@ -58,7 +62,6 @@
 
   /* Transitions */
   --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
   --theme-duration: 450ms;
   --theme-ease: cubic-bezier(0.2, 0, 0, 1);
 
@@ -76,15 +79,24 @@
 
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
-  --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.25);
 
   /* Blur surfaces */
   --glass-blur: 32px;
-  --glass-active-blur: 32px;
   --glass-bg: rgba(254, 254, 254, 0.58);
   --glass-bg-heavy: rgba(254, 254, 254, 0.82);
+
+  transition:
+    --color-bg var(--theme-duration) var(--theme-ease),
+    --color-text var(--theme-duration) var(--theme-ease),
+    --color-text-medium var(--theme-duration) var(--theme-ease),
+    --color-text-light var(--theme-duration) var(--theme-ease),
+    --color-border var(--theme-duration) var(--theme-ease),
+    --color-accent var(--theme-duration) var(--theme-ease),
+    --color-progress var(--theme-duration) var(--theme-ease),
+    --color-background-secondary var(--theme-duration) var(--theme-ease),
+    --glass-bg var(--theme-duration) var(--theme-ease),
+    --glass-bg-heavy var(--theme-duration) var(--theme-ease),
+    --glass-blur var(--theme-duration) var(--theme-ease);
 }
 
 /* Dark mode (inverted ink/paper) */
@@ -95,9 +107,7 @@
   --color-text-medium: #d7d7d7;
   --color-text-light: #c4c4c4;
   --color-border: #2a2a2a;
-  --color-header-bg: rgba(15, 15, 15, 0.98);
   --color-accent: var(--color-mid);
-  --color-lightbox-bg: rgba(0, 0, 0, 0.97);
   --color-progress: var(--color-mid);
   --color-background-secondary: rgba(255, 255, 255, 0.04);
   --glass-bg: rgba(15, 15, 15, 0.46);

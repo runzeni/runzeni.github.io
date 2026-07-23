@@ -6,11 +6,6 @@
   padding-inline: clamp(1rem, 4vw, 3rem);
 }
 
-[data-section="fotos"] .breadcrumb-nav {
-  max-width: 46rem;
-  margin-inline: auto;
-}
-
 [data-section="fotos"] .gallery-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
@@ -203,14 +198,7 @@
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
 }
 
-[data-reduce-transparency="on"] .pswp {
-  animation: glassFilterToSolid 0s linear var(--theme-duration) both;
-}
-
-.pswp__bg {
-  background: var(--pswp-bg);
-  transition: background-color var(--theme-duration) var(--theme-ease);
-}
+.pswp__bg { background: var(--pswp-bg); }
 
 /* Restore the shared B&W transition inside the touch-optimized viewer. */
 .pswp .pswp__img {
@@ -227,7 +215,7 @@
   width: 3.5rem;
   height: 3.5rem;
   opacity: 0.72;
-  transition: opacity 160ms ease, background 160ms ease;
+  transition: opacity 160ms ease;
 }
 
 .pswp__button:hover,
@@ -325,7 +313,6 @@
   background: var(--glass-bg-heavy);
   color: var(--color-text);
   transform: translateX(-50%);
-  transition: background-color var(--theme-duration) var(--theme-ease);
 }
 
 .pswp__zoom-range label {

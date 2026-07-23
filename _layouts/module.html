@@ -5,7 +5,7 @@ layout: default
 {% assign series_documents = site.modules | where: 'series', page.series %}
 {% assign series_items = series_documents | where_exp: 'item', 'item.module_number' | sort: 'module_number' %}
 {% assign series_overview = series_documents | where: 'slug', 'index' | first %}
-{% assign series_title = page.series_title | default: series_overview.title %}
+{% assign series_title = series_overview.title %}
 
 <article class="article-page module-article">
   <header class="article-header">

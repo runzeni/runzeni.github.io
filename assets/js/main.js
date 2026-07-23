@@ -62,54 +62,10 @@
     }));
   };
 
-  let activeThemeTransition = null;
-  let activeThemeIcon = null;
-  let activeThemeOrigin = null;
-  let themeChangeId = 0;
-  const clearThemeIconTransition = () => {
-    activeThemeIcon?.style.removeProperty('view-transition-name');
-    activeThemeIcon = null;
-  };
-  const setThemePreference = (value, persist = true, origin = null) => {
+  const setThemePreference = (value, persist = true) => {
     const themeColor = query('meta[name="theme-color"]');
     if (themeColor) themeColor.content = value === 'dark' ? '#0f0f0f' : '#fefefe';
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduceMotion || !document.startViewTransition) {
-      activeThemeTransition?.skipTransition();
-      clearThemeIconTransition();
-      root.classList.remove('theme-is-transitioning');
-      applyPreference('data-theme', 'theme', value, persist);
-      activeThemeTransition = null;
-      activeThemeOrigin = null;
-      return;
-    }
-
-    activeThemeTransition?.skipTransition();
-    clearThemeIconTransition();
-
-    activeThemeOrigin = origin;
-    const icon = origin?.querySelector('.icon-theme');
-    if (icon) {
-      icon.style.viewTransitionName = 'active-theme-icon';
-      activeThemeIcon = icon;
-    }
-
-    const apply = () => applyPreference('data-theme', 'theme', value, persist);
-    const changeId = ++themeChangeId;
-    let transition = null;
-    const finish = () => {
-      if (changeId !== themeChangeId) return;
-      root.classList.remove('theme-is-transitioning');
-      clearThemeIconTransition();
-      if (activeThemeTransition === transition) activeThemeTransition = null;
-      activeThemeOrigin = null;
-    };
-
-    root.classList.add('theme-is-transitioning');
-    transition = document.startViewTransition(apply);
-    activeThemeTransition = transition;
-    transition.finished.then(finish, finish);
+    applyPreference('data-theme', 'theme', value, persist);
   };
 
   const initPreferences = () => {
@@ -146,39 +102,23 @@
       }
     ];
 
-    const activate = (preference, origin) => {
+    const activate = (preference) => {
       const value = preference.next(root.getAttribute(preference.attribute));
-      if (preference.attribute === 'data-theme') setThemePreference(value, true, origin);
+      if (preference.attribute === 'data-theme') setThemePreference(value);
       else applyPreference(preference.attribute, preference.key, value);
       queryAll(preference.selector).forEach((button) => updateLabel(button, preference.labels, value));
     };
 
-    /* A document View Transition suppresses normal hit testing. Route a rapid
-       repeat tap within the initiating control back to that control. */
-    document.addEventListener('click', (event) => {
-      if (!root.classList.contains('theme-is-transitioning') || !activeThemeOrigin) return;
-      if (activeThemeOrigin.contains(event.target)) return;
-
-      const rect = activeThemeOrigin.getBoundingClientRect();
-      const withinOrigin = event.clientX >= rect.left && event.clientX <= rect.right
-        && event.clientY >= rect.top && event.clientY <= rect.bottom;
-      if (!withinOrigin) return;
-
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      activate(preferences[0], activeThemeOrigin);
-    }, true);
-
     preferences.forEach((preference) => {
       queryAll(preference.selector).forEach((button) => {
         updateLabel(button, preference.labels, root.getAttribute(preference.attribute));
-        button.addEventListener('click', () => activate(preference, button));
+        button.addEventListener('click', () => activate(preference));
       });
     });
 
     window.addEventListener('sitepreferenceactivate', (event) => {
       const preference = preferences.find((item) => item.attribute === event.detail?.attribute);
-      if (preference) activate(preference, event.detail?.origin || null);
+      if (preference) activate(preference);
     });
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
@@ -198,7 +138,7 @@
     const menu = query('#site-menu');
     const scrim = query('#menu-scrim');
     const header = query('#site-header');
-    if (!button || !menu || !header) return { close() {} };
+    if (!button || !menu || !header) return;
 
     const focusableSelector = 'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
     const setInert = (inert) => {
@@ -260,8 +200,6 @@
         button.focus();
       }
     });
-
-    return { close: () => setOpen(false) };
   };
 
   const initScrollChrome = () => {

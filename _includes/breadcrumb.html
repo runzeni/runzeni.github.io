@@ -1,6 +1,5 @@
 {% unless page.url == "/" or page.url == "/index.html" %}
-{% unless page.hide_breadcrumb %}
-<div class="site-breadcrumb{% if page.breadcrumb_class %} {{ page.breadcrumb_class }}{% endif %}">
+<div class="site-breadcrumb">
   <nav class="breadcrumb-container" aria-label="Breadcrumb">
     <a href="{{ '/' | relative_url }}" class="breadcrumb-item">Home</a>
     {% assign crumbs = page.url | split: '/' %}
@@ -10,20 +9,14 @@
         {% assign crumb_path = crumb_path | append: '/' | append: crumb %}
         <span class="breadcrumb-separator" aria-hidden="true">/</span>
         {% if forloop.last %}
-          {% if page.breadcrumb_title %}
-            {% assign current_label = page.breadcrumb_title %}
-          {% elsif page.title %}
-            {% assign current_label = page.title %}
-          {% else %}
-            {% assign current_label = crumb | replace: '-', ' ' | capitalize %}
-          {% endif %}
+          {% assign current_label = page.title | default: crumb | replace: '-', ' ' | capitalize %}
           <span class="breadcrumb-item breadcrumb-current" aria-current="page">{{ current_label }}</span>
         {% else %}
           {% assign crumb_url = crumb_path | append: '/' %}
           {% assign crumb_label = crumb | replace: '-', ' ' | capitalize %}
           {% for p in site.pages %}
             {% if p.url == crumb_url %}
-              {% assign crumb_label = p.breadcrumb_title | default: p.title %}
+              {% assign crumb_label = p.title | default: crumb_label %}
               {% break %}
             {% endif %}
           {% endfor %}
@@ -33,5 +26,4 @@
     {% endfor %}
   </nav>
 </div>
-{% endunless %}
 {% endunless %}

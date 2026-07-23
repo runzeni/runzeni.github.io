@@ -5,9 +5,6 @@ baseurl: ""
 repository: runzeni/runzeni.github.io
 lang: en-US
 
-include:
-  - .well-known
-
 exclude:
   - README.md
   - Gemfile
@@ -55,7 +52,6 @@ defaults:
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
-  - jekyll-feed
 
 sass:
   style: compressed

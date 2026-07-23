@@ -11,17 +11,17 @@ protocol: true
   <p class="gallery-subtitle">{{ site.data.cocktails.cocktails | size }} cocktail notes, searchable by spirit or ingredient.</p>
 </header>
 
-<form class="protocol-controls" id="protocol-filters" novalidate>
+<form class="protocol-controls" id="protocol-filters">
   <div class="search-row">
     <label for="search-box" class="visually-hidden">Search cocktails by name or ingredient</label>
     <input type="search" id="search-box" placeholder="Search cocktails or ingredients" class="search-input" autocomplete="off" aria-describedby="results-count">
-    <button id="shuffle-btn" class="shuffle-btn" type="button" aria-label="Show a random cocktail" title="Shuffle cocktails">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"></rect><circle cx="9" cy="9" r="1"></circle><circle cx="15" cy="9" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="9" cy="15" r="1"></circle><circle cx="15" cy="15" r="1"></circle></svg>
-      <span class="visually-hidden">Shuffle cocktails</span>
+    <button id="shuffle-btn" class="shuffle-btn" type="button" aria-label="Show a random cocktail" title="Show a random cocktail">
+      <span class="shuffle-icon" aria-hidden="true">🎲</span>
+      <span class="visually-hidden">Show a random cocktail</span>
     </button>
   </div>
   <div class="filter-row">
-    <div class="filter-buttons" id="filter-buttons" role="group" aria-label="Filter by spirit">
+    <div class="filter-buttons" role="group" aria-label="Filter by spirit">
       <button class="filter-btn active" type="button" data-base="all" aria-pressed="true">All</button>
       <button class="filter-btn" type="button" data-base="whiskey" aria-pressed="false">Whiskey</button>
       <button class="filter-btn" type="button" data-base="gin" aria-pressed="false">Gin</button>
@@ -36,8 +36,12 @@ protocol: true
 
 <noscript><p class="protocol-noscript">All recipes are shown below. Search and filters need JavaScript.</p></noscript>
 
-<section id="cocktails-grid" class="cocktails-grid" aria-label="Cocktail recipes" aria-busy="false" data-endpoint="{{ '/cocktails.json' | relative_url }}">
+<section id="cocktails-grid" class="cocktails-grid" aria-label="Cocktail recipes">
   {% for cocktail in site.data.cocktails.cocktails %}
     {% include cocktail-card.html cocktail=cocktail %}
   {% endfor %}
+  <div class="no-results" id="no-results" hidden>
+    <p>No cocktails found.</p>
+    <button class="clear-search-btn" id="clear-filters" type="button">Clear filters</button>
+  </div>
 </section>

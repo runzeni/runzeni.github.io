@@ -3,11 +3,11 @@
 // ==============================================
 
 /* === Image Filters === */
-img:not(.no-filter) {
+img {
   transition: filter var(--theme-duration) var(--theme-ease);
 }
 
-[data-monochrome="true"] img:not(.no-filter) {
+[data-monochrome="true"] img {
   filter: grayscale(100%);
 }
 
@@ -35,7 +35,7 @@ body {
 }
 
 @media (pointer: coarse) {
-  img:not(.no-filter) {
+  img {
     transition: none;
   }
 }
@@ -79,7 +79,6 @@ p {
 
 a {
   color: var(--color-text);
-  transition: color var(--duration-fast) ease;
 }
 
 /* === Code & Preformatted Text === */
@@ -183,8 +182,7 @@ mark {
 
   /* Hide UI elements */
   .site-header, .site-menu-dropdown, .scroll-progress, .sticky-nav, .notes-outline,
-  .shortcuts-overlay, .module-navigation, .module-nav, .no-print, button,
-  .portfolio-grid, .portfolio-sequence, .contact-sheet-grid { display: none !important; }
+  .module-navigation, button, .portfolio-sequence, .contact-sheet-grid { display: none !important; }
 
   /* Layout */
   body { padding: 0 !important; margin: 0 !important; font-size: 11pt !important; line-height: 1.5 !important; }

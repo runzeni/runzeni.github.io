@@ -2,7 +2,6 @@
 layout: home
 title: Runze Ni
 description: Photos & working studies by Runze.
-hide_breadcrumb: true
 ---
 
 ## About

@@ -1,5 +1,7 @@
 - from: /cine/
   to: /fotos/#cine
+- from: /protocol/
+  to: /protocols/
 - from: /misc/colorimetry/
   to: /notes/colorimetry/
 - from: /misc/colorimetry/comprehensive-outline/

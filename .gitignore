@@ -10,7 +10,6 @@
 /vendor/
 /.bundle/
 /.venv/
-Gemfile.lock
 
 # AI / Editor
 /AGENTS.md

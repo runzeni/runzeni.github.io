@@ -1,5 +1,5 @@
 {% assign cocktail = include.cocktail %}
-<article class="cocktail-card">
+<article class="cocktail-card" data-base="{{ cocktail.base | escape }}" data-name="{{ cocktail.name | escape }}">
   <header class="cocktail-header">
     <h2 class="cocktail-name">{{ cocktail.name | escape }}</h2>
     {% if cocktail.year or cocktail.creator %}
@@ -9,7 +9,7 @@
   </header>
   <div class="cocktail-ingredients">
     {% for ingredient in cocktail.ingredients %}
-      <p class="ingredient-line">{% if ingredient.amount != nil %}{{ ingredient.amount }}{% endif %}{% if ingredient.unit and ingredient.unit != '' %} {{ ingredient.unit }}{% endif %} {{ ingredient.ingredient | escape }}</p>
+      <p class="ingredient-line">{% if ingredient.amount != nil %}<span class="ingredient-amount" data-amount="{{ ingredient.amount }}">{{ ingredient.amount }}</span>{% endif %}{% if ingredient.unit and ingredient.unit != '' %} {{ ingredient.unit | escape }}{% endif %}<span class="ingredient-name"> {{ ingredient.ingredient | escape }}</span></p>
     {% endfor %}
   </div>
   {% if cocktail.instructions %}<p class="cocktail-instructions">{{ cocktail.instructions | escape }}</p>{% endif %}
