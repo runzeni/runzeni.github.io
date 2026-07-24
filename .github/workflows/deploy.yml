@@ -33,8 +33,8 @@ jobs:
           if command -v magick || command -v convert; then exit 0; fi
           sudo apt-get update
           sudo apt-get install -y imagemagick
-      - name: Verify photo manifest
-        run: ruby scripts/build-photo-manifest.rb --check
+      - name: Generate photo manifest
+        run: ruby scripts/build-photo-manifest.rb
       - name: Build web photo renditions
         run: bash scripts/build-photo-derivatives.sh --clean
       - name: Build site

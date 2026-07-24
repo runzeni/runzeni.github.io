@@ -21,7 +21,7 @@ bash scripts/build-site.sh build
 
 - `_data/profile.yml` is the single source for the home-page bio, links, publications, and presentations.
 - `_data/portfolio.yml` is the curated edit for `/fotos/`.
-- `_photobook/` holds roll metadata; `_data/photobooks.yml` is the generated, checked manifest for each roll's published frames.
+- `_photobook/` holds minimal roll metadata. `_data/photos.yml` is generated locally and is never edited or committed.
 - `_data/cocktails.json` is the single source for the server-rendered, searchable Protocols collection.
 - `_notes/` holds Markdown-first articles; `_modules/` holds longer Notes series. The two Colorimetry widgets are intentionally small, source-defined studies rather than image simulations.
 
@@ -53,45 +53,55 @@ existing bookmarks continue to work after a section move.
 
 ## Photos
 
-Original scans stay in numeric `assets/img/<year>/` folders or `assets/img/portfolio/`; they are excluded from the published artifact. WebP renditions are generated locally into ignored `assets/img/derived` and are generated again by the deploy workflow before Jekyll builds the published artifact. `bash scripts/build-site.sh` prepares both the frame manifest and WebPs before Jekyll starts.
+Original scans stay in numeric `assets/img/<year>/` folders or
+`assets/img/portfolio/`; one exclusion rule keeps every year out of the public
+artifact. The build validates the authored metadata, derives dimensions and
+titles, and produces ignored 640, 1200, and 1920 px WebPs. GitHub Actions
+regenerates the same files before deployment. Conversion automatically uses up
+to 18 workers; set `PHOTO_JOBS` only when a manual limit is useful.
 
 ### Add to Selected works
 
 1. Prefer an existing original in `assets/img/<year>/<roll>/`; do not copy it
    into `portfolio` if it is already part of an archived roll. Put standalone
    selected-work originals in `assets/img/portfolio/`.
-2. Add one record to `_data/portfolio.yml`. Supply the source path, unique
-   `sequence`, editorial `row` and `placement`, pixel `width` and `height`, and
-   useful `alt` text. Placements are `lead`, `full`, `feature`, `left`, `right`,
-   `inset-left`, `inset-right`, and `ending`.
-3. Run `bash scripts/build-site.sh serve`. It renders only new or changed WebPs;
-   the ignored `assets/img/derived/` files are never committed.
-
-Use ImageMagick when dimensions are not known:
-
-```sh
-magick identify -format '%w %h\n' "assets/img/path/to/photo.jpg"
-```
+2. Add `src`, unique `sequence`, editorial `row`, `placement`, and literal
+   `alt` text to `_data/portfolio.yml`. Dimensions are generated. Placements
+   are `lead`, `full`, `feature`, `left`, `right`, `inset-left`,
+   `inset-right`, and `ending`.
+3. Run `bash scripts/build-site.sh serve`, then review `/fotos/` and its
+   lightbox. Commit only the source and `_data/portfolio.yml`.
 
 ### Add a full roll to the archive
 
-1. Create `assets/img/<year>/<roll-folder>/` and place the roll's JPG, JPEG, or
-   PNG files there in the filename order in which they should appear.
-2. Copy an existing `_photobook/*.md` file and update `title`, `film`, `year`,
-   `date`, `image_dir`, and the unique URL `slug`. `camera` is optional. Archive
-   covers are sampled at build time, so no fixed cover is required.
-3. Build or serve the site. The manifest builder records every frame and its
-   dimensions; the derivative builder automatically recognizes future numeric
-   year folders.
-4. Review and commit the originals, the new `_photobook` file, and the updated
-   `_data/photobooks.yml`. Do not commit `_site/` or `assets/img/derived/`.
+1. Choose one lowercase slug, for example `2026-kodak-gold-200-tampa`. Create
+   `assets/img/2026/2026-kodak-gold-200-tampa/` and place JPG, JPEG, or PNG
+   files inside. Alphabetical filename order is display order, so prefer
+   `frame-001.jpg`, `frame-002.jpg`, and so on.
+2. Create `_photobook/2026-kodak-gold-200-tampa.md` with:
 
-The explicit refresh commands are:
-
-```sh
-ruby scripts/build-photo-manifest.rb
-bash scripts/build-site.sh build
+```yaml
+---
+year: 2026
+camera: Olympus XA
+film: Kodak Gold 200
+location: Tampa
+---
 ```
+
+The metadata filename and image folder normally share the slug, so no path or
+URL field is needed. Omit `film` for digital work; the site displays `Digital`.
+Legacy folders may use an optional `folder` override.
+
+3. Run `bash scripts/build-site.sh serve`. The build creates the title, URL,
+   dimensions, responsive sources, and archive manifest automatically.
+4. Review the archive card, roll page, frame order, responsive layout, and
+   lightbox. Commit only the source folder and `_photobook` file.
+
+For new exports, use sRGB JPEGs at 1920 px on the long edge and approximately
+quality 88–90. Do not upscale or repeatedly recompress an existing JPEG.
+
+Never commit `_data/photos.yml`, `assets/img/derived/`, or `_site/`.
 
 ### Cine stills plan
 

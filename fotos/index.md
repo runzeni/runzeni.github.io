@@ -18,10 +18,12 @@ gallery: true
 {% assign selected_photos = site.data.portfolio.photos | sort: 'sequence' %}
 <section class="portfolio-sequence" data-photo-gallery aria-label="Selected photographs">
   {% for photo in selected_photos %}
-    {% assign thumbnail = photo.src | replace: '/assets/img/', '/assets/img/derived/' | replace: '.jpg', '.webp' %}
-    <a class="portfolio-item portfolio-item--{{ photo.placement }}" style="--sequence-row: {{ photo.row }}" href="{{ thumbnail | relative_url }}" data-gallery-trigger data-pswp-width="{{ photo.width }}" data-pswp-height="{{ photo.height }}">
+    {% assign photo_asset = site.data.photos.assets[photo.src] %}
+    {% assign image_loading = 'lazy' %}
+    {% if forloop.first %}{% assign image_loading = 'eager' %}{% endif %}
+    <a class="portfolio-item portfolio-item--{{ photo.placement }}" style="--sequence-row: {{ photo.row }}" href="{{ photo_asset.src | relative_url }}" data-gallery-trigger data-pswp-width="{{ photo_asset.width }}" data-pswp-height="{{ photo_asset.height }}">
       <span class="portfolio-item__frame">
-        <img src="{{ thumbnail | relative_url }}" width="{{ photo.width }}" height="{{ photo.height }}" alt="{{ photo.alt | escape }}" loading="{% if forloop.first %}eager{% else %}lazy{% endif %}" decoding="async" sizes="(max-width: 620px) 100vw, (max-width: 960px) 50vw, 62vw"{% if forloop.first %} fetchpriority="high"{% endif %}>
+        {% include responsive-photo.html photo=photo_asset alt=photo.alt sizes="(max-width: 620px) 100vw, (max-width: 960px) 50vw, 62vw" loading=image_loading %}
       </span>
     </a>
   {% endfor %}

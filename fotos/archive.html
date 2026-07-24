@@ -1,17 +1,20 @@
 ---
 layout: default
 title: Archive
-description: Full rolls of film photographs by Runze Ni.
+description: Complete photographic series by Runze Ni.
 permalink: /fotos/archive/
 ---
 
-{% assign sorted_rolls = site.photobook | sort: 'year' | reverse %}
+{% assign chronological_rolls = site.photobook | sort: 'year' %}
+{% assign first_roll = chronological_rolls | first %}
+{% assign last_roll = chronological_rolls | last %}
+{% assign sorted_rolls = chronological_rolls | reverse %}
 
 <header class="gallery-header archive-header">
   <p class="gallery-kicker">Fotos</p>
   <h1 class="gallery-title">Full archive</h1>
   <div class="gallery-header__meta">
-    <p class="gallery-meta">{{ sorted_rolls | size }} rolls <span aria-hidden="true">·</span> 2022–{{ 'now' | date: '%Y' }}</p>
+    <p class="gallery-meta">{{ sorted_rolls | size }} rolls <span aria-hidden="true">·</span> {{ first_roll.year }}–{{ last_roll.year }}</p>
     <a href="{{ '/fotos/' | relative_url }}" class="gallery-archive-link"><span aria-hidden="true">←</span> Selected works</a>
   </div>
 </header>
@@ -23,17 +26,20 @@ permalink: /fotos/archive/
   <section class="archive-year" aria-labelledby="archive-{{ group.name }}">
     <h2 id="archive-{{ group.name }}">{{ group.name }}</h2>
     <div class="year-grid">
-      {% for roll in group.items %}
-        {% assign roll_photos = site.data.photobooks.rolls[roll.slug].photos %}
+      {% assign year_rolls = group.items | sort: 'title' %}
+      {% for roll in year_rolls %}
+        {% assign roll_photos = site.data.photos.rolls[roll.slug].photos %}
         {% assign cover_photo = roll_photos | sample %}
-        {% assign title_parts = roll.title | split: ' / ' %}
+        {% assign image_loading = 'lazy' %}
+        {% if roll_index == 0 %}{% assign image_loading = 'eager' %}{% endif %}
         <a href="{{ roll.url | relative_url }}" class="roll-card">
           <span class="roll-thumb">
-            <img src="{{ cover_photo.src | relative_url }}" width="{{ cover_photo.width }}" height="{{ cover_photo.height }}" alt="Cover image for {{ roll.title | escape }}" loading="{% if roll_index == 0 %}eager{% else %}lazy{% endif %}" decoding="async" sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 33vw"{% if roll_index == 0 %} fetchpriority="high"{% endif %}>
+            {% capture cover_alt %}Cover image for {{ roll.title }}{% endcapture %}
+            {% include responsive-photo.html photo=cover_photo alt=cover_alt sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 33vw" loading=image_loading %}
           </span>
           <span class="roll-info">
             <span class="roll-film">{{ roll.film }}</span>
-            {% if title_parts.size > 1 %}<span class="roll-location">{{ title_parts.last }}</span>{% endif %}
+            <span class="roll-meta">{{ roll.location }} <span aria-hidden="true">·</span> {{ roll.camera }}</span>
           </span>
         </a>
         {% assign roll_index = roll_index | plus: 1 %}

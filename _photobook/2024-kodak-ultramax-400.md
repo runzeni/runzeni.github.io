@@ -1,8 +1,7 @@
 ---
-title: "Kodak Ultramax 400 / Cleveland & Chicago"
-film: Kodak Ultramax 400
 year: 2024
-date: 2024-01-01
-image_dir: 2024_FUJI400_CLE+CHI_Export_Web
-slug: 2024-kodak-ultramax-400
+camera: Olympus XA
+film: Kodak Ultramax 400
+location: Cleveland & Chicago
+folder: 2024_FUJI400_CLE+CHI_Export_Web
 ---

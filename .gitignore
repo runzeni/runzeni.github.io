@@ -5,6 +5,7 @@
 /_site/
 .jekyll-cache/
 /assets/img/derived/
+/_data/photos.yml
 
 # Ruby / Bundler
 /vendor/
