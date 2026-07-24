@@ -24,7 +24,7 @@ layout: default
       {% if image_count == 1 %}{% assign image_loading = 'eager' %}{% endif %}
       {% capture alt %}{{ page.film }} photograph from {{ page.location }} — frame {{ image_count }}{% endcapture %}
       <a class="contact-sheet-item" href="{{ photo.src | relative_url }}" data-gallery-trigger data-pswp-width="{{ photo.width }}" data-pswp-height="{{ photo.height }}">
-        {% include responsive-photo.html photo=photo alt=alt sizes="(max-width: 760px) 50vw, 33vw" loading=image_loading %}
+        {% include photo.html photo=photo alt=alt loading=image_loading %}
       </a>
     {% else %}
       <p class="gallery-empty">This roll is being prepared for the archive.</p>

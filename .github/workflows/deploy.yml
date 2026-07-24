@@ -35,8 +35,6 @@ jobs:
           sudo apt-get install -y imagemagick
       - name: Generate photo manifest
         run: ruby scripts/build-photo-manifest.rb
-      - name: Build web photo renditions
-        run: bash scripts/build-photo-derivatives.sh --clean
       - name: Build site
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
       - name: Upload Pages artifact

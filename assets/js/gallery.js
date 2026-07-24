@@ -4,6 +4,7 @@ const justifiedGallery = document.querySelector('[data-justified-gallery]');
 
 if (justifiedGallery) {
   const items = Array.from(justifiedGallery.querySelectorAll('[data-gallery-trigger]'));
+  const spacious = justifiedGallery.dataset.justifiedGallery === 'spacious';
   let frame = 0;
 
   const placeRow = (row, top, containerWidth, gap, targetHeight, justify) => {
@@ -34,8 +35,12 @@ if (justifiedGallery) {
     if (!containerWidth) return;
 
     const compact = containerWidth < 620;
-    const gap = compact ? 6 : 10;
-    const targetHeight = compact ? 138 : Math.min(250, Math.max(190, containerWidth * 0.19));
+    const gap = compact ? (spacious ? 10 : 6) : (spacious ? 18 : 10);
+    const targetHeight = compact
+      ? (spacious ? 320 : 138)
+      : (spacious
+          ? Math.min(440, Math.max(300, containerWidth * 0.36))
+          : Math.min(250, Math.max(190, containerWidth * 0.19)));
     const rows = [];
     let row = [];
     let ratioTotal = 0;

@@ -1,8 +1,5 @@
-{% capture photo_srcset %}{% for variant in include.photo.variants %}{{ variant.src | relative_url }} {{ variant.width }}w{% unless forloop.last %}, {% endunless %}{% endfor %}{% endcapture %}
 <img
   src="{{ include.photo.src | relative_url }}"
-  srcset="{{ photo_srcset | strip }}"
-  sizes="{{ include.sizes }}"
   width="{{ include.photo.width }}"
   height="{{ include.photo.height }}"
   alt="{{ include.alt | escape }}"

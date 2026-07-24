@@ -35,7 +35,7 @@ permalink: /fotos/archive/
         <a href="{{ roll.url | relative_url }}" class="roll-card">
           <span class="roll-thumb">
             {% capture cover_alt %}Cover image for {{ roll.title }}{% endcapture %}
-            {% include responsive-photo.html photo=cover_photo alt=cover_alt sizes="(max-width: 640px) 100vw, (max-width: 980px) 50vw, 33vw" loading=image_loading %}
+            {% include photo.html photo=cover_photo alt=cover_alt loading=image_loading %}
           </span>
           <span class="roll-info">
             <span class="roll-film">{{ roll.film }}</span>

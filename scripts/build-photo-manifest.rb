@@ -1,19 +1,15 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Validate the human-authored photo metadata and generate the dimensions and
-# responsive WebP paths consumed by Jekyll.
+# Validate photo sources and metadata, then generate the dimensions and direct
+# source paths consumed by Jekyll.
 
 require 'date'
 require 'open3'
 require 'pathname'
 require 'yaml'
 
-VARIANT_WIDTHS = [640, 1200, 1920].freeze
 PHOTO_EXTENSIONS = %w[.jpg .jpeg .png].freeze
-PORTFOLIO_PLACEMENTS = %w[
-  lead full feature left right inset-left inset-right ending
-].freeze
 
 root = Pathname.new(__dir__).join('..').realpath
 destination = root.join('_data', 'photos.yml')
@@ -51,74 +47,35 @@ def image_dimensions(command, path)
   [width, height]
 end
 
-def source_path(root, public_path)
-  prefix = '/assets/img/'
-  abort "Photo source must begin with #{prefix}: #{public_path}" unless public_path.start_with?(prefix)
-
-  path = root.join(public_path.delete_prefix('/')).cleanpath
-  image_root = root.join('assets', 'img').to_s + File::SEPARATOR
-  abort "Photo source leaves assets/img: #{public_path}" unless path.to_s.start_with?(image_root)
-  abort "Missing photo source: #{public_path}" unless path.file?
-  abort "Unsupported photo extension: #{public_path}" unless PHOTO_EXTENSIONS.include?(path.extname.downcase)
-
-  path
-end
-
 def photo_record(root, command, path)
   source_width, source_height = image_dimensions(command, path)
-  widths = VARIANT_WIDTHS.map { |width| [width, source_width].min }.uniq
-  relative = path.relative_path_from(root.join('assets', 'img')).to_s
-  stem = relative.sub(/\.[^.]+\z/, '')
-
-  variants = widths.map do |width|
-    height = (source_height * width.fdiv(source_width)).round
-    {
-      'src' => "/assets/img/derived/#{stem}-#{width}w.webp",
-      'width' => width,
-      'height' => height
-    }
-  end
-
-  largest = variants.last
   {
-    'src' => largest.fetch('src'),
-    'width' => largest.fetch('width'),
-    'height' => largest.fetch('height'),
-    'variants' => variants
+    'src' => "/#{path.relative_path_from(root)}",
+    'width' => source_width,
+    'height' => source_height
   }
 end
 
-portfolio_path = root.join('_data', 'portfolio.yml')
-portfolio_data = YAML.safe_load(portfolio_path.read, aliases: false) || {}
-portfolio = portfolio_data.fetch('photos') { abort "Missing photos list in #{portfolio_path}" }
-abort "#{portfolio_path} photos must be a list" unless portfolio.is_a?(Array)
+portfolio_dir = root.join('assets', 'img', 'portfolio')
+abort "Missing portfolio directory: #{portfolio_dir}" unless portfolio_dir.directory?
 
-seen_sequences = {}
-seen_sources = {}
-assets = {}
+portfolio_files = Dir[portfolio_dir.join('*').to_s].filter_map do |path_string|
+  path = Pathname.new(path_string)
+  next unless path.file? && PHOTO_EXTENSIONS.include?(path.extname.downcase)
 
-portfolio.each_with_index do |photo, index|
-  label = "Portfolio entry #{index + 1}"
-  %w[src sequence row placement alt].each do |field|
-    abort "#{label} is missing #{field}" if photo[field].nil? || photo[field].to_s.strip.empty?
-  end
+  match = path.basename.to_s.match(/\Aportfolio-(\d{2,})\.(?:jpe?g|png)\z/i)
+  abort "Portfolio image must be named portfolio-NN: #{path.basename}" unless match
 
-  sequence = Integer(photo.fetch('sequence'), exception: false)
-  row = Integer(photo.fetch('row'), exception: false)
-  abort "#{label} has an invalid sequence" unless sequence&.positive?
-  abort "#{label} has an invalid row" unless row&.positive?
-  abort "Duplicate portfolio sequence: #{sequence}" if seen_sequences[sequence]
-  abort "Duplicate portfolio source: #{photo.fetch('src')}" if seen_sources[photo.fetch('src')]
-  abort "#{label} has an invalid placement: #{photo.fetch('placement')}" unless PORTFOLIO_PLACEMENTS.include?(photo.fetch('placement'))
-
-  generated_fields = %w[width height layout] & photo.keys
-  abort "#{label} contains generated or obsolete fields: #{generated_fields.join(', ')}" unless generated_fields.empty?
-
-  source = photo.fetch('src')
-  seen_sequences[sequence] = true
-  seen_sources[source] = true
-  assets[source] = photo_record(root, image_command, source_path(root, source))
+  [match[1].to_i, path]
 end
+abort "No supported image files found in #{portfolio_dir}" if portfolio_files.empty?
+
+duplicate = portfolio_files.map(&:first).tally.find { |_number, count| count > 1 }
+abort "Duplicate portfolio number: #{duplicate.first}" if duplicate
+
+portfolio = portfolio_files
+  .sort_by(&:first)
+  .map { |_number, path| photo_record(root, image_command, path) }
 
 rolls = {}
 seen_folders = {}
@@ -157,19 +114,19 @@ Dir[root.join('_photobook', '*.md').to_s].sort.each do |entry_path|
   rolls[slug] = { 'photos' => photos }
 end
 
-generated = YAML.dump({ 'assets' => assets, 'rolls' => rolls })
+generated = YAML.dump({ 'portfolio' => portfolio, 'rolls' => rolls })
 
 if check_only
   unless destination.file? && destination.read == generated
     warn 'Photo manifest is missing or stale. Run: ruby scripts/build-photo-manifest.rb'
     exit 1
   end
-  puts "Photo manifest is current (#{assets.length} selected works, #{rolls.length} rolls)."
+  puts "Photo manifest is current (#{portfolio.length} selected works, #{rolls.length} rolls)."
 elsif !destination.file? || destination.read != generated
   temporary = Pathname.new("#{destination}.#{Process.pid}.tmp")
   temporary.write(generated)
   temporary.rename(destination)
-  puts "Wrote #{destination.relative_path_from(root)} (#{assets.length} selected works, #{rolls.length} rolls)."
+  puts "Wrote #{destination.relative_path_from(root)} (#{portfolio.length} selected works, #{rolls.length} rolls)."
 else
-  puts "Photo manifest is already current (#{assets.length} selected works, #{rolls.length} rolls)."
+  puts "Photo manifest is already current (#{portfolio.length} selected works, #{rolls.length} rolls)."
 end

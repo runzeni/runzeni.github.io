@@ -20,7 +20,8 @@ bash scripts/build-site.sh build
 ## Content map
 
 - `_data/profile.yml` is the single source for the home-page bio, links, publications, and presentations.
-- `_data/portfolio.yml` is the curated edit for `/fotos/`.
+- `assets/img/portfolio/` is `/fotos/`: every numbered image is included
+  automatically in ascending numeric order.
 - `_photobook/` holds minimal roll metadata. `_data/photos.yml` is generated locally and is never edited or committed.
 - `_data/cocktails.json` is the single source for the server-rendered, searchable Protocols collection.
 - `_notes/` holds Markdown-first articles; `_modules/` holds longer Notes series. The two Colorimetry widgets are intentionally small, source-defined studies rather than image simulations.
@@ -53,24 +54,21 @@ existing bookmarks continue to work after a section move.
 
 ## Photos
 
-Original scans stay in numeric `assets/img/<year>/` folders or
-`assets/img/portfolio/`; one exclusion rule keeps every year out of the public
-artifact. The build validates the authored metadata, derives dimensions and
-titles, and produces ignored 640, 1200, and 1920 px WebPs. GitHub Actions
-regenerates the same files before deployment. Conversion automatically uses up
-to 18 workers; set `PHOTO_JOBS` only when a manual limit is useful.
+The Lightroom JPG, JPEG, or PNG exports under numeric `assets/img/<year>/`
+folders and `assets/img/portfolio/` are published directly. The build validates
+names and roll metadata, records dimensions, and derives titles; it does not
+recompress or duplicate the photographs.
 
 ### Add to Selected works
 
-1. Prefer an existing original in `assets/img/<year>/<roll>/`; do not copy it
-   into `portfolio` if it is already part of an archived roll. Put standalone
-   selected-work originals in `assets/img/portfolio/`.
-2. Add `src`, unique `sequence`, editorial `row`, `placement`, and literal
-   `alt` text to `_data/portfolio.yml`. Dimensions are generated. Placements
-   are `lead`, `full`, `feature`, `left`, `right`, `inset-left`,
-   `inset-right`, and `ending`.
+1. Put the JPG, JPEG, or PNG in `assets/img/portfolio/`. Name it
+   `portfolio-NN.jpg`; the current set runs from `portfolio-01.jpg` through
+   `portfolio-42.jpg`.
+2. `portfolio-01.jpg` appears first. Add the next photograph as
+   `portfolio-43.jpg` to append it; deleting a file removes it from Selected
+   works.
 3. Run `bash scripts/build-site.sh serve`, then review `/fotos/` and its
-   lightbox. Commit only the source and `_data/portfolio.yml`.
+   lightbox. Commit only the source image.
 
 ### Add a full roll to the archive
 
@@ -94,21 +92,22 @@ URL field is needed. Omit `film` for digital work; the site displays `Digital`.
 Legacy folders may use an optional `folder` override.
 
 3. Run `bash scripts/build-site.sh serve`. The build creates the title, URL,
-   dimensions, responsive sources, and archive manifest automatically.
+   dimensions, and archive manifest automatically.
 4. Review the archive card, roll page, frame order, responsive layout, and
    lightbox. Commit only the source folder and `_photobook` file.
 
-For new exports, use sRGB JPEGs at 1920 px on the long edge and approximately
-quality 88–90. Do not upscale or repeatedly recompress an existing JPEG.
+For new exports, use an sRGB JPEG at 1920 px on the long edge and the lowest
+Lightroom quality that still looks right to you. The export is the exact file
+visitors receive, so export once from the original and do not recompress it.
 
-Never commit `_data/photos.yml`, `assets/img/derived/`, or `_site/`.
+Never commit `_data/photos.yml` or `_site/`.
 
 ### Cine stills plan
 
 Keep Cine within Fotos but separate from film rolls. When the first finished
 set is ready, store originals under `assets/img/cine/<project-slug>/`, describe
 the ordered stills in `_data/cine.yml`, and render a project-level sequence at
-`/fotos/#cine` with the same lightbox and derivative pipeline. Use one short
+`/fotos/#cine` with the same direct-image lightbox. Use one short
 project note rather than captions under every frame. Add that structure only
 when a real set exists; until then the current restrained placeholder remains.
 
