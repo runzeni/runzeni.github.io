@@ -1,5 +1,5 @@
 {% assign cocktail = include.cocktail %}
-<article class="cocktail-card" data-base="{{ cocktail.base | escape }}" data-name="{{ cocktail.name | escape }}">
+<article class="entry-card cocktail-card" data-base="{{ cocktail.base | escape }}" data-name="{{ cocktail.name | escape }}">
   <header class="cocktail-header">
     <h2 class="cocktail-name">{{ cocktail.name | escape }}</h2>
     {% if cocktail.year or cocktail.creator %}

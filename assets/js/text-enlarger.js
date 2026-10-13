@@ -122,8 +122,9 @@
     if (availableHeight <= 0 || availableWidth <= 0) return;
 
     let low = 24;
-    const emptyMaximum = updateEmptyState() && window.matchMedia('(min-width: 900px)').matches ? 180 : 520;
-    let high = Math.min(emptyMaximum, Math.max(availableWidth, availableHeight));
+    updateEmptyState();
+    const automaticMaximum = 170;
+    let high = Math.min(automaticMaximum, Math.max(availableWidth, availableHeight));
     let best = low;
 
     for (let index = 0; index < 11; index += 1) {
@@ -183,8 +184,15 @@
   async function requestWakeLock() {
     if (!state.presenting || !('wakeLock' in navigator) || document.visibilityState !== 'visible') return;
     try {
-      state.wakeLock = await navigator.wakeLock.request('screen');
-      state.wakeLock.addEventListener('release', () => { state.wakeLock = null; }, { once: true });
+      const lock = await navigator.wakeLock.request('screen');
+      if (!state.presenting) {
+        await lock.release();
+        return;
+      }
+      state.wakeLock = lock;
+      lock.addEventListener('release', () => {
+        if (state.wakeLock === lock) state.wakeLock = null;
+      }, { once: true });
     } catch (error) {
       state.wakeLock = null;
     }
@@ -266,19 +274,6 @@
     selection.addRange(range);
   }
 
-  function fallbackCopy(text) {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.setAttribute('readonly', '');
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    textarea.select();
-    const copied = document.execCommand('copy');
-    textarea.remove();
-    if (!copied) throw new Error('Copy command was rejected');
-  }
-
   async function copyMessage() {
     const text = message.textContent.trim();
     if (!text) {
@@ -287,8 +282,7 @@
     }
 
     try {
-      if (navigator.clipboard?.writeText && window.isSecureContext) await navigator.clipboard.writeText(text);
-      else fallbackCopy(text);
+      await window.site.copyText(text);
       window.siteCopyConfirmation?.('Copied');
       announce('Message copied');
     } catch (error) {

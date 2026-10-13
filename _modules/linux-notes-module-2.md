@@ -6,11 +6,11 @@ module_number: 2
 slug: module-2
 permalink: /notes/linux-notes/module-2/
 date: 2026-02-23
+updated: 2026-10-13
 description: "Essential commands for navigating the filesystem, manipulating files, and getting things done in the terminal."
 ---
 
-The reference module: the commands you will use 90% of the time. The goal is to build muscle memory so the terminal feels like a natural extension of your thought process, rather than a barrier to your research.
-
+A compact reference for navigating files, finding text, and connecting commands. Quote paths that contain spaces.
 ## 2.1 Navigation
 {: #section-2-1}
 
@@ -58,7 +58,7 @@ mv file.txt /other/path/        # move
 
 ### Deleting
 
-> **There is no trash can in the terminal. Deletion is permanent.**
+`rm` bypasses the desktop Trash. Check paths before removing files; restoration may require a backup.
 
 ```bash
 rm file.txt             # delete file
@@ -109,7 +109,7 @@ grep -r "TODO" .
 grep -v "error" log.txt
 
 # Count matching lines
-grep -c ">" sequences.fasta
+grep -c '^>' sequences.fasta
 ```
 
 ## 2.4 Permissions
@@ -129,7 +129,7 @@ Every file has a mode string (e.g., `-rwxr-xr--`) defining who can do what.
 
 ```bash
 # Symbolic mode (easier to read)
-chmod +x script.sh        # add execute for everyone
+chmod u+x script.sh      # add execute for the owner
 chmod u+w file.txt        # add write for owner (u=user)
 chmod go-r private.key    # remove read for group and others
 
@@ -157,17 +157,25 @@ echo "Error found" >> log.txt            # appends to file
 
 ### Pipes (`|`)
 
-Passes the stdout of the left command to the stdin of the right command.
+Passes standard output from the left command to standard input of the right command. Standard error remains separate unless redirected.
 
 ```bash
 # Count number of Python files
-find . -name "*.py" | wc -l
+find . -type f -name "*.py" | wc -l
 
 # Check for errors in the last 50 lines of a log
 tail -n 50 app.log | grep "Error"
 
 # Unique sorted values (classic combo)
-cat data.txt | sort | uniq
+sort -u data.txt
 # This is the Unix philosophy in action — small tools chaining
 # together to solve complex problems without a custom script.
 ```
+
+The file-count example assumes filenames contain no newlines. Shell globs such as `*` normally omit leading-dot names. For directories, `r` permits listing names, `w` permits changing entries, and `x` permits traversal; access can also depend on parent permissions and ACLs. `rm` bypasses the desktop Trash, but does not securely erase file contents.
+
+## References
+
+- [GNU Coreutils manual](https://www.gnu.org/software/coreutils/manual/coreutils.html)
+- [GNU grep manual](https://www.gnu.org/software/grep/manual/grep.html)
+- [Bash filename expansion](https://www.gnu.org/software/bash/manual/html_node/Filename-Expansion.html)

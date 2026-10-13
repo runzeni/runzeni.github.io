@@ -33,10 +33,10 @@ jobs:
           if command -v magick || command -v convert; then exit 0; fi
           sudo apt-get update
           sudo apt-get install -y imagemagick
-      - name: Generate photo manifest
-        run: ruby scripts/build-photo-manifest.rb
       - name: Build site
-        run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
+        run: bash scripts/build-site.sh build --baseurl "${{ steps.pages.outputs.base_path }}"
+      - name: Check generated links and assets
+        run: python3 scripts/check-site.py _site --baseurl "${{ steps.pages.outputs.base_path }}"
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:

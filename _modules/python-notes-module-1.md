@@ -5,7 +5,7 @@ series: python-notes
 module_number: 1
 slug: module-1
 permalink: /notes/python-notes/module-1/
-updated: 2026-07-21
+updated: 2026-10-13
 description: The small set of language patterns I need to turn an idea into a clear, reusable program.
 ---
 
@@ -136,7 +136,14 @@ def read_sample_sheet(path: Path) -> list[dict[str, str]]:
         if missing:
             names = ", ".join(sorted(missing))
             raise ValueError(f"Missing sample-sheet columns: {names}")
-        return list(reader)
+        rows = []
+        for line, row in enumerate(reader, start=2):
+            if None in row or any(value is None for value in row.values()):
+                raise ValueError(f"Malformed sample-sheet row: {line}")
+            if any(not row[key].strip() for key in REQUIRED_COLUMNS):
+                raise ValueError(f"Empty required value on row {line}")
+            rows.append(row)
+        return rows
 ```
 
 Loading a sample sheet is reasonable; loading every read or spectrum into a list usually is not. Stream large biological formats with their dedicated parsers, as shown in Module 3.
@@ -179,6 +186,8 @@ def read_text(path: Path) -> str:
 `assert` documents internal invariants during development, but it is not input validation: optimized Python can remove assertions. Raise `ValueError`, `TypeError`, or a domain-specific exception for user data.
 
 ## A reusable command-line script
+
+Place `read_sample_sheet`, its imports and `REQUIRED_COLUMNS`, and `duplicates` with its `Counter` import above the following code (after the `__future__` import).
 
 The standard library is enough for a durable small command. `argparse` provides help and validation, `logging` records operational events, and `main()` keeps importable logic separate from execution.
 

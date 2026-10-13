@@ -4,30 +4,29 @@ layout: default
 
 {% assign series_items = site.modules | where: 'series', page.series | where_exp: 'item', 'item.module_number' | sort: 'module_number' %}
 
-<header class="article-landing-header series-header">
-  {% if page.kicker %}<p class="article-kicker">{{ page.kicker }}</p>{% endif %}
-  <h1>{{ page.title }}</h1>
-  {% if page.description %}<p class="article-landing-subtitle">{{ page.description }}</p>{% endif %}
-  <p class="series-count">{{ series_items.size }} modules</p>
+<div class="series-landing">
+<header class="gallery-header series-landing__header">
+  <h1 class="gallery-title">{{ page.title }}</h1>
+  {% if page.description %}<p class="gallery-subtitle">{{ page.description }}</p>{% endif %}
 </header>
 
-{% if content != '' %}
+{% assign introduction = content | strip %}
+{% if introduction != '' %}
   <div class="series-introduction article-content">{{ content }}</div>
 {% endif %}
 
-<nav class="series-index" aria-label="{{ page.title }} modules">
-  <ol>
+<nav aria-label="{{ page.title | escape }} contents">
+  <ol class="entry-grid">
     {% for item in series_items %}
-      <li>
-        <a href="{{ item.url | relative_url }}" class="series-index-link">
-          <span class="series-index-number">{{ item.module_number }}</span>
-          <span class="series-index-main">
-            <span class="series-index-title">{{ item.short_title | default: item.title }}</span>
-            {% if item.description %}<span class="series-index-description">{{ item.description }}</span>{% endif %}
-          </span>
-          <span class="series-index-arrow" aria-hidden="true">→</span>
-        </a>
-      </li>
+      {% assign module_title = item.short_title | default: item.title %}
+      {% capture module_number %}Module {{ item.module_number }}{% endcapture %}
+      <li>{% include entry-card.html url=item.url title=module_title description=item.description meta=module_number %}</li>
+    {% endfor %}
+    {% for reference in page.references %}
+      <li>{% include entry-card.html url=reference.url title=reference.title description=reference.description meta='Reference' %}</li>
     {% endfor %}
   </ol>
 </nav>
+
+{% if page.figure_note %}<p class="series-landing__note">{{ page.figure_note | escape }}</p>{% endif %}
+</div>

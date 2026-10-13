@@ -6,353 +6,132 @@ module_number: 3
 slug: module-3
 permalink: /notes/linux-notes/module-3/
 date: 2026-02-23
+updated: 2026-10-13
 description: "Proteomics analysis in Python — environment setup, key libraries, and sample workflows for class."
 ---
 
-Putting the command line to work — proteomics analysis in Python.
-
-This module is my running notebook for the computational side of biology class. The focus is on proteomics (mass spectrometry data, protein identification, quantification), but the setup and patterns apply to most bioinformatics work. I'll keep adding to this as the course goes on.
+A small proteomics workflow: isolate the environment, inspect spectra and sequences, and keep identification confidence separate from abundance analysis.
 
 ## 3.1 Environment Setup
 {: #section-3-1}
 
-Rule number one: **never install packages into your system Python**. Always use a virtual environment or conda.
-
-### Option A: conda (Recommended for Bioinformatics)
-
-Conda handles both Python packages and system-level dependencies (like compiled C libraries that many bioinformatics tools need).
+Install Conda using the installer for your operating system and processor. Then create a project environment; the channel flags below leave global configuration unchanged.
 
 ```bash
-# Install miniconda (if not already installed)
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh
-
-# Create a new environment for proteomics work
-conda create -n proteomics python=3.11
+conda create -n proteomics python=3.13 \
+  numpy pandas matplotlib pyteomics biopython lxml \
+  --override-channels --channel conda-forge --channel bioconda \
+  --strict-channel-priority
 conda activate proteomics
 
-# Install core packages
-conda install -c conda-forge -c bioconda \
-    pandas numpy scipy matplotlib seaborn \
-    pyteomics biopython
-
-# Export environment (for reproducibility)
-conda env export > environment.yml
-
-# Recreate from file
-conda env create -f environment.yml
+# Portable record of requested packages
+conda env export --from-history > environment.yml
+# Exact package URLs for this platform
+conda list --explicit > explicit.txt
 ```
 
-### Option B: venv + pip
-
-```bash
-# Create virtual environment
-python3 -m venv ~/envs/proteomics
-source ~/envs/proteomics/bin/activate
-
-# Install packages
-pip install pandas numpy scipy matplotlib seaborn
-pip install pyteomics biopython lxml
-
-# Save requirements
-pip freeze > requirements.txt
-
-# Install from requirements
-pip install -r requirements.txt
-```
-
-> **My note:** I use conda because half the tools in bioinformatics have weird C dependencies that pip can't handle. Save yourself the headache.
+The portable file can resolve to newer dependencies. Keep the platform-specific snapshot with a reported analysis. A `venv` with `python -m pip` is also suitable when the required packages and system libraries are available.
 
 ## 3.2 Key Libraries
 {: #section-3-2}
 
-Quick reference for the Python libraries I keep reaching for.
+| Task | Library |
+| --- | --- |
+| Arrays and tables | NumPy, pandas |
+| Spectra and identification formats | Pyteomics |
+| Sequence records | Biopython |
+| Static figures | Matplotlib |
 
-### Data & Computation
-
-- **pandas** — DataFrames, the workhorse for tabular data. Read CSVs, filter, group, merge.
-- **numpy** — numerical arrays, linear algebra, fast math.
-- **scipy** — statistical tests, signal processing, optimization.
-
-### Proteomics-Specific
-
-- **pyteomics** — read mzML, mzXML, FASTA, pepXML, mzIdentML files. The Swiss army knife.
-- **biopython** — sequence handling, BLAST, PDB parsing, GenBank access.
-- **pyopenms** — Python bindings for OpenMS (feature detection, alignment, ID). Heavy but powerful.
-
-### Visualization
-
-- **matplotlib** — the base plotting library. Not pretty by default, but fully customizable.
-- **seaborn** — statistical plots built on matplotlib. Heatmaps, violin plots, pair plots.
-- **plotly** — interactive plots. Good for exploring spectra.
-
-### Quick Install Cheat Sheet
-
-```bash
-# Everything at once with conda
-conda install -c conda-forge -c bioconda \
-    pandas numpy scipy matplotlib seaborn \
-    pyteomics biopython pyopenms plotly
-
-# Or with pip
-pip install pandas numpy scipy matplotlib seaborn \
-    pyteomics biopython lxml plotly
-# Note: pyopenms via pip can be tricky, conda is easier
-```
+Add a package when a task needs it. Parsing a spectrum does not require a complete search or quantification pipeline.
 
 ## 3.3 Loading & Inspecting Data
 {: #section-3-3}
 
-Mass spectrometry data comes in various formats. Here are the most common ones and how to open them.
+### Inspect an MS1 spectrum
 
-### Reading mzML Files (Raw Spectra)
-
-`mzML` is the standard open format for mass spec data. Each "spectrum" in the file represents one scan.
+Stream the file rather than loading every spectrum. This example explicitly selects an MS1 scan and handles files containing none.
 
 ```python
 from pyteomics import mzml
-import matplotlib.pyplot as plt
 
-# Read all spectra from an mzML file
-spectra = list(mzml.read('sample.mzML'))
+with mzml.read('sample.mzML', use_index=False) as spectra:
+    spectrum = next((s for s in spectra if s.get('ms level') == 1), None)
 
-print(f"Total spectra: {len(spectra)}")
-print(f"First spectrum keys: {spectra[0].keys()}")
+if spectrum is None:
+    raise ValueError('No MS1 spectrum found')
 
-# Quick look at one spectrum
-spectrum = spectra[0]
-print(f"MS level: {spectrum['ms level']}")
-print(f"Scan time: {spectrum['scanList']['scan'][0]['scan start time']}")
-
-# Plot a single spectrum
-mz = spectrum['m/z array']
-intensity = spectrum['intensity array']
-
-plt.figure(figsize=(12, 4))
-plt.stem(mz, intensity, markerfmt=' ', basefmt=' ')
-plt.xlabel('m/z')
-plt.ylabel('Intensity')
-plt.title('MS1 Spectrum')
-plt.tight_layout()
-plt.savefig('spectrum.png', dpi=150)
-plt.show()
+print(spectrum['id'])
+print(len(spectrum['m/z array']), 'peaks')
 ```
 
-### Reading FASTA Files (Protein Sequences)
+mzML can contain MS1 and tandem spectra, as well as chromatograms. Preserve acquisition metadata and units when exporting summaries.
+
+### Count reviewed UniProt entries
+
+For **UniProtKB FASTA headers**, `sp|` identifies Swiss-Prot entries; `tr|` identifies TrEMBL entries. Searching for the word “reviewed” in a description is not a valid filter. Other FASTA databases may use different conventions.
 
 ```python
-from pyteomics import fasta
+from Bio import SeqIO
 
-# Read a FASTA database
-proteins = list(fasta.read('uniprot_human.fasta'))
-
-print(f"Total proteins: {len(proteins)}")
-print(f"First protein: {proteins[0].description}")
-print(f"Sequence length: {len(proteins[0].sequence)}")
-
-# Filter for reviewed (Swiss-Prot) entries
-reviewed = [p for p in proteins if 'reviewed' in p.description.lower()]
-print(f"Reviewed entries: {len(reviewed)}")
+with open('uniprot_human.fasta', encoding='utf-8') as handle:
+    reviewed = sum(record.id.startswith('sp|') for record in SeqIO.parse(handle, 'fasta'))
+print(reviewed, 'Swiss-Prot entries')
 ```
 
-### Reading Search Results (pepXML / mzIdentML)
+### Inspect identification results
 
 ```python
 from pyteomics import pepxml
 
-# Read peptide identification results
-psms = list(pepxml.read('search_results.pep.xml'))
-
-print(f"Total PSMs: {len(psms)}")
-
-# Convert to DataFrame for easier analysis
-import pandas as pd
-
-records = []
-for psm in psms:
-    hit = psm['search_hit'][0]  # top hit
-    records.append({
-        'spectrum': psm['spectrum'],
-        'peptide': hit['peptide'],
-        'protein': hit['protein'],
-        'score': hit['search_score'].get('expect', None),
-        'charge': psm['assumed_charge'],
-    })
-
-df = pd.DataFrame(records)
-print(df.head())
-print(df.describe())
+with pepxml.read('search_results.pep.xml', use_index=False) as results:
+    first = next(results, None)
+    if first is not None:
+        for hit in first.get('search_hit', []):
+            print(hit.get('peptide'), hit.get('search_score'))
+            print(hit.get('proteins'))
 ```
+
+Scores and their direction depend on the search engine. A hit can map to multiple proteins; retain that mapping rather than treating the first accession as an unambiguous identification.
 
 ## 3.4 Filtering & Analysis
 {: #section-3-4}
 
-Raw search results need filtering. The standard approach is FDR (False Discovery Rate) control using a target-decoy strategy.
+Use the search workflow's documented confidence procedure and retain its settings and output columns. A target–decoy estimate depends on search competition, database construction, score direction, and the level being filtered. A threshold-specific FDR estimate and a monotone q-value are related but distinct.
 
-### Basic FDR Filtering
+A 1% PSM-level threshold does **not** establish 1% peptide- or protein-level FDR. Counting distinct protein accessions after PSM filtering does not perform protein inference. Shared peptides require explicit protein-group rules; greedy set cover is an approximation, not a guarantee of the smallest or biologically correct protein set.
 
-```python
-import pandas as pd
-import numpy as np
-
-# Assume df has columns: peptide, protein, score, is_decoy
-# Lower score = better match (e.g., E-value)
-
-# Sort by score (best first)
-df = df.sort_values('score', ascending=True).reset_index(drop=True)
-
-# Calculate FDR at each score threshold
-decoy_count = df['is_decoy'].cumsum()
-target_count = (~df['is_decoy']).cumsum()
-df['fdr'] = decoy_count / target_count
-
-# Filter at 1% FDR
-fdr_threshold = df[df['fdr'] <= 0.01]['score'].max()
-filtered = df[(df['score'] <= fdr_threshold) & (~df['is_decoy'])]
-
-print(f"PSMs at 1% FDR: {len(filtered)}")
-print(f"Unique peptides: {filtered['peptide'].nunique()}")
-print(f"Unique proteins: {filtered['protein'].nunique()}")
-```
-
-### Protein Grouping (Parsimony)
-
-```python
-# Simple protein grouping — minimal set that explains all peptides
-from collections import defaultdict
-
-# Build peptide-to-protein mapping
-pep_to_prot = defaultdict(set)
-prot_to_pep = defaultdict(set)
-
-for _, row in filtered.iterrows():
-    pep_to_prot[row['peptide']].add(row['protein'])
-    prot_to_pep[row['protein']].add(row['peptide'])
-
-# Greedy set cover (simple parsimony)
-explained = set()
-protein_groups = []
-
-while explained != set(pep_to_prot.keys()):
-    # Pick protein that explains the most unexplained peptides
-    best = max(prot_to_pep.keys(),
-               key=lambda p: len(prot_to_pep[p] - explained))
-    new_peptides = prot_to_pep[best] - explained
-    if not new_peptides:
-        break
-    protein_groups.append({
-        'protein': best,
-        'unique_peptides': len(new_peptides),
-        'total_peptides': len(prot_to_pep[best])
-    })
-    explained |= new_peptides
-
-groups_df = pd.DataFrame(protein_groups)
-print(f"Protein groups: {len(groups_df)}")
-print(groups_df.head(10))
-```
-
-> **My note:** This is a simplified version. Real tools like ProteinProphet or Percolator do much more sophisticated grouping and rescoring. But this helps understand what's happening under the hood.
+For abundance comparisons, define biological replicates, contrasts, missingness, normalization, and multiple-testing correction separately. See [the bioinformatics notes]({{ '/notes/python-notes/module-3/' | relative_url }}) and [the working omics stack]({{ '/notes/python-notes/module-4/' | relative_url }}) for those decisions.
 
 ## 3.5 Visualization
 {: #section-3-5}
 
-Plots I keep making for class assignments and lab reports.
-
-### Spectrum Plot (Annotated)
+A spectrum plot should state its MS level and intensity scale. Continue from the MS1 example above:
 
 ```python
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
 
-def plot_spectrum(mz, intensity, annotations=None, title='MS2 Spectrum'):
-    """Plot a mass spectrum with optional peak annotations."""
-    fig, ax = plt.subplots(figsize=(12, 5))
+mz = np.asarray(spectrum['m/z array'], dtype=float)
+intensity = np.asarray(spectrum['intensity array'], dtype=float)
+if mz.ndim != 1 or mz.shape != intensity.shape or not mz.size:
+    raise ValueError('Expected paired, nonempty peak arrays')
+if not (np.isfinite(mz).all() and np.isfinite(intensity).all()):
+    raise ValueError('Peak arrays must be finite')
+if (intensity < 0).any() or intensity.max() <= 0:
+    raise ValueError('Relative intensity requires nonnegative peaks and a positive maximum')
 
-    # Normalize intensity to percentage
-    intensity_pct = intensity / intensity.max() * 100
-
-    ax.stem(mz, intensity_pct, markerfmt=' ', basefmt=' ',
-            linefmt='C0-', label='peaks')
-
-    if annotations:
-        for mz_val, label in annotations.items():
-            idx = np.argmin(np.abs(mz - mz_val))
-            ax.annotate(label, (mz[idx], intensity_pct[idx]),
-                       textcoords="offset points", xytext=(0, 10),
-                       ha='center', fontsize=8, color='red')
-
-    ax.set_xlabel('m/z', fontsize=12)
-    ax.set_ylabel('Relative Intensity (%)', fontsize=12)
-    ax.set_title(title, fontsize=14)
-    ax.set_ylim(0, 110)
-    plt.tight_layout()
-    return fig
+fig, ax = plt.subplots(figsize=(8, 3), layout='constrained')
+ax.vlines(mz, 0, 100 * intensity / intensity.max(), linewidth=.7)
+ax.set(xlabel='m/z', ylabel='Relative intensity (%)', title='MS1 spectrum')
+fig.savefig('spectrum.svg')
+plt.close(fig)
 ```
 
-### Volcano Plot (Differential Expression)
+For differential-abundance figures, label the effect scale and whether p-values are adjusted. For heatmaps, state the feature-selection rule and transformation; omit constant rows before row standardization. Plotting should consume an analysis result, not silently choose its statistical method.
 
-```python
-import seaborn as sns
+## References
 
-def volcano_plot(df, fc_col='log2_fc', pval_col='neg_log10_pval',
-                 fc_thresh=1.0, pval_thresh=1.3):
-    """
-    Volcano plot for differential protein expression.
-    fc_thresh: log2 fold change cutoff (default 1.0 = 2-fold)
-    pval_thresh: -log10(p-value) cutoff (default 1.3 ≈ p=0.05)
-    """
-    fig, ax = plt.subplots(figsize=(8, 6))
-
-    # Classify points
-    df = df.copy()
-    df['significance'] = 'Not significant'
-    df.loc[(df[fc_col].abs() >= fc_thresh) &
-           (df[pval_col] >= pval_thresh), 'significance'] = 'Significant'
-
-    colors = {'Not significant': '#bbbbbb', 'Significant': '#e74c3c'}
-
-    sns.scatterplot(data=df, x=fc_col, y=pval_col,
-                    hue='significance', palette=colors,
-                    alpha=0.6, s=20, ax=ax, legend=True)
-
-    ax.axhline(y=pval_thresh, color='grey', linestyle='--', linewidth=0.8)
-    ax.axvline(x=fc_thresh, color='grey', linestyle='--', linewidth=0.8)
-    ax.axvline(x=-fc_thresh, color='grey', linestyle='--', linewidth=0.8)
-
-    ax.set_xlabel('log₂(Fold Change)')
-    ax.set_ylabel('-log₁₀(p-value)')
-    ax.set_title('Differential Protein Expression')
-    plt.tight_layout()
-    return fig
-```
-
-### Heatmap (Protein Abundance)
-
-```python
-def abundance_heatmap(df, sample_cols, protein_col='protein',
-                      n_top=30, method='zscore'):
-    """
-    Heatmap of top N proteins across samples.
-    method: 'zscore' for row-normalized, 'raw' for absolute values.
-    """
-    top = df.nlargest(n_top, sample_cols[0])
-
-    matrix = top.set_index(protein_col)[sample_cols]
-
-    if method == 'zscore':
-        matrix = matrix.apply(lambda row: (row - row.mean()) / row.std(),
-                              axis=1)
-
-    fig, ax = plt.subplots(figsize=(10, 8))
-    sns.heatmap(matrix, cmap='RdBu_r', center=0,
-                xticklabels=True, yticklabels=True,
-                linewidths=0.5, ax=ax)
-    ax.set_title(f'Top {n_top} Proteins — Z-score Normalized')
-    plt.tight_layout()
-    return fig
-```
-
-> **My note:** These are templates — I copy-paste and adapt for each assignment. The volcano plot in particular comes up in almost every proteomics paper.
-
-This module will keep growing as I work through more class material. The goal is to have a personal reference I can quickly search through instead of digging through lecture slides.
+- [Bioconda environments and channels](https://bioconda.github.io/)
+- [Pyteomics data access](https://pyteomics.readthedocs.io/en/latest/data.html)
+- [UniProt FASTA header conventions](https://www.uniprot.org/help/fasta-headers)
+- [Pyteomics target–decoy statistics](https://pyteomics.readthedocs.io/en/latest/api/pepxml.html#target-decoy-approach)

@@ -5,7 +5,7 @@ series: python-notes
 module_number: 5
 slug: module-5
 permalink: /notes/python-notes/module-5/
-updated: 2026-07-21
+updated: 2026-10-13
 description: A practical command ladder for running, inspecting, testing, debugging, profiling, and automating Python without losing track of the environment.
 ---
 
@@ -159,7 +159,13 @@ Use `python -m MODULE -h` before assuming flags. Python's list of modules with c
 For a one-off data probe, keep the output narrow and deterministic:
 
 ```bash
-python -c "import csv; rows=list(csv.DictReader(open('samples.csv', newline=''))); print(len(rows)); print(sorted(rows[0]))"
+python - <<'PYTHON'
+import csv
+with open('samples.csv', encoding='utf-8', newline='') as handle:
+    reader = csv.DictReader(handle)
+    print(reader.fieldnames or [])
+    print(sum(1 for _ in reader))
+PYTHON
 ```
 
 Once a probe becomes important or multiline, move it into a version-controlled script with named inputs, validation, and tests.
@@ -237,6 +243,7 @@ with Path("logs/nextflow.log").open("w", encoding="utf-8") as log:
     run(
         [
             "nextflow", "run", "nf-core/rnaseq",
+            "-r", "3.25.0",
             "-profile", "docker",
             "--input", "samplesheet.csv",
             "--outdir", "results",

@@ -2,6 +2,7 @@
   'use strict';
 
   const root = document.documentElement;
+  const scrollBehavior = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
   const query = (selector, scope = document) => scope.querySelector(selector);
   const queryAll = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
 
@@ -54,8 +55,23 @@
   };
   window.siteCopyConfirmation = showCopyConfirmation;
 
+  // Let the material fade to opacity before releasing its backdrop layer.
+  // Removing the filter at the start of the transition causes a visible jump.
+  let surfaceTimer;
+  const settleSurface = () => {
+    clearTimeout(surfaceTimer);
+    root.removeAttribute('data-surface-settled');
+    if (root.getAttribute('data-reduce-transparency') !== 'on') return;
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const timing = getComputedStyle(root).getPropertyValue('--theme-duration').trim();
+    const duration = parseFloat(timing) * (timing.endsWith('ms') ? 1 : 1000) || 450;
+    surfaceTimer = setTimeout(() => root.setAttribute('data-surface-settled', ''), reduced ? 0 : duration + 50);
+  };
+  if (root.getAttribute('data-reduce-transparency') === 'on') root.setAttribute('data-surface-settled', '');
+
   const applyPreference = (attribute, key, value, persist = true) => {
     root.setAttribute(attribute, value);
+    if (attribute === 'data-reduce-transparency') settleSurface();
     if (persist) storage.set(key, value);
     window.dispatchEvent(new CustomEvent('sitepreferencechange', {
       detail: { attribute, value }
@@ -76,8 +92,8 @@
         key: 'theme',
         next: (value) => value === 'dark' ? 'light' : 'dark',
         labels: {
-          light: { label: 'Light', pressed: false, aria: 'Switch to dark mode', title: 'Switch to dark mode (D)' },
-          dark: { label: 'Dark', pressed: true, aria: 'Switch to light mode', title: 'Switch to light mode (D)' }
+          light: { label: 'Light', pressed: false, aria: 'Switch to dark mode', title: 'Switch to dark mode' },
+          dark: { label: 'Dark', pressed: true, aria: 'Switch to light mode', title: 'Switch to light mode' }
         }
       },
       {
@@ -86,8 +102,8 @@
         key: 'monochrome',
         next: (value) => value === 'true' ? 'false' : 'true',
         labels: {
-          false: { label: 'Color', pressed: false, aria: 'Switch to monochrome mode', title: 'Switch to B&W mode (M)' },
-          true: { label: 'B&W', pressed: true, aria: 'Switch to color mode', title: 'Switch to color mode (M)' }
+          false: { label: 'Color', pressed: false, aria: 'Switch to monochrome mode', title: 'Switch to B&W mode' },
+          true: { label: 'B&W', pressed: true, aria: 'Switch to color mode', title: 'Switch to color mode' }
         }
       },
       {
@@ -96,8 +112,8 @@
         key: 'reduceTransparency',
         next: (value) => value === 'on' ? 'off' : 'on',
         labels: {
-          off: { label: 'Blur', pressed: false, aria: 'Use solid surfaces', title: 'Use solid surfaces (G)' },
-          on: { label: 'Solid', pressed: true, aria: 'Use blurred surfaces', title: 'Use blurred surfaces (G)' }
+          off: { label: 'Blur', pressed: false, aria: 'Use solid surfaces', title: 'Use solid surfaces' },
+          on: { label: 'Solid', pressed: true, aria: 'Use blurred surfaces', title: 'Use blurred surfaces' }
         }
       }
     ];
@@ -194,6 +210,9 @@
       if (menu.contains(event.target) || button.contains(event.target) || persistentControl) return;
       setOpen(false);
     });
+    document.addEventListener('focusin', (event) => {
+      if (menu.classList.contains('menu-open') && !menu.contains(event.target) && !header.contains(event.target)) setOpen(false);
+    });
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && menu.classList.contains('menu-open')) {
         setOpen(false);
@@ -229,13 +248,12 @@
     window.addEventListener('resize', schedule, { passive: true });
     schedule();
 
-    if (scrollTop) scrollTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-    if (scrollBottom) scrollBottom.addEventListener('click', () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' }));
+    if (scrollTop) scrollTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: scrollBehavior() }));
+    if (scrollBottom) scrollBottom.addEventListener('click', () => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: scrollBehavior() }));
   };
 
   const initCodeHeaders = () => {
     const copyIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
-    const canCopy = Boolean(navigator.clipboard && navigator.clipboard.writeText);
 
     const language = (wrapper) => {
       const match = Array.from(wrapper.classList).find((name) => name.startsWith('language-'));
@@ -250,7 +268,6 @@
       name.textContent = label;
       element.appendChild(name);
 
-      if (!canCopy) return element;
       const copy = document.createElement('button');
       copy.type = 'button';
       copy.className = 'code-copy-btn';
@@ -258,10 +275,10 @@
       copy.innerHTML = copyIcon;
       copy.addEventListener('click', async () => {
         try {
-          await navigator.clipboard.writeText(code.textContent);
+          await copyText(code.textContent);
           showCopyConfirmation('Copied');
         } catch (error) {
-          copy.setAttribute('aria-label', 'Unable to copy code');
+          showCopyConfirmation('Unable to copy. Select the code to copy manually.');
         }
       });
       element.appendChild(copy);
@@ -396,17 +413,32 @@
       }
     }
 
+    const active = document.activeElement;
+    const selection = window.getSelection();
+    const ranges = selection ? Array.from({ length: selection.rangeCount }, (_, i) => selection.getRangeAt(i).cloneRange()) : [];
+    const inputSelection = active && typeof active.selectionStart === 'number'
+      ? [active.selectionStart, active.selectionEnd, active.selectionDirection] : null;
     const field = document.createElement('textarea');
     field.value = value;
     field.setAttribute('readonly', '');
-    field.style.position = 'fixed';
-    field.style.opacity = '0';
-    document.body.appendChild(field);
-    field.select();
-    const copied = document.execCommand('copy');
-    field.remove();
-    if (!copied) throw new Error('Copy command was rejected');
+    Object.assign(field.style, { position: 'fixed', opacity: '0', fontSize: '16px' });
+    (document.fullscreenElement || document.body).appendChild(field);
+    try {
+      field.focus({ preventScroll: true });
+      field.select();
+      if (!document.execCommand('copy')) throw new Error('Copy command was rejected');
+    } finally {
+      field.remove();
+      active?.focus({ preventScroll: true });
+      if (inputSelection) active.setSelectionRange(...inputSelection);
+      if (selection) {
+        selection.removeAllRanges();
+        ranges.forEach((range) => selection.addRange(range));
+      }
+    }
   };
+
+  window.site = Object.freeze({ copyText, scrollBehavior });
 
   const initEmailCopy = () => {
     queryAll('[data-copy-email]').forEach((button) => {

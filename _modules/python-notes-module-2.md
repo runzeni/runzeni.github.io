@@ -5,15 +5,15 @@ series: python-notes
 module_number: 2
 slug: module-2
 permalink: /notes/python-notes/module-2/
-updated: 2026-07-21
+updated: 2026-10-13
 description: Environments, project structure, arrays, tables, statistics, figures, and tests without hidden state.
 ---
 
-Scientific Python is not only a collection of libraries. It is a chain of contracts: a recreatable environment, an explicit data schema, a defensible analysis, and outputs that can be traced back to code and inputs.
+A reliable analysis has declared inputs, checked tables, and a recorded environment. These patterns keep a small scientific Python project reproducible.
 
 ## Isolate one environment per project
 
-For a pure-Python project, start with the standard library’s `venv`. Treat the environment as disposable; commit its specification, not the `.venv/` directory.
+After creating the `pyproject.toml` and `src/study_analysis/` layout below, start with the standard library’s `venv`. Treat the environment as disposable; commit its specification, not the `.venv/` directory.
 
 ```bash
 python3 -m venv .venv
@@ -248,8 +248,13 @@ For many tested features, adjust the family of p-values together:
 
 ```python
 p_values = results["p_value"].to_numpy(dtype=float)
-results["q_value_bh"] = stats.false_discovery_control(p_values, method="bh")
+valid = np.isfinite(p_values)
+results["p_adjusted_bh"] = np.nan
+if valid.any():
+    results.loc[valid, "p_adjusted_bh"] = stats.false_discovery_control(p_values[valid], method="bh")
 ```
+
+Report why any features lack a finite p-value; filtering must not be chosen to improve significance.
 
 For small samples or a statistic with a poor asymptotic approximation, a permutation test may be more appropriate if its exchangeability assumption matches the design. Choose `permutation_type` to reflect independent samples, paired sample labels, or pairings—not whichever option gives a smaller p-value.
 

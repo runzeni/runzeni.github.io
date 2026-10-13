@@ -5,16 +5,14 @@ slug: index
 permalink: /notes/colorimetry/
 layout: series
 kicker: Color science
-description: Working notes on color science for moving images, from biological vision to ACES.
+description: Seven chapters on color science for moving images, from vision to ACES.
+updated: 2026-10-13
+references:
+  - title: Series outline
+    url: /notes/colorimetry/comprehensive-outline/
+    description: The full reading map.
+  - title: Mathematical appendix
+    url: /notes/colorimetry/appendix-mathematics/
+    description: Equations and reference values.
+figure_note: Browser colors illustrate concepts; they are not calibrated reference patches.
 ---
-
-## Work in progress
-
-This is a developing reading-and-making project, not a calibrated technical reference. Diagrams marked as studies will be replaced only with sourced data or a clearly labelled schematic.
-
-The first public interactives are deliberately small and reusable: a formula-based transfer-curve explorer and a named-primary coordinate explorer. Image comparisons and camera-specific claims still need real source material before they belong here.
-
-## References
-
-- [Comprehensive outline]({{ '/notes/colorimetry/comprehensive-outline/' | relative_url }})
-- [Mathematical appendix]({{ '/notes/colorimetry/appendix-mathematics/' | relative_url }})

@@ -12,39 +12,25 @@ permalink: /notes/
 
 {% assign published_notes = site.notes | sort: 'date' | reverse %}
 {% if published_notes.size > 0 %}
-  <section class="notes-library" aria-labelledby="articles-heading">
-    <h2 class="notes-library-title" id="articles-heading">Articles</h2>
-    <ol class="notes-list">
+<section class="notes-library" aria-labelledby="articles-heading">
+  <h2 class="notes-library-title" id="articles-heading">Articles</h2>
+  <div class="entry-grid">
     {% for item in published_notes %}
-      <li>
-        <a href="{{ item.url | relative_url }}" class="notes-list-link">
-          <span class="notes-list-main">
-            <span class="notes-list-title">{{ item.title }}</span>
-            {% if item.description %}<span class="notes-list-description">{{ item.description }}</span>{% endif %}
-          </span>
-          {% if item.date %}<time class="notes-list-meta" datetime="{{ item.date | date_to_xmlschema }}">{{ item.date | date: '%b %Y' }}</time>{% endif %}
-        </a>
-      </li>
+      {% assign note_date = item.date | date: '%b %Y' %}
+      {% include entry-card.html url=item.url title=item.title description=item.description meta=note_date %}
     {% endfor %}
-    </ol>
-  </section>
+  </div>
+</section>
 {% endif %}
 
-<section class="notes-library" aria-labelledby="series-heading">
-  <h2 class="notes-library-title" id="series-heading">Series</h2>
-  <ol class="notes-list">
+<section class="notes-library" aria-label="Note series">
+  {% if published_notes.size > 0 %}<h2 class="notes-library-title">Series</h2>{% endif %}
+  <div class="entry-grid">
     {% assign index_pages = site.modules | where: 'slug', 'index' | sort: 'title' %}
     {% for item in index_pages %}
-      {% assign series_modules = site.modules | where: 'series', item.series | where_exp: 'module', 'module.module_number' | sort: 'module_number' %}
-      <li>
-        <a href="{{ item.url | relative_url }}" class="notes-list-link">
-          <span class="notes-list-main">
-            <span class="notes-list-title">{{ item.title }}</span>
-            {% if item.description %}<span class="notes-list-description">{{ item.description }}</span>{% endif %}
-          </span>
-          {% if series_modules.size > 0 %}<span class="notes-list-meta">{{ series_modules.size }} modules</span>{% endif %}
-        </a>
-      </li>
+      {% assign series_modules = site.modules | where: 'series', item.series | where_exp: 'module', 'module.module_number' %}
+      {% capture module_count %}{{ series_modules.size }} modules{% endcapture %}
+      {% include entry-card.html url=item.url title=item.title description=item.description meta=module_count %}
     {% endfor %}
-  </ol>
+  </div>
 </section>

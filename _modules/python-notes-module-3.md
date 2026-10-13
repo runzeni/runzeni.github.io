@@ -5,7 +5,7 @@ series: python-notes
 module_number: 3
 slug: module-3
 permalink: /notes/python-notes/module-3/
-updated: 2026-07-21
+updated: 2026-10-13
 description: Practical patterns for biological formats, omics tables, provenance, and workflows that remain auditable.
 ---
 
@@ -47,7 +47,7 @@ Bioinformatics packages often include compiled libraries and command-line tools.
 mamba create -n bioinfo python=3.13 \
   biopython pyteomics pysam \
   numpy pandas scipy matplotlib \
-  --channel conda-forge \
+  --override-channels --channel conda-forge \
   --channel bioconda \
   --strict-channel-priority
 
@@ -113,6 +113,8 @@ def summarize_fasta(path: Path) -> dict[str, float | int]:
     }
 ```
 
+The GC example counts G and C against all sequence symbols, including ambiguous bases; it assumes nucleotide input. For GC among only A/C/G/T, change the denominator explicitly.
+
 Do not assume a FASTA description is a stable identifier. Decide whether the key is an accession, accession plus version, gene ID, transcript ID, protein isoform, or a locally assigned ID—and retain the original header for traceability.
 
 ### BAM or CRAM with pysam
@@ -123,7 +125,7 @@ import pysam
 
 
 def primary_reads_in_region(path: Path, contig: str, start: int, end: int) -> int:
-    """Count primary mapped reads in a 0-based, half-open interval [start, end)."""
+    """Count primary mapped alignments overlapping [start, end), 0-based."""
     with pysam.AlignmentFile(str(path), "rb") as alignments:
         if not alignments.has_index():
             raise ValueError(f"An index is required for regional access: {path}")
@@ -135,6 +137,8 @@ def primary_reads_in_region(path: Path, contig: str, start: int, end: int) -> in
             and not read.is_supplementary
         )
 ```
+
+This counts alignments overlapping the interval, not read pairs or fragments; duplicates and low-mapping-quality records are retained.
 
 CRAM decoding may require the exact reference sequence used to create the file. Treat that reference and its checksum as an input, not as an implicit machine setting.
 
@@ -269,6 +273,8 @@ sample_qc = (
     )
 )
 ```
+
+The missing fraction above describes rows present in the input. If absent protein–sample pairs also mean missing measurements, first complete the declared protein × sample grid.
 
 Do not replace missing values with zero by default. In omics data, missingness may reflect detection limits, stochastic sampling, filtering, true absence, or a failed run; each mechanism implies a different analysis.
 

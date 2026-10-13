@@ -5,7 +5,7 @@ series: python-notes
 module_number: 4
 slug: module-4
 permalink: /notes/python-notes/module-4/
-updated: 2026-07-21
+updated: 2026-10-13
 description: The current proteomics and bulk RNA-seq toolchains, plus a sample-aware blueprint for future scRNA-seq work.
 ---
 
@@ -70,7 +70,7 @@ The recorded RN13 runs pinned `nf-core/rnaseq v3.25.0`. The pig run used Nextflo
 
 The analysis contract is:
 
-- keep integer abundance estimates and the complete sample design for DESeq2 inference;
+- pass the tximport result through `DESeqDataSetFromTximport()` with the complete sample design; retain estimated counts and length information rather than manually rounding or substituting TPM;
 - use variance-stabilized values for PCA, distances, and heatmaps, not as the input to the count model;
 - inspect MultiQC and per-sample metrics before exclusion, and record every retained concern or removed sample;
 - use `fgsea`/`msigdbr` for ranked pathway analysis and `clusterProfiler` for GO and KEGG over-representation with a declared universe;
@@ -97,7 +97,7 @@ FASTQ + assay metadata + pinned reference
 ### Upstream and QC
 
 - Use the vendor-supported Cell Ranger route for a conventional 10x assay when its outputs and license fit the project; use a pinned `nf-core/scrnaseq` route when a reproducible Nextflow wrapper and an alternative aligner are preferable.
-- Archive both raw and filtered count matrices. Ambient-RNA methods need the empty-droplet background that a filtered matrix discards.
+- Archive both raw and filtered count matrices. Methods such as SoupX use the empty-droplet background that a filtered matrix discards.
 - Inspect genes, UMIs, mitochondrial fraction, empty-droplet calls, and expected recovery per sample. Prefer sample-aware distributions and robust outlier rules over one universal threshold.
 - Assess ambient RNA with evidence from background expression and implausible marker leakage. SoupX or a comparable method is a conditional correction, not a mandatory checkbox.
 - Estimate doublets per capture with an assay-appropriate expected rate, then inspect flagged cells and cluster context. A detector such as scDblFinder or Scrublet supplies evidence; it does not replace experimental knowledge.

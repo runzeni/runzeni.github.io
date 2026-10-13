@@ -1,173 +1,47 @@
-/*
- * Colorimetry studies
- * Small SVG-based teaching aids. They use named standards and formulas rather
- * than simulated footage, so their limits remain visible in the interface.
- */
-
-.colorimetry-widget {
-  margin: 2.5rem 0;
-  padding: clamp(1rem, 3vw, 1.5rem);
-  border-top: 1px solid var(--color-text);
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-background-secondary);
+/* Figures share an open editorial layout, with no nested cards. */
+.color-study {
+  margin: 2.5rem 0 3rem;
+  padding: 1.25rem 0 0;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-text);
 }
-
-.colorimetry-widget__eyebrow {
-  margin: 0 0 0.4rem;
-  color: var(--color-text-light);
-  font: 600 var(--text-xs)/var(--leading-tight) var(--font-sans);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.colorimetry-widget__title {
-  margin: 0;
-  font: 600 var(--text-lg)/var(--leading-tight) var(--font-serif);
-}
-
-.colorimetry-widget__note {
-  margin: 0.6rem 0 0;
-  color: var(--color-text-light);
-  font: 400 var(--text-sm)/var(--leading-normal) var(--font-sans);
-}
-
-.colorimetry-widget__canvas {
-  margin: 1.25rem 0;
-  padding: clamp(0.5rem, 1.5vw, 0.85rem);
-  border: 1px solid var(--color-border);
-  background: var(--color-bg);
-}
-
-.colorimetry-widget svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  overflow: visible;
-}
-
-.colorimetry-widget__controls {
-  display: grid;
-  gap: 0.85rem;
-  align-items: end;
-}
-
-.colorimetry-widget__control {
+.color-study__visual { max-width: 42rem; margin-inline: auto; }
+.color-study svg { display: block; width: 100%; height: auto; overflow: visible; }
+.color-study svg text { fill: var(--color-text-light); font: 14px var(--font-sans); }
+.color-study .chart-grid { fill: none; stroke: var(--color-border); stroke-width: .7; }
+.color-study__controls:not([hidden]) {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.5rem 0.75rem;
   align-items: center;
-  color: var(--color-text);
-  font: 500 var(--text-sm)/var(--leading-tight) var(--font-sans);
+  gap: .25rem 1rem;
+  margin: 1rem 0;
+  font: 500 var(--text-sm)/1.4 var(--font-sans);
 }
+.color-study__controls label { grid-column: 1 / -1; }
+.color-study input[type=range] { width: 100%; min-height: 44px; margin: 0; accent-color: var(--color-text); }
+.color-study__controls > span, .color-study__controls .choice-buttons { grid-column: 1 / -1; }
+.color-study output { min-width: 3ch; font-variant-numeric: tabular-nums; }
+.color-study .color-study__readout,
+.color-study figcaption { font: 400 var(--text-xs)/1.55 var(--font-sans); color: var(--color-text-light); text-align: left; }
+.color-study figcaption { margin: .8rem 0 0; }
+.color-study figcaption strong { font-weight: 500; color: var(--color-text); }
+.color-study .color-study__readout { margin: .75rem 0; font-variant-numeric: tabular-nums; }
+.color-study .color-legend { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; padding: 0; margin: .75rem 0; list-style: none; font: var(--text-xs)/1.5 var(--font-sans); }
+.color-study .color-legend li { display: flex; align-items: center; gap: .4rem; margin: 0; }
+.color-legend span { width: 1rem; height: 2px; background: var(--curve-color); }
+.color-study .color-flow { display: grid; gap: 0; list-style: none; padding: 0; margin: 0; }
+.color-flow li { display: grid; grid-template-columns: minmax(8rem, 1fr) 1.5fr; gap: .6rem 1rem; padding: 1rem 0; margin: 0; border-bottom: 1px solid var(--color-border); }
+.color-flow li:last-child { border-bottom: 0; }
+.color-flow strong { font: 500 var(--text-base)/1.4 var(--font-sans); }
+.color-flow span { font: var(--text-sm)/1.5 var(--font-sans); color: var(--color-text-light); }
+.contrast-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; }
+.contrast-pair > div { display: grid; place-items: center; aspect-ratio: 1.2; }
+.contrast-pair span { display: block; width: 32%; aspect-ratio: 1; background: #808080; }
+.bayer-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 3px; max-width: 25rem; margin: auto; }
+.bayer-grid span { display: grid; place-items: center; aspect-ratio: 1; font: 500 1rem var(--font-mono); color: #111; }
+.bayer-R { background: #ecada1; } .bayer-G { background: #b8d3a5; } .bayer-B { background: #a7c9e0; }
+@media (max-width: 420px) { .color-flow li { grid-template-columns: 1fr; gap: .3rem; } }
+@media print { .color-study__controls { display: none !important; } }
 
-.colorimetry-widget__control input[type="range"] {
-  grid-column: 1 / -1;
-  width: 100%;
-  margin: 0;
-  accent-color: var(--color-text);
-}
-
-.colorimetry-widget__output {
-  color: var(--color-text-light);
-  font-variant-numeric: tabular-nums;
-}
-
-.colorimetry-widget__legend,
-.colorimetry-widget__checkboxes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1rem;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-.colorimetry-widget__legend {
-  list-style: none;
-  color: var(--color-text-light);
-  font: 400 var(--text-xs)/var(--leading-tight) var(--font-sans);
-}
-
-.colorimetry-widget__legend-item,
-.colorimetry-widget__checkboxes label {
-  display: inline-flex;
-  gap: 0.4rem;
-  align-items: center;
-}
-
-.colorimetry-widget__checkboxes {
-  color: var(--color-text);
-  font: 500 var(--text-sm)/var(--leading-tight) var(--font-sans);
-}
-
-.colorimetry-widget__checkboxes input {
-  inline-size: 1rem;
-  block-size: 1rem;
-  margin: 0;
-  accent-color: var(--color-text);
-}
-
-.colorimetry-widget__swatch {
-  inline-size: 0.85rem;
-  block-size: 0.2rem;
-  background: var(--swatch-color, var(--color-text));
-}
-
-.colorimetry-widget__readout {
-  margin: 0;
-  color: var(--color-text-light);
-  font: 400 var(--text-xs)/var(--leading-normal) var(--font-sans);
-}
-
-.colorimetry-widget__fallback {
-  margin: 0;
-  color: var(--color-text-light);
-  font: 400 var(--text-xs)/var(--leading-normal) var(--font-sans);
-}
-
-.colorimetry-widget .chart-grid {
-  stroke: var(--color-border);
-  stroke-width: 1;
-}
-
-.colorimetry-widget .chart-axis {
-  stroke: var(--color-text-light);
-  stroke-width: 1.25;
-}
-
-.colorimetry-widget .chart-label {
-  fill: var(--color-text-light);
-  font: 11px var(--font-sans);
-}
-
-.colorimetry-widget .chart-locus {
-  stroke: var(--color-text);
-  stroke-width: 1.8;
-}
-
-.colorimetry-widget .chart-locus--purples {
-  stroke: var(--color-text-light);
-  stroke-dasharray: 3 3;
-  stroke-width: 1.25;
-}
-
-.colorimetry-widget .chart-locus-focus {
-  fill: var(--color-bg);
-  stroke: var(--color-text);
-  stroke-width: 1.5;
-  vector-effect: non-scaling-stroke;
-}
-
-.colorimetry-widget .chart-locus-focus__center {
-  fill: var(--color-text);
-}
-
-@media (min-width: 640px) {
-  .colorimetry-widget__controls {
-    grid-template-columns: minmax(12rem, 0.8fr) 1.2fr;
-  }
-
-  .colorimetry-widget__checkboxes {
-    align-self: center;
-  }
-}
+.color-study:not([data-ready]) svg { max-width: 360px; margin-inline: auto; }
+.color-study:not([data-ready]) svg text { font-size: 16px; }

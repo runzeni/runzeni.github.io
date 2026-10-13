@@ -155,6 +155,7 @@ mark {
   *,
   *::before,
   *::after {
+    scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -182,7 +183,7 @@ mark {
 
   /* Hide UI elements */
   .site-header, .site-menu-dropdown, .scroll-progress, .sticky-nav, .notes-outline,
-  .module-navigation, button, .portfolio-sequence, .contact-sheet-grid { display: none !important; }
+  .module-navigation, button, .contact-sheet-grid { display: none !important; }
 
   /* Layout */
   body { padding: 0 !important; margin: 0 !important; font-size: 11pt !important; line-height: 1.5 !important; }
@@ -214,4 +215,23 @@ mark {
   img { max-width: 100% !important; page-break-inside: avoid !important; }
 
   @page { margin: 2cm 1.5cm; size: A4; }
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 10001;
+  padding: 0.75rem 1rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+  transform: translateY(-150%);
+  font-family: var(--font-sans);
+}
+.skip-link:focus { transform: none; }
+button:active { opacity: 0.72; }
+button:disabled { opacity: 0.5; cursor: default; }
+[data-reduce-transparency="on"][data-surface-settled] * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }

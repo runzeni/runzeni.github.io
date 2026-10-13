@@ -66,11 +66,11 @@
   line-height: var(--leading-tight);
   letter-spacing: clamp(0.02em, 0.3vw, 0.06em);
   text-transform: uppercase;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+
   transition: transform var(--duration-med) var(--transition-smooth),
               box-shadow var(--duration-med) var(--transition-smooth);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
-  flex: 1 1 0;
+  flex: 1 1 8rem;
   min-width: 0;
   max-width: clamp(200px, 25vw, 300px);
   display: flex;
@@ -87,7 +87,7 @@
 
 [data-theme="dark"] .quick-nav-btn {
   border-color: rgba(255, 255, 255, 0.18);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+
 }
 
 .quick-nav-btn:hover {
@@ -96,7 +96,7 @@
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(200%);
   color: var(--color-bg);
   border-color: rgba(26, 26, 26, 0.9);
-  transform: scale(1.03);
+  transform: translateY(-1px);
   box-shadow: 0 clamp(4px, 0.8vw, 8px) clamp(12px, 2vw, 24px) rgba(0, 0, 0, 0.08);
 }
 
@@ -112,7 +112,7 @@
 }
 
 .quick-nav-btn:active {
-  transform: scale(1.01);
+  transform: none;
   box-shadow: 0 clamp(2px, 0.4vw, 4px) clamp(6px, 1vw, 12px) rgba(0, 0, 0, 0.04);
   transition: transform 0.1s var(--transition-smooth),
               box-shadow 0.1s var(--transition-smooth);
@@ -129,7 +129,7 @@
   .quick-nav-buttons {
     /* CSS Grid for cleaner 2x2 layout */
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
     gap: clamp(0.4rem, 2vw, 0.7rem);
     margin: 0; /* Parent flex centering + gap handles vertical spacing */
     padding: 0 clamp(0.5rem, 2vw, 1rem);
@@ -172,7 +172,7 @@
 .shuffle-btn,
 .filter-btn,
 .clear-search-btn,
-.cocktail-card {
+.entry-card {
   border: 1px solid var(--color-border);
 }
 
@@ -258,27 +258,64 @@
   gap: 0.75rem;
 }
 
-.filter-btn {
-  padding: 0.5rem 1rem;
-  font-size: var(--text-sm);
-  line-height: var(--leading-tight);
-  font-family: var(--font-sans);
-  font-weight: 600;
+/* Shared choices: direct actions, with the same selected state everywhere. */
+.choice-buttons { display: flex; flex-wrap: wrap; gap: .5rem; }
+.choice-button {
+  min-height: 44px;
+  padding: .5rem 1rem;
+  font: 500 var(--text-sm)/var(--leading-tight) var(--font-sans);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background: var(--color-bg);
   color: var(--color-text);
   cursor: pointer;
 }
-
-.filter-btn:hover {
-  background: var(--color-border);
+.choice-button:hover { border-color: var(--color-text-light); }
+.choice-button[aria-pressed="true"] {
+  background: var(--color-sci-yellow-marker);
+  color: #1a1a1a;
+  border-color: var(--color-sci-yellow-marker);
 }
-
-.filter-btn.active {
-  background: var(--color-accent);
-  color: var(--color-bg);
-  border-color: var(--color-accent);
+.cocktail-card mark { background: var(--color-sci-yellow-marker); color: #1a1a1a; }
+.cocktail-card[data-selectable] {
+  cursor: pointer;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
+.cocktail-card.is-selected {
+  transform: translateY(-3px);
+  border-color: var(--color-sci-yellow-marker);
+  box-shadow: 0 7px 20px rgb(0 0 0 / .12);
+}
+.recipe-select {
+  display: block; width: 100%; min-height: 44px; padding: 0;
+  border: 0; background: transparent; color: inherit;
+  font: inherit; text-align: left; cursor: pointer;
+}
+@media (prefers-reduced-motion: reduce) {
+  .cocktail-card[data-selectable] { transition: none; }
+}
+.entry-card--link {
+  display: flex; flex-direction: column;
+  color: var(--color-text); text-decoration: none;
+}
+.entry-card--link:hover { border-color: var(--color-text-light); }
+.entry-card--link:hover .entry-card__title { text-decoration: underline; text-underline-offset: .18em; text-decoration-thickness: 1px; }
+.entry-card__preview {
+  display: grid; place-items: center; min-height: 150px;
+  margin-bottom: 1.5rem; border-bottom: 1px solid var(--color-border);
+  font: 500 4rem/1 var(--font-serif);
+}
+.entry-card__meta {
+  margin-bottom: 1rem;
+  color: var(--color-text-light);
+  font: 400 var(--text-xs)/1.5 var(--font-mono);
+}
+.entry-card .entry-card__description {
+  margin: .6rem 0 0;
+  color: var(--color-text-light);
+  font: 400 var(--text-sm)/1.55 var(--font-sans);
+}
+.entry-card__arrow { white-space: nowrap; font-family: var(--font-sans); font-weight: 400; }
 
 .results-count {
   font-family: var(--font-sans);
@@ -321,7 +358,7 @@
 }
 
 /* === Cocktail Cards === */
-.cocktails-grid {
+.entry-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
@@ -330,15 +367,16 @@
   padding: 10px;
   overflow: visible;
   content-visibility: auto;
+  list-style: none;
 }
 
 @media (max-width: 600px) {
-  .cocktails-grid {
+  .entry-grid {
     grid-template-columns: 1fr;
   }
 }
 
-.cocktail-card {
+.entry-card {
   border-radius: var(--radius-md);
   padding: 1.5rem;
   background: var(--color-bg);
@@ -350,7 +388,8 @@
   border-bottom: 1px solid var(--color-border);
 }
 
-.cocktail-name {
+.cocktail-name,
+.entry-card__title {
   font-family: var(--font-serif);
   font-size: var(--text-xl);
   line-height: var(--leading-tight);
@@ -408,19 +447,20 @@
 /* === Toast Notification === */
 .copy-notification {
   position: fixed;
-  top: 50%;
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
   left: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
+  transform: translateX(-50%);
   background: var(--color-accent);
   color: var(--color-bg);
-  padding: 1rem 2rem;
+  padding: 0.75rem 1.25rem;
   border-radius: var(--radius-md);
   font-family: var(--font-sans);
   font-weight: 600;
   font-size: var(--text-sm);
   line-height: var(--leading-tight);
   z-index: z('max');
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  max-width: calc(100% - 2rem);
+  text-align: center;
   opacity: 0;
   transition: opacity var(--duration-base) var(--transition-smooth), transform var(--duration-base) var(--transition-smooth);
   pointer-events: none;
@@ -428,10 +468,16 @@
 
 .copy-notification.show {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1);
+  transform: translateX(-50%);
 }
 
 .copy-notification.hide {
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0.9);
+  transform: translateX(-50%);
 }
+
+.entry-grid > li { display: flex; margin: 0; min-width: 0; }
+.entry-grid > li > .entry-card { width: 100%; }
+
+.entry-card__title { display: flex; align-items: baseline; justify-content: space-between; gap: .6rem; }
+.entry-card__arrow { flex-shrink: 0; }

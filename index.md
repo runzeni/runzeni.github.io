@@ -1,7 +1,7 @@
 ---
 layout: home
 title: Runze Ni
-description: Photos & working studies by Runze.
+description: Renal physiology research, photography, and working studies by Runze Ni.
 ---
 
 ## About

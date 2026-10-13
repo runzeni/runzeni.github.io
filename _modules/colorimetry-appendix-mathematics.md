@@ -3,229 +3,104 @@ title: "Mathematical Appendix"
 series: colorimetry
 slug: appendix-mathematics
 permalink: /notes/colorimetry/appendix-mathematics/
-description: "Comprehensive mathematical reference for all formulas used in the Modern Color Science series"
+description: "Equations, primary coordinates, and figure conventions."
 math: true
+updated: 2026-10-13
 ---
 
-Centralized mathematical reference for all formulas in the series.
+Equations used in the figures. Values are floating-point signals unless a unit is given; quantization and legal-range video scaling are separate operations.
 
-This appendix collects all mathematical formulas, matrices, and primaries from Modules 1-7 in one place for quick reference.
-
-## A.1 Colorimetric Calculations
+## A.1 Colorimetry
 {: #colorimetry}
 
-### CIE XYZ Tristimulus Values
+For a reflecting, nonfluorescent sample:
 
-*From Module 2 - The integration formula payoff*
+$$X=k\int ER\bar x\,d\lambda,\quad Y=k\int ER\bar y\,d\lambda,\quad Z=k\int ER\bar z\,d\lambda.$$
 
-$$
-\begin{align}
-X &= k \int_{380}^{780} S(\lambda) \cdot R(\lambda) \cdot \bar{x}(\lambda) \, d\lambda \\
-Y &= k \int_{380}^{780} S(\lambda) \cdot R(\lambda) \cdot \bar{y}(\lambda) \, d\lambda \\
-Z &= k \int_{380}^{780} S(\lambda) \cdot R(\lambda) \cdot \bar{z}(\lambda) \, d\lambda
-\end{align}
-$$
+Choosing $k=1/\int E\bar y\,d\lambda$ gives a perfect diffuse reflector Y = 1. For absolute radiometric inputs, photometric scaling and units must instead be retained. Use the observer and sampling interval appropriate to the task. [CIE 1931 data](https://doi.org/10.25039/CIE.DS.xvudnb9b).
 
-Where:
+$$x=X/(X+Y+Z),\quad y=Y/(X+Y+Z),\quad X=xY/y,\quad Z=(1-x-y)Y/y.$$
 
-- $S(\lambda)$ = Spectral Power Distribution of illuminant
-- $R(\lambda)$ = Reflectance spectrum (0-1)
-- $\bar{x}(\lambda), \bar{y}(\lambda), \bar{z}(\lambda)$ = CIE Standard Observer color matching functions
-- $k$ = Normalizing constant: $k = 100 / \int S(\lambda) \bar{y}(\lambda) d\lambda$
+The forward conversion is undefined at zero total tristimulus; the inverse needs y ≠ 0.
 
-### Chromaticity Coordinates (xyY)
+For CIELAB, define $\delta=6/29$ and
 
-$$
-x = \frac{X}{X + Y + Z}, \quad y = \frac{Y}{X + Y + Z}
-$$
+$$f(t)=\begin{cases}t^{1/3}&t>\delta^3\\t/(3\delta^2)+4/29&\text{otherwise}.\end{cases}$$
 
-The luminance $Y$ is kept separately. Together, $(x, y, Y)$ fully describes a color.
+$$L^*=116f(Y/Y_n)-16,$$
+$$a^*=500[f(X/X_n)-f(Y/Y_n)],\qquad b^*=200[f(Y/Y_n)-f(Z/Z_n)].$$
 
-### CIELAB (L*a*b*) - Perceptually Uniform Space
+The figures use D65, $(X_n,Y_n,Z_n)=(0.95047,1,1.08883)$. Euclidean ΔE₇₆ is an approximate difference measure, not a universal visibility threshold. [CIE definition](https://cie.co.at/eilvterm/17-23-076).
 
-$$
-\begin{align}
-L^* &= 116 \, f(Y/Y_n) - 16 \\
-a^* &= 500 \left[ f(X/X_n) - f(Y/Y_n) \right] \\
-b^* &= 200 \left[ f(Y/Y_n) - f(Z/Z_n) \right]
-\end{align}
-$$
-
-Where the piecewise function $f(t)$ is:
-
-$$
-f(t) = \begin{cases}
-t^{1/3} & \text{if } t > \left(\frac{6}{29}\right)^3 \\
-\frac{1}{3}\left(\frac{29}{6}\right)^2 t + \frac{4}{29} & \text{otherwise}
-\end{cases}
-$$
-
-And $(X_n, Y_n, Z_n)$ = XYZ values of reference white (typically D65)
-
-**Axes:**
-
-- $L^*$: Lightness (0 = black, 100 = white)
-- $a^*$: Red-Green axis (negative = green, positive = red)
-- $b^*$: Blue-Yellow axis (negative = blue, positive = yellow)
-
-## A.2 Transfer Functions
+## A.2 Transfer functions
 {: #transfer}
 
-### Gamma 2.2 (Simple Power Function)
+For nonnegative linear values C in [0, 1], sRGB encoding is
 
-*From Module 3 - Display EOTF*
+$$C'=\begin{cases}12.92C&C\leq0.0031308\\1.055C^{1/2.4}-0.055&C>0.0031308.\end{cases}$$
 
-$$
-V_{\text{display}} = V_{\text{encoded}}^{2.2}
-$$
+Its inverse uses C′/12.92 up to C′ = 0.04045, and $((C'+0.055)/1.055)^{2.4}$ above. A simple gamma encoding instead uses $C'=C^{1/\gamma}$. [ICC sRGB specification](https://www.color.org/srgb.pdf).
 
-Encoding (OETF): $V_{\text{encoded}} = V_{\text{linear}}^{1/2.2} \approx V_{\text{linear}}^{0.4545}$
+For PQ, let L be display luminance in cd/m² and N the normalized signal:
 
-### sRGB (Piecewise Transfer Function)
+$$N=\left(\frac{c_1+c_2(L/10000)^{m_1}}{1+c_3(L/10000)^{m_1}}\right)^{m_2},$$
 
-$$
-V_{\text{srgb}} = \begin{cases}
-12.92 \times V_{\text{linear}} & \text{if } V_{\text{linear}} \leq 0.0031308 \\
-1.055 \times V_{\text{linear}}^{1/2.4} - 0.055 & \text{otherwise}
-\end{cases}
-$$
+$$L=10000\left(\frac{\max(N^{1/m_2}-c_1,0)}{c_2-c_3N^{1/m_2}}\right)^{1/m_1}.$$
 
-Effective gamma ~2.2, with linear segment for shadow detail preservation.
+Here $m_1=2610/16384$, $m_2=2523/32$, $c_1=3424/4096$, $c_2=2413/128$, and $c_3=2392/128$. The intended domain is L ∈ [0, 10000], N ∈ [0, 1].
 
-### ST.2084 PQ (Perceptual Quantizer for HDR)
+HLG's OETF takes relative scene light E ∈ [0, 1]:
 
-*From Module 3 - Absolute luminance encoding*
+$$E'=\begin{cases}\sqrt{3E}&0\leq E\leq1/12\\a\ln(12E-b)+c&1/12<E\leq1,\end{cases}$$
 
-$$
-V = \left( \frac{\max[(L/10000)^{m_1} - c_1, 0]}{c_2 - c_3 (L/10000)^{m_1}} \right)^{m_2}
-$$
+with $a=0.17883277$, $b=1-4a$, and $c=0.5-a\ln(4a)$. The OETF alone does not predict display luminance. [ITU-R BT.2100-3](https://www.itu.int/rec/R-REC-BT.2100/en).
 
-Constants:
-
-- $m_1 = 0.1593017578125$ (2610/16384)
-- $m_2 = 78.84375$ (2523/32)
-- $c_1 = 0.8359375$ (3424/4096)
-- $c_2 = 18.8515625$ (2413/128)
-- $c_3 = 18.6875$ (2392/128)
-
-$L$ = luminance in nits (cd/m²), range: 0.0001 to 10,000 nits
-
-## A.3 ACES Primaries & Transforms
+## A.3 ACES coordinates
 {: #aces}
 
-### ACES 2065-1 (AP0) Primaries
+| Primaries | Red xy | Green xy | Blue xy | White xy |
+|---|---|---|---|---|
+| AP0 | .7347, .2653 | .0000, 1.0000 | .0001, −.0770 | .32168, .33767 |
+| AP1 | .713, .293 | .165, .830 | .128, .044 | .32168, .33767 |
 
-*From Module 4 - The archive space with imaginary primaries*
+ACES2065-1 uses AP0 and linear values; ACEScg uses AP1 and linear values. ACEScc and ACEScct use AP1 with distinct log encodings. Neither primary triangle is a physical monitor specification. [ACES encodings](https://docs.acescentral.com/encodings/acescg/).
 
-| Primary | x | y |
-| --- | --- | --- |
-| Red | 0.7347 | 0.2653 |
-| Green | 0.0000 | 1.0000 |
-| Blue | 0.0001 | -0.0770 |
-| White Point | 0.32168 (D60) | 0.33767 |
+A primary conversion takes the form $RGB_B=M_{XYZ\rightarrow B}\,M_{A\rightarrow XYZ}\,RGB_A$ for linear values and a common white. Insert a specified chromatic-adaptation transform when required. An illustrative matrix without a named source and domain is not a camera input transform.
 
-### ACEScg (AP1) Primaries
-
-*The working space - all real primaries*
-
-| Primary | x | y |
-| --- | --- | --- |
-| Red | 0.713 | 0.293 |
-| Green | 0.165 | 0.830 |
-| Blue | 0.128 | 0.044 |
-| White Point | 0.32168 (D60) | 0.33767 |
-
-### Example ARRI Alexa IDT Matrix (Conceptual)
-
-$$
-\begin{bmatrix}
-R_{\text{ACES}} \\
-G_{\text{ACES}} \\
-B_{\text{ACES}}
-\end{bmatrix}
-=
-\begin{bmatrix}
-0.680206 & 0.236137 & 0.083657 \\
-0.035735 & 0.950071 & 0.014194 \\
-0.000000 & 0.002932 & 0.997068
-\end{bmatrix}
-\begin{bmatrix}
-R_{\text{camera}} \\
-G_{\text{camera}} \\
-B_{\text{camera}}
-\end{bmatrix}
-$$
-
-*Note: Actual IDT includes LogC decoding + chromatic adaptation D65→D60*
-
-## A.4 Camera Log Curves
+## A.4 Camera log curves
 {: #camera}
 
-### LogC3 (ARRI - Classic Curve)
+For LogC3 EI800, the exposure-value encoding is
 
-*From Module 6 - For ARRI Wide Gamut 3*
+$$f(x)=\begin{cases}c\log_{10}(ax+b)+d&x>cut\\ex+f_0&x\leq cut,\end{cases}$$
 
-$$
-y = \begin{cases}
-5.555556 \times x + 0.052272 & \text{if } x < 0.010591 \\
-0.247190 \times \log_{10}(5.555556 \times x + 0.047996) + 0.385537 & \text{otherwise}
-\end{cases}
-$$
+where $(cut,a,b,c,d,e,f_0)=(.010591,5.555556,.052272,.247190,.385537,5.367655,.092809)$. These rounded parameters are specific to EI800. [ARRI LogC3, exposure-value table](https://www.arri.com/resource/blob/31918/66f56e6abb6e5b6553929edf9aa7483e/2017-03-alexa-logc-curve-in-vfx-data.pdf).
 
-- $x$ = scene linear exposure (normalized 0-1)
-- $y$ = LogC3 code value (0-1)
-- Middle Grey (18%) → $y = 0.39$ (39%)
-- Dynamic range: ~14 stops
+For the LogC4 software encoding, define
 
-### LogC4 (ARRI Alexa 35)
+$$a=(2^{18}-16)/117.45,\quad b=(1023-95)/1023,\quad c=95/1023,$$
+$$s=\frac{7\ln2\;2^{7-14c/b}}{ab},\qquad t=\frac{2^{6-14c/b}-64}{a}.$$
 
-$$
-y = \begin{cases}
-(x - 0.0011361) / 0.068512 & \text{if } x < 0.0059569 \\
-0.27861 \times \log_{10}(x \times 10.6723 + 1) + 0.33122 & \text{otherwise}
-\end{cases}
-$$
+$$f(x)=\begin{cases}\frac{\log_2(ax+64)-6}{14}b+c&x\geq t\\(x-t)/s&x<t.\end{cases}$$
 
-- Middle Grey (18%) → $y = 0.32$ (32%)
-- Dynamic range: ~17 stops
-- Shift from 39% to 32% creates room for 2.5 extra highlight stops
+The inverse is $(2^{14(N-c)/b+6}-64)/a$ for N ≥ 0, and Ns + t otherwise. These definitions preserve negative values in the specified linear extension. [ARRI LogC4, §4.1](https://www.arri.com/resource/blob/278790/bea879ac0d041a925bed27a096ab3ec2/2022-05-arri-logc4-specification-data.pdf).
 
-### Log3G10 (RED IPP2)
+Log3G10 is discussed conceptually in Module 6; this revision does not implement a RED decoder. Production conversions should use the manufacturer's versioned specification or an established color-management implementation.
 
-$$
-y = \begin{cases}
-15.1927 \times x & \text{if } x < -0.01 \\
-0.224282 \times \log_{10}(x + 0.01) + 0.444666 & \text{otherwise}
-\end{cases}
-$$
-
-- $x$ = scene linear exposure
-- $y$ = Log3G10 code value (0-1)
-- "3G10" = 3 stops below middle grey, 10 above = 13 stops total
-- Simpler structure than LogC for cleaner ACES transforms
-
-## A.5 Camera & Display Gamut Primaries
+## A.5 Display and camera primaries
 {: #gamuts}
 
-### Camera Gamuts
+| Space | Red xy | Green xy | Blue xy |
+|---|---|---|---|
+| Rec.709 / sRGB | .640, .330 | .300, .600 | .150, .060 |
+| Rec.2020 | .708, .292 | .170, .797 | .131, .046 |
+| ARRI Wide Gamut 3 | .6840, .3130 | .2210, .8480 | .0861, −.1020 |
+| ARRI Wide Gamut 4 | .7347, .2653 | .1424, .8576 | .0991, −.0308 |
 
-| Gamut | Red (x, y) | Green (x, y) | Blue (x, y) | White |
-| --- | --- | --- | --- | --- |
-| ARRI Wide Gamut 3 | (0.6840, 0.3130) | (0.2210, 0.8480) | (0.0861, -0.1020) | D65 |
-| REDWideGamutRGB | (0.7803, 0.3043) | (0.1216, 1.4940) | (0.0956, -0.0846) | D65 |
-| S-Gamut3.Cine (Sony) | (0.766, 0.275) | (0.225, 0.800) | (0.089, -0.087) | D65 |
+All four use D65, xy = (.3127, .3290). These coordinates alone do not define a transfer function or an image rendering. Sources: [BT.709](https://www.itu.int/rec/R-REC-BT.709/en), [BT.2020](https://www.itu.int/rec/R-REC-BT.2020/en), and the ARRI specifications above.
 
-### Display Gamuts
+## Figure conventions
 
-| Gamut | Red (x, y) | Green (x, y) | Blue (x, y) | White |
-| --- | --- | --- | --- | --- |
-| Rec.709 / sRGB | (0.640, 0.330) | (0.300, 0.600) | (0.150, 0.060) | D65 |
-| DCI-P3 | (0.680, 0.320) | (0.265, 0.690) | (0.150, 0.060) | DCI (0.314, 0.351) |
-| Rec.2020 | (0.708, 0.292) | (0.170, 0.797) | (0.131, 0.046) | D65 |
+Spectral curves use wavelength in nm. Blackbody curves use Planck's law and independent peak normalization; the LED comparison is an explicitly synthetic sum of Gaussian bands. The metamer example constructs a null-space perturbation of sampled CIE XYZ functions, then changes its spectral weighting. Lab circles use L* = 60, radius 5, and D65. Film, tone, gamut-compression, and grid-deformation figures are pedagogical functions, not fitted products or measured camera data.
 
-## Additional Resources
-- CIE (2004). *Colorimetry, 3rd Edition*. CIE Publication 15:2004.
-- Poynton, C. (2012). *Digital Video and HDTV: Algorithms and Interfaces*, 2nd Ed. Morgan Kaufmann.
-- SMPTE Standards Collection: ST.2065-1 (ACES), ST.2084 (PQ), ST.2067 series
-- ITU-R Recommendations: BT.709, BT.2020, BT.2100
-- ARRI, RED, and Sony technical documentation (referenced in Module 6)
+The shared [figure source]({{ '/assets/js/colorimetry-models.mjs' | relative_url }}) defines each calculation. Static figures and interactive updates use the same implementation.

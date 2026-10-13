@@ -1,191 +1,46 @@
 ---
-title: "Module 6: Camera Architectures & Case Studies"
-short_title: "Camera Architectures & Case Studies"
+title: "Module 6: Camera encoding"
+short_title: "Camera encoding"
 series: colorimetry
 module_number: 6
 slug: module-6
 permalink: /notes/colorimetry/module-6/
 date: 2025-12-10
-description: "ARRI's LogC pipeline, RED IPP2 vs ACES, and RAW demosaicing mechanics."
-math: true
+description: "Log encoding, working spaces, and RAW."
+math: false
+colorimetry_interactive: true
+updated: 2026-10-13
 ---
 
-"A camera is just a sensor with an opinion."
+A camera's sensor, color encoding, and viewing transform answer different questions. Compare them separately.
 
-We have spent five modules talking about universal standards (<mark>ACES</mark>, <mark>CIE XYZ</mark>). Now, let's talk about the proprietary "Secret Sauce" that manufacturers bake into their cameras.
-
-Why does an <mark>ARRI Alexa</mark> look different from a <mark>RED V-Raptor</mark>? It's not just the sensor hardware; it's the math they wrap around it.
-
-## 6.1 The ARRI Gold Standard
+## 6.1 LogC3 and LogC4
 {: #section-6-1}
 
-For over a decade, the <mark>ALEV III sensor</mark> (Alexa Classic through Mini LF) has been the benchmark for digital cinema. Why? Because ARRI prioritized <mark>Highlights</mark> over everything else.
+Log encodings distribute code values efficiently across exposure. They do not create sensor dynamic range or, by themselves, determine a highlight look.
 
-### The LogC Curve (LogC3 vs. LogC4)
+{% include colorimetry/fig-6-1.html %}
 
-ARRI's encoding is designed to mimic film density.
+The plot uses LogC3's EI800 exposure-value formula, including its linear branch, and the LogC4 software formula. LogC3 parameters vary with exposure index; LogC4's software encoding has a fixed definition. The latter must not be confused with its in-camera hardware encoding. [ARRI LogC3 specification](https://www.arri.com/resource/blob/31918/66f56e6abb6e5b6553929edf9aa7483e/2017-03-alexa-logc-curve-in-vfx-data.pdf), [ARRI LogC4 specification](https://www.arri.com/resource/blob/278790/bea879ac0d041a925bed27a096ab3ec2/2022-05-arri-logc4-specification-data.pdf).
 
-- **LogC3:** The classic curve. It allocates a massive amount of data to the highlights (shoulder), ensuring that roll-off is gentle and desaturated.
-- **LogC4** (Alexa 35): With the new <mark>ALEV IV sensor</mark> (17 stops), LogC3 ran out of room. <mark>LogC4</mark> is a new curve that pulls <mark>Middle Grey down to 32%</mark> (from 39%) to make room for 2.5 extra stops of highlight information.
-
-**LogC3 Formula (ARRI Wide Gamut 3):**
-
-$$
-y = \begin{cases}
-5.555556 \times x + 0.052272 & \text{if } x < 0.010591 \\
-0.247190 \times \log_{10}(5.555556 \times x + 0.047996) + 0.385537 & \text{otherwise}
-\end{cases}
-$$
-
-Where $x$ is scene linear exposure (normalized) and $y$ is the LogC3 code value (0-1). Middle Grey (18% reflectance, $x = 0.18$) maps to <mark>$y = 0.39$</mark>.
-
-**LogC4 Formula (Alexa 35):**
-
-$$
-y = \begin{cases}
-(x - 0.0011361) / 0.068512 & \text{if } x < 0.0059569 \\
-0.27861 \times \log_{10}(x \times 10.6723 + 1) + 0.33122 & \text{otherwise}
-\end{cases}
-$$
-
-Where Middle Grey ($x = 0.18$) maps to <mark>$y = 0.32$</mark>. This shift from 39% to 32% creates headroom for 2.5 additional stops in highlights while maintaining 10-bit precision.
-
-> **Why Middle Grey Matters:** The position of Middle Grey determines how the 10-bit code values (0-1023) are distributed across the dynamic range. LogC3's 39% was optimal for 14 stops. LogC4's 32% accommodates 17 stops by "borrowing" code values from midtones and shadows—acceptable because modern sensors have lower noise.
-
-### The "K1S1" Magic
-
-The "Alexa Look" isn't just the Log curve; it's the <mark>Display Rendering Transform (DRT)</mark>.
-
-The famous <mark>K1S1</mark> (and later the <mark>ARRI Rec.709</mark> LUT) applies a very specific, non-linear tone map.
-
-- **Shoulder Desaturation:** As colors get brighter, ARRI's LUT aggressively desaturates them. A bright red taillight turns white/orange, not "digital red." This mimics how film emulsion runs out of dye.
-- **Matrix Crosstalk:** The ARRI matrix allows colors to "bleed" into each other slightly, creating a dense, organic palette rather than a sterile, separated one.
-
-<figure class="diagram-placeholder">
-  <div class="diagram-container">
-    <div class="placeholder-text">
-      {% include colorimetry-figure-in-development.html %}
-    </div>
-  </div>
-  <figcaption>Figure 6.1: ARRI LogC3 vs LogC4—expanding dynamic range through curve optimization</figcaption>
-</figure>
-
-## 6.2 The Color Wars
+## 6.2 Camera working spaces
 {: #section-6-2}
 
-For years, camera manufacturers took different philosophical approaches to color science. ARRI favored <mark>Perceptual Pleasing</mark>, RED favored <mark>Mathematical Flexibility</mark>, and Sony/Canon positioned themselves somewhere in between.
+ARRI Wide Gamut 3 and 4 define RGB coordinates; LogC3 and LogC4 define transfer functions. A large primary triangle is not a measurement of a sensor's spectral accuracy or the colors it captures.
 
-### RED IPP2 (Image Processing Pipeline 2)
+{% include colorimetry/fig-6-2.html %}
 
-For years, RED was the "Wild West." You had <mark>DragonColor</mark>, <mark>DragonColor2</mark>, <mark>RedGamma3</mark>, <mark>RedGamma4</mark>... it was a mess.
+RED's Log3G10 name refers to 18% gray near one third of the signal range and ten stops above it near 1.0—not three stops below gray. R3D is a RAW format; RWG/Log3G10 is one developed representation, not an inherent display interpretation of every R3D file. [RED white paper](https://s3.amazonaws.com/red_3/downloads/other/white-papers/WhitePaperREDWideGamutRGBandLog3G10.pdf).
 
-Then came <mark>IPP2</mark>, which unified everything into a workflow remarkably similar to ACES.
+When mixing cameras, identify the exact RAW development settings or log/gamut pair. Use documented input transforms, then assess matching under the actual illumination. Brand-level claims about “natural,” “clinical,” or “film-like” color are not substitutes for those tests.
 
-#### The Separation of Church and State
-
-IPP2 separates the Technical from the Creative.
-
-1. **<mark>REDWideGamutRGB</mark>:** The container. It encompasses every color the sensor can see.
-1. **<mark>Log3G10</mark>:** The curve. It defines Middle Grey and provides 10 stops of highlight headroom (hence "3G10" = 3 stops below, 10 above middle grey).
-
-**Log3G10 Formula (RED IPP2):**
-
-$$
-y = \begin{cases}
-15.1927 \times x & \text{if } x < -0.01 \\
-0.224282 \times \log_{10}(x + 0.01) + 0.444666 & \text{otherwise}
-\end{cases}
-$$
-
-Where $x$ is scene linear exposure and $y$ is the Log3G10 code value (0-1). The name "3G10" refers to the dynamic range allocation: <mark>3 stops below middle grey, 10 stops above</mark> = 13 stops total.
-
-> **Technical Detail:** Unlike LogC which uses $\log_{10}(ax + b)$, Log3G10 uses $\log_{10}(x + c)$ with a simpler offset. This makes the math cleaner for ACES transforms since both RED and ACES use similar logarithmic structures.
-
-#### The Output Transform
-
-In the old days, you baked the look in the camera. In IPP2, the <mark>R3D</mark> file is always Log3G10. The "Look" (Contrast, Rolloff) is just metadata applied at the very end of the chain.
-
-> **Why This Matters:** This makes RED footage incredibly flexible in an ACES workflow because <mark>Log3G10 → ACES AP0</mark> is a clean, mathematically defined path.
-
-### The Philosophical Divide
-
-- **ARRI Philosophy:** "Give cinematographers a beautiful starting point that matches film." (Perceptually optimized from the start)
-- **RED Philosophy:** "Give colorists maximum data and let them decide." (Technically pure, creatively flexible)
-- **Sony Venice:** A hybrid approach—<mark>X-OCN</mark> (eXtended Original Camera Negative) with <mark>S-Gamut3.Cine</mark> attempts to balance both worlds by providing ACES-friendly primaries with perceptually tuned shoulder rolloff.
-
-<figure class="diagram-placeholder">
-  <div class="diagram-container">
-    <div class="placeholder-text">
-      {% include colorimetry-figure-in-development.html %}
-    </div>
-  </div>
-  <figcaption>Figure 6.2: Camera native gamuts—the "color wars" visualized on the CIE diagram</figcaption>
-</figure>
-
-## 6.3 RAW Mechanics: The Bayer Pattern
+## 6.3 RAW and the Bayer mosaic
 {: #section-6-3}
 
-Underneath the Log curves and LUTs, all these cameras (mostly) share the same anatomy: The <mark>Bayer Filter Array</mark>.
+A conventional Bayer block has two green-filtered sites, one red, and one blue. RGGB, BGGR, GRBG, and GBRG are different orientations of that pattern. Each site records a filtered intensity; demosaicing estimates the missing channels using neighboring samples. Other sensor layouts also exist.
 
-### The Mosaic
+{% include colorimetry/fig-6-3.html %}
 
-Sensors are monochromatic. They only count photons. To see color, we place a mosaic of colored filters over the pixels.
+The doubled green sampling supports spatial detail; it is not a direct copy of the human cone mosaic. Demosaicing, black-level subtraction, white balance, and color conversion all affect a developed image.
 
-The pattern is <mark>BGGR</mark> (Blue, Green, Green, Red).
-
-- **50% Green:** Because the human eye (M-Cone) is most sensitive to green luminance.
-- **25% Red / 25% Blue:** We need less resolution for these colors.
-
-### Demosaicing (Debayering)
-
-The process of turning this mosaic into an RGB image is called <mark>Demosaicing</mark>.
-
-The algorithm looks at a "Red" pixel (which has no Blue or Green data) and guesses the missing values by looking at its neighbors.
-
-- **Debayer Quality:** High-quality debayering (like <mark>ARRI ADA-7</mark>) looks for edges and textures to avoid "zippering" artifacts. Low-quality debayering just averages the neighbors, resulting in soft images.
-
-<figure class="diagram-placeholder">
-  <div class="diagram-container">
-    <div class="placeholder-text">
-      {% include colorimetry-figure-in-development.html %}
-    </div>
-  </div>
-  <figcaption>Figure 6.3: Bayer pattern demosaicing—from mosaic to RGB image</figcaption>
-</figure>
-
-### The Hacker's Way: Dcraw & Libraw
-
-If you want to see what the sensor actually saw—without ARRI's matrix or RED's IPP2 sauce—you need a command-line tool called <mark>dcraw</mark> (or its modern successor <mark>Libraw</mark>).
-
-This is for the DIT who wants to verify sensor noise or check for true clipping without any LUTs hiding the truth.
-
-#### The "Truth" Command
-
-Run this in your terminal to convert a RAW file to a linear TIFF with no white balance and no color interpolation:
-
-<pre><code>dcraw -D -4 -T image.raw</code></pre>
-
-- <code>-D</code>: Document mode. No debayering. You see the raw greyscale Bayer pattern.
-- <code>-4</code>: Linear 16-bit output. No gamma curve.
-- <code>-T</code>: Save as TIFF.
-
-#### Converting to ACES
-
-If you want to debayer straight to <mark>ACES AP0</mark> (bypassing the manufacturer's SDK):
-
-<pre><code>dcraw -o 5 -4 -w -T image.raw</code></pre>
-
-- <code>-o 5</code>: Output color space = XYZ (for ACES conversion).
-- <code>-w</code>: Use camera white balance.
-
-> **Why do this?** Sometimes manufacturer SDKs apply hidden noise reduction or sharpening. Dcraw gives you the raw, mathematical pixel data. It is the biologist's microscope for digital images.
-
-**Next Module:** We finish the course with the "Final Boss"—<mark>Computational Color</mark>. Algorithms, Inverse LUTs, and Security.
-
-## References & Further Reading
-- ARRI (2020). *ALEXA 35 - System and Workflow Overview*. ARRI Technical Documentation.
-- ARRI (2017). *ALEXA LogC Curve - Usage in VFX*. ARRI White Paper WP-5.
-- RED Digital Cinema (2021). *IPP2 White Paper - Color Science and Image Pipeline 2*.
-- Sony (2018). *Venice Technical Manual - X-OCN and S-Gamut3.Cine*. Sony Professional Solutions.
-- Coffin, D. (2023). *dcraw - Decoding RAW Digital Photos in Linux*. Available at: cybercom.net/~dcoffin/dcraw
-- OpenImageIO Project. *RAW File Processing and Color Management*. Available at: openimageio.org
+RAW tools and SDKs differ in supported cameras and output behavior. Do not assume a generic command exports ACES: for example, dcraw's `-o 5` selects XYZ, not ACES. Verify the tool's documentation, output metadata, and a known test image before relying on a conversion. [LibRaw output parameters](https://www.libraw.org/docs/API-datastruct-eng.html).

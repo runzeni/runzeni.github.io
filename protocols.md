@@ -21,14 +21,12 @@ protocol: true
     </button>
   </div>
   <div class="filter-row">
-    <div class="filter-buttons" role="group" aria-label="Filter by spirit">
-      <button class="filter-btn active" type="button" data-base="all" aria-pressed="true">All</button>
-      <button class="filter-btn" type="button" data-base="whiskey" aria-pressed="false">Whiskey</button>
-      <button class="filter-btn" type="button" data-base="gin" aria-pressed="false">Gin</button>
-      <button class="filter-btn" type="button" data-base="tequila" aria-pressed="false">Tequila</button>
-      <button class="filter-btn" type="button" data-base="rum" aria-pressed="false">Rum</button>
-      <button class="filter-btn" type="button" data-base="cognac" aria-pressed="false">Cognac</button>
-      <button class="filter-btn" type="button" data-base="misc" aria-pressed="false">Misc</button>
+    <div class="filter-buttons choice-buttons" role="group" aria-label="Filter by spirit">
+      <button class="filter-btn choice-button active" type="button" data-base="all" aria-pressed="true">All</button>
+      {% assign spirits = site.data.cocktails.cocktails | map: 'base' | uniq %}
+      {% for spirit in spirits %}
+        <button class="filter-btn choice-button" type="button" data-base="{{ spirit | escape }}" aria-pressed="false">{{ spirit | capitalize }}</button>
+      {% endfor %}
     </div>
     <p class="results-count" id="results-count" role="status" aria-live="polite">{{ site.data.cocktails.cocktails | size }} cocktails</p>
   </div>
@@ -36,7 +34,7 @@ protocol: true
 
 <noscript><p class="protocol-noscript">All recipes are shown below. Search and filters need JavaScript.</p></noscript>
 
-<section id="cocktails-grid" class="cocktails-grid" aria-label="Cocktail recipes">
+<section id="cocktails-grid" class="entry-grid" aria-label="Cocktail recipes">
   {% for cocktail in site.data.cocktails.cocktails %}
     {% include cocktail-card.html cocktail=cocktail %}
   {% endfor %}

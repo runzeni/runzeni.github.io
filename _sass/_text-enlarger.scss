@@ -209,7 +209,7 @@
   border-right: 1px solid var(--tool-divider);
   background: transparent;
   color: inherit;
-  font: 500 0.66rem/1.1 var(--font-sans);
+  font: 500 var(--text-2xs)/1.2 var(--font-sans);
   cursor: pointer;
 }
 
@@ -254,7 +254,7 @@
   align-items: center;
   gap: 0.6rem;
   padding: 0.5rem 0.8rem;
-  font: 500 0.66rem/1 var(--font-sans);
+  font: 500 var(--text-2xs)/1.2 var(--font-sans);
 }
 
 .text-controls__size input {
@@ -333,6 +333,8 @@ body.text-tool-is-presenting .scroll-progress { display: none; }
 }
 
 .text-enlarger .copy-notification {
+  top: max(1.5rem, env(safe-area-inset-top));
+  bottom: auto;
   border: 1px solid color-mix(in srgb, var(--stage-bg) 18%, transparent);
   background: var(--stage-fg);
   color: var(--stage-bg);

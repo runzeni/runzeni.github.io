@@ -4,7 +4,8 @@ Personal portfolio for Runze Ni: photographs, cocktail notes, color studies, and
 
 ## Local development
 
-Ruby 3.3 is pinned in `.ruby-version`.
+Ruby 3.3 is pinned in `.ruby-version`. Install ImageMagick for photo inspection.
+On Apple Silicon Homebrew, prepend `/opt/homebrew/opt/ruby@3.3/bin` to PATH before running Bundler.
 
 ```sh
 bundle install
@@ -15,11 +16,14 @@ Build the production artifact with:
 
 ```sh
 bash scripts/build-site.sh build
+python3 scripts/check-site.py
+git diff --check
 ```
 
 ## Content map
 
-- `_data/profile.yml` is the single source for the home-page bio, links, publications, and presentations.
+- `index.md` owns the biography, education, research, publications, and presentations.
+- `_data/profile.yml` owns reusable identity, contact details, and social links.
 - `assets/img/portfolio/` is `/fotos/`: every numbered image is included
   automatically in ascending numeric order.
 - `_photobook/` holds minimal roll metadata. `_data/photos.yml` is generated locally and is never edited or committed.
@@ -62,11 +66,9 @@ recompress or duplicate the photographs.
 ### Add to Selected works
 
 1. Put the JPG, JPEG, or PNG in `assets/img/portfolio/`. Name it
-   `portfolio-NN.jpg`; the current set runs from `portfolio-01.jpg` through
-   `portfolio-42.jpg`.
-2. `portfolio-01.jpg` appears first. Add the next photograph as
-   `portfolio-43.jpg` to append it; deleting a file removes it from Selected
-   works.
+   `portfolio-NN.jpg`, using an unused number (at least two digits).
+2. Numeric filename order determines display order. Use a number greater than
+   the current maximum to append a photograph; deleting a file removes it.
 3. Run `bash scripts/build-site.sh serve`, then review `/fotos/` and its
    lightbox. Commit only the source image.
 
@@ -114,3 +116,19 @@ when a real set exists; until then the current restrained placeholder remains.
 ## Deployment
 
 Pushing `main` runs `.github/workflows/deploy.yml`, which builds Jekyll and deploys the artifact with the official GitHub Pages Actions flow. In the repository’s **Settings → Pages**, choose **GitHub Actions** as the publishing source once if it is not already selected.
+
+## Maintenance
+
+Home styles live in `_sass/_home.scss`, reading/Notes styles in
+`_sass/_articles.scss`, and photo layouts in `_sass/_gallery.scss`. They compile
+into one stylesheet. Email, code, and text copying share `window.site.copyText`;
+scripted scrolling uses `window.site.scrollBehavior()` for reduced motion.
+
+The generated-output checker uses Python 3 standard-library modules only. It
+checks local links, static fragments, redirects, CSS URLs, authored JavaScript
+imports, duplicate IDs, and image alt attributes; it does not fetch external URLs
+or replace keyboard/touch browser testing. CI uses the same build entry point.
+
+### Colorimetry figures
+
+The 26 figures use native SVG/HTML and a shared formula module. Static includes are checked in; Pages builds require no Node or plotting plugin. After editing `assets/js/colorimetry-models.mjs`, run `node scripts/build-colorimetry.mjs` and `node scripts/check-colorimetry.mjs`, then the usual Jekyll build and site checker. Dataset provenance is in `assets/data/README-colorimetry.md`. Browser controls initialize near the viewport; each figure remains readable without JavaScript.

@@ -6,93 +6,69 @@ module_number: 1
 slug: module-1
 permalink: /notes/linux-notes/module-1/
 date: 2026-02-23
+updated: 2026-10-13
 description: "From Unix to Linux"
 ---
 
-The command line isn't a relic; it is a deliberately designed tool for complex tasks. It is the standard interface for servers, research clusters, and embedded systems.
+The shell is useful for repeatable file operations, remote work, and research workflows. A few ideas explain how its tools fit together.
 
 ## 1.1 The Unix Philosophy
 {: #section-1-1}
 
-Born at Bell Labs (1969) by Ken Thompson and Dennis Ritchie. Unix introduced the core concepts we use today.
+Unix began at Bell Labs in 1969. Its lasting contribution is a style of composition: small programs can do useful work together through a common interface.
 
-> **The Golden Rule:** "Write programs that do one thing and do it well. Write programs to work together."
-
-### Core Concepts
-
-- **Everything is a file:** Documents, hard drives, processes, and network sockets are all treated as files.
-- **Text streams:** Programs talk to each other via plain text, not binary formats.
-- **Composability:** Small tools chained together (pipes) solve complex problems.
+- **File interfaces:** Ordinary files, devices, and sockets share many input/output operations. This is a useful model, not a claim that every operating-system object is literally a file.
+- **Streams:** A pipe carries bytes from one process to another. Many command-line tools use text; binary streams are possible too.
+- **Composition:** Connect existing tools before writing a larger program.
 
 ## 1.2 The Linux Architecture
 {: #section-1-2}
 
-**GNU (1983):** Richard Stallman created the tools (Compiler, Shell, Editor) but lacked a kernel.
-**Linux (1991):** Linus Torvalds wrote the kernel.
-
-Combined, they form the operating system: **GNU/Linux**.
-
-### The Stack
+The GNU project was announced in 1983; Linux began in 1991. Many distributions combine the Linux kernel with GNU tools. Others use different user-space components, so “Linux” and “GNU/Linux” are not interchangeable in every context.
 
 | Layer | Role |
-|-------|------|
-| **Hardware** | CPU, RAM, Disks |
-| **Kernel (Linux)** | The "boss." Manages hardware resources and memory. Talks to hardware so software doesn't have to |
-| **Shell (GNU)** | The "translator." Takes your text commands and sends instructions to the Kernel |
-| **Applications** | Web servers, Python scripts, File browsers |
+| --- | --- |
+| Hardware | Processors, memory, storage, and peripherals |
+| Kernel | Manages processes, memory, devices, and system calls |
+| Shell | Interprets commands, runs built-ins, and launches programs |
+| Applications | Editors, web servers, analysis tools, and scripts |
 
 ## 1.3 Distributions (Distros)
 {: #section-1-3}
 
-A "Distro" is the Kernel + Tools + Package Manager bundled together. The main difference for users is **how you install software**.
+A distribution packages a kernel, tools, repositories, and a release policy. Differences include software versions, defaults, support periods, and package management.
 
-### Debian Family (Uses `apt`)
+| Family | Examples | Package tools |
+| --- | --- | --- |
+| Debian | Debian, Ubuntu, Kali | `apt`, `dpkg` |
+| Red Hat ecosystem | Fedora, RHEL, Rocky Linux, AlmaLinux | `dnf`, `rpm` |
+| Arch | Arch Linux | `pacman` |
+| Alpine | Alpine Linux | `apk` |
 
-- **Debian:** Stable, slow updates. The foundation.
-- **Ubuntu:** Most popular, user-friendly. Great driver support.
-- **Kali:** Specialized for security/pentesting.
-
-### Red Hat Family (Uses `dnf` / `rpm`)
-
-- **RHEL:** Enterprise standard. Paid support.
-- **Fedora:** Bleeding edge. Upstream for RHEL.
-- **Rocky/Alma:** Free versions of RHEL.
-
-### Others
-
-- **Arch (`pacman`):** DIY, rolling release. Documentation is legendary.
-- **Alpine (`apk`):** Tiny, used heavily in Docker/Containers.
-
-> **Class Note:** We are using **Ubuntu**. Key command: `sudo apt install <package>`.
+The class examples use Ubuntu. An installation command such as `sudo apt install package-name` is distribution-specific.
 
 ## 1.4 The Shell
 {: #section-1-4}
 
-The program that interprets your commands.
-
-- **sh:** The ancestor. Minimal.
-- **bash (Bourne Again Shell):** The Linux standard. Default on most systems.
-- **zsh:** Modern, themeable. Default on macOS.
+Bash and Zsh are shells. A terminal emulator is the application that displays their input and output. A console may be physical or virtual; it is not necessarily a desktop window.
 
 ```bash
-# Check your shell
-echo $SHELL
+# Configured login shell; this may differ from the running shell
+printf '%s\n' "$SHELL"
+
+# Current shell process in an interactive Bash or Zsh session
+ps -p "$$" -o comm=
 ```
 
-### Terminal vs. Shell vs. Console
-
-| Term | What it is |
-|------|------------|
-| **Terminal** | The window app (GNOME Terminal, iTerm2) |
-| **Shell** | The text interpreter running *inside* the window (Bash, Zsh) |
-| **Console** | The physical text display (mostly relevant for servers) |
+`sh` names a shell interface used by many portable scripts; the implementation varies by system. Bash-specific syntax does not necessarily work with `sh`.
 
 ## 1.5 Why CLI?
 {: #section-1-5}
 
-Why not just use a GUI?
+A command can be saved, reviewed, and repeated across many inputs. SSH makes the same tools available on a remote machine. A script is only part of reproducibility: retain input versions, software versions, parameters, and logs as well.
 
-- **Scale:** Rename 1 file? GUI. Rename 10,000 files? CLI (1 line of code).
-- **Remote Access (SSH):** Servers don't have monitors. You access them via text.
-- **Resources:** GUIs eat RAM; text is cheap.
-- **Reproducibility (Crucial for Science):** A shell script documents exactly how data was processed. Clicking buttons is not reproducible research.
+## References
+
+- [GNU project history](https://www.gnu.org/gnu/thegnuproject.html)
+- [Bash manual](https://www.gnu.org/software/bash/manual/bash.html)
+- [Linux pipe interface](https://man7.org/linux/man-pages/man7/pipe.7.html)

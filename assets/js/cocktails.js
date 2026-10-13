@@ -43,6 +43,45 @@
     ingredients: Array.from(element.querySelectorAll('.ingredient-name'), (item) => item.textContent)
   }));
 
+  let selected = null;
+  const selectRecipe = (card) => {
+    selected = selected === card ? null : card;
+    cocktails.forEach(({element}) => {
+      const active = element === selected;
+      element.classList.toggle('is-selected', active);
+      element.querySelector('.recipe-select').setAttribute('aria-pressed', String(active));
+    });
+  };
+  // Keep article semantics and readable ingredients; only the heading is a button.
+  cocktails.forEach(({element}) => {
+    const heading = element.querySelector('.cocktail-name');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'recipe-select';
+    button.setAttribute('aria-pressed', 'false');
+    button.textContent = heading.textContent;
+    heading.replaceChildren(button);
+    element.dataset.selectable = 'true';
+    element.addEventListener('click', event => {
+      if (event.target.closest('a') || (event.detail > 0 && window.getSelection()?.toString())) return;
+      selectRecipe(element);
+    });
+  });
+  const highlightNodes = [...grid.querySelectorAll('.recipe-select, .ingredient-name')]
+    .map(element => ({element, text: element.textContent}));
+  const highlight = terms => highlightNodes.forEach(({element, text}) => {
+    const fragment = document.createDocumentFragment();
+    // Work on original Unicode words so accents and punctuation remain intact.
+    for (const part of text.split(/([\p{L}\p{N}_]+)/u)) {
+      if (terms.some(term => normalize(part).startsWith(term))) {
+        const mark = document.createElement('mark');
+        mark.textContent = part;
+        fragment.append(mark);
+      } else fragment.append(document.createTextNode(part));
+    }
+    element.replaceChildren(fragment);
+  });
+
   const debounce = (callback, delay) => {
     let timer;
     return (...args) => {
@@ -80,13 +119,14 @@
     cocktails.forEach((cocktail) => {
       const baseMatches = selectedBase === 'all' || cocktail.base === selectedBase;
       const textMatches = !terms.length
-        || matches(cocktail.name, terms)
-        || cocktail.ingredients.some((ingredient) => matches(ingredient, terms));
+        || matches([cocktail.name, ...cocktail.ingredients].join(' '), terms);
       const visible = baseMatches && textMatches;
       cocktail.element.hidden = !visible;
       if (visible) shown += 1;
     });
 
+    if (selected?.hidden) selectRecipe(selected);
+    highlight(terms);
     search.value = rawQuery;
     empty.hidden = shown > 0;
     count.textContent = shown === cocktails.length ? `${shown} cocktails` : `Showing ${shown} of ${cocktails.length}`;
@@ -96,6 +136,8 @@
   const randomCocktail = () => {
     const chosen = cocktails[Math.floor(Math.random() * cocktails.length)];
     cocktails.forEach((cocktail) => { cocktail.element.hidden = cocktail !== chosen; });
+    highlight([]);
+    if (selected !== chosen.element) selectRecipe(chosen.element);
     empty.hidden = true;
     search.value = '';
     setActiveBase('all');
@@ -103,7 +145,7 @@
     updateUrl('all', '');
     shuffle.classList.remove('is-shuffling');
     window.requestAnimationFrame(() => shuffle.classList.add('is-shuffling'));
-    grid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    grid.scrollIntoView({ behavior: window.site.scrollBehavior(), block: 'nearest' });
   };
 
   const parameters = new URLSearchParams(window.location.search);

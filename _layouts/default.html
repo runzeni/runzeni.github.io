@@ -18,21 +18,16 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data:; connect-src 'self'; frame-src 'self';">
     <script>
       (function () {
-        try {
-          var theme = localStorage.getItem('theme');
-          var monochrome = localStorage.getItem('monochrome') || 'false';
-          var reduceTransparency = localStorage.getItem('reduceTransparency');
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-          var supportsBackdrop = CSS.supports('backdrop-filter', 'blur(1px)') || CSS.supports('-webkit-backdrop-filter', 'blur(1px)');
-          var selectedTheme = theme || (prefersDark ? 'dark' : 'light');
-
-          document.documentElement.setAttribute('data-theme', selectedTheme);
-          document.documentElement.setAttribute('data-monochrome', monochrome);
-          document.documentElement.setAttribute('data-reduce-transparency', supportsBackdrop ? (reduceTransparency || 'off') : 'on');
-          document.querySelector('meta[name="theme-color"]').content = selectedTheme === 'dark' ? '#0f0f0f' : '#fefefe';
-        } catch (error) {
-          // Preference storage can be unavailable in a private browsing context.
+        function stored(key) {
+          try { return localStorage.getItem(key); } catch (error) { return null; }
         }
+        var theme = stored('theme');
+        var selectedTheme = /^(light|dark)$/.test(theme) ? theme : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        var supportsBackdrop = CSS.supports('backdrop-filter', 'blur(1px)') || CSS.supports('-webkit-backdrop-filter', 'blur(1px)');
+        document.documentElement.setAttribute('data-theme', selectedTheme);
+        document.documentElement.setAttribute('data-monochrome', stored('monochrome') === 'true' ? 'true' : 'false');
+        document.documentElement.setAttribute('data-reduce-transparency', !supportsBackdrop || stored('reduceTransparency') === 'on' ? 'on' : 'off');
+        document.querySelector('meta[name="theme-color"]').content = selectedTheme === 'dark' ? '#0f0f0f' : '#fefefe';
       }());
     </script>
 
@@ -63,12 +58,14 @@
       <style>
         .site-menu-dropdown { position: static; width: 100%; height: auto; overflow: visible; visibility: visible; transform: none; padding: 1rem; }
         .menu-scrim { display: none; }
-        .sticky-nav { display: none; }
+        .sticky-nav, .menu-controls { display: none; }
+        .header-left { visibility: hidden; }
       </style>
     </noscript>
   </head>
 
   <body{% if page.text_enlarger %} class="text-tool-page"{% endif %}>
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <div class="scroll-progress" id="scroll-progress" role="progressbar" aria-label="Page scroll progress" aria-valuemin="0" aria-valuemax="100"></div>
 
     <header class="site-header" id="site-header">
@@ -76,7 +73,7 @@
         <button id="menu-toggle" class="menu-toggle header-button" type="button" aria-label="Open navigation" aria-controls="site-menu" aria-expanded="false" title="Menu">
           <span class="hamburger" aria-hidden="true"><span></span><span></span></span>
         </button>
-        <button id="header-theme-toggle" class="theme-toggle header-button header-theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode (D)" data-menu-persistent>
+        <button id="header-theme-toggle" class="theme-toggle header-button header-theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch to dark mode" data-menu-persistent>
           {% include icon-theme.html %}
         </button>
       </div>
@@ -92,15 +89,15 @@
       {% include navigation.html %}
       <div class="menu-controls">
         <p class="menu-controls__title">Display</p>
-        <button id="theme-toggle" class="theme-toggle header-button" type="button" aria-label="Switch to dark mode" title="Switch to dark mode (D)">
+        <button id="theme-toggle" class="theme-toggle header-button" type="button" aria-label="Switch to dark mode" title="Switch to dark mode">
           {% include icon-theme.html %}
           <span class="menu-control-label">Light</span>
         </button>
-        <button id="monochrome-toggle" class="monochrome-toggle header-button" type="button" aria-label="Switch to monochrome mode" title="Switch to B&W mode (M)">
+        <button id="monochrome-toggle" class="monochrome-toggle header-button" type="button" aria-label="Switch to monochrome mode" title="Switch to B&W mode">
           <svg class="icon-color" viewBox="0 0 24 24" aria-hidden="true"><circle class="color-red" cx="12" cy="8" r="5"></circle><circle class="color-blue" cx="8.5" cy="14" r="5"></circle><circle class="color-yellow" cx="15.5" cy="14" r="5"></circle></svg>
           <span class="menu-control-label">Color</span>
         </button>
-        <button id="reduce-transparency-toggle" class="reduce-transparency-toggle header-button" type="button" aria-label="Use solid surfaces" title="Use solid surfaces (G)">
+        <button id="reduce-transparency-toggle" class="reduce-transparency-toggle header-button" type="button" aria-label="Use solid surfaces" title="Use solid surfaces">
           <svg class="icon-glass" viewBox="0 0 24 24" aria-hidden="true"><rect class="glass-pane-back" x="3" y="5" width="13" height="15" rx="2"></rect><rect class="glass-pane-front" x="8" y="3" width="13" height="15" rx="2"></rect><rect class="glass-overlap" x="8" y="5" width="8" height="13" rx="1.5"></rect></svg>
           <span class="menu-control-label">Blur</span>
         </button>
@@ -152,7 +149,7 @@
     <script src="{{ '/assets/js/main.js' | relative_url }}" defer></script>
     {% if page.gallery %}<script src="{{ '/assets/js/gallery.js' | relative_url }}" type="module"></script>{% endif %}
     {% if page.protocol %}<script src="{{ '/assets/js/cocktails.js' | relative_url }}" defer></script>{% endif %}
-    {% if page.colorimetry_interactive %}<script src="{{ '/assets/js/colorimetry.js' | relative_url }}" defer></script>{% endif %}
+    {% if page.colorimetry_interactive %}<script src="{{ '/assets/js/colorimetry.js' | relative_url }}" type="module"></script>{% endif %}
     {% if page.text_enlarger %}<script src="{{ '/assets/js/text-enlarger.js' | relative_url }}" defer></script>{% endif %}
   </body>
 </html>
