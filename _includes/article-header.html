@@ -1,0 +1,6 @@
+<header class="article-header">
+  <h1>{{ page.short_title | default: page.title | escape }}</h1>
+  {% if page.updated or page.date %}
+    <p class="article-meta">{% if page.updated %}Updated {% endif %}<time datetime="{{ page.updated | default: page.date | date_to_xmlschema }}">{{ page.updated | default: page.date | date: '%B %-d, %Y' }}</time></p>
+  {% endif %}
+</header>

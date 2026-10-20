@@ -3,17 +3,7 @@ layout: default
 ---
 
 <article class="article-page">
-  <header class="article-header">
-    {% if page.kicker %}<p class="article-kicker">{{ page.kicker }}</p>{% endif %}
-    <h1>{{ page.title }}</h1>
-    {% if page.description %}<p class="article-dek">{{ page.description }}</p>{% endif %}
-    {% if page.date or page.updated %}
-      <p class="article-meta">
-        {% if page.date %}<time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%B %-d, %Y' }}</time>{% endif %}
-        {% if page.updated %}{% if page.date %}<span aria-hidden="true">·</span>{% endif %} Updated <time datetime="{{ page.updated | date_to_xmlschema }}">{{ page.updated | date: '%B %-d, %Y' }}</time>{% endif %}
-      </p>
-    {% endif %}
-  </header>
+  {% include article-header.html %}
 
   {% if page.printable %}
     <div class="article-actions">
@@ -25,7 +15,7 @@ layout: default
     {{ content }}
   </div>
 
-  {% if page.tags %}
+  {% if page.tags and page.tags.size > 0 %}
     <footer class="article-footer" aria-label="Article topics">
       <span>Filed under</span>
       <ul>{% for tag in page.tags %}<li>{{ tag }}</li>{% endfor %}</ul>

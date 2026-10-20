@@ -16,3 +16,13 @@ Synthetic examples are identified individually: no camera sensitivity, LED fixtu
 ## Rights
 
 The CIE source datasets, the 5 nm JSON adaptation, and figures derived from those data are provided under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). Credit: International Commission on Illumination (CIE), with dataset titles and DOIs above. Changes: sampling, null-value serialization, numerical integration/coordinate conversion, and plotting as documented. Other site content is not relicensed by this notice.
+
+## CIE experiment reconstructions — October 14
+
+Figures 2.1 and 2.5 apply the inverse of the equal-energy-normalized CIE RGB-to-XYZ matrix to the existing CIE XYZ samples. The rounded matrix and primary-unit convention are documented under `#cie-rgb` in the mathematical appendix and in [Colour 0.4.6 source](https://colour.readthedocs.io/en/v0.4.6/_modules/colour/colorimetry/transformations.html#RGB_2_degree_cmfs_to_XYZ_2_degree_cmfs). These are reconstructed coordinates, not raw historical observer data. Figure 2.6 mixes the 450 and 650 nm XYZ samples at fixed total radiant power before normalizing to xy. The existing CIE CC BY-SA notice applies to these derived figures. Figure 2.7 uses an in-gamut synthetic sRGB stimulus and the ICC matrix; it does not use a spectral-to-display approximation.
+
+## Signaling diagrams — October 20
+
+`assets/js/signaling-models.mjs` holds qualitative photoreceptor and signaling-pathway states. The existing static generator and browser controller render them through the same figure component. Connected pathways use semantic HTML, so descriptions wrap and resize instead of shrinking inside an SVG. Figure 1.9 retains its number; S1/S2 belong to the companion Signal transduction article. It records lecture slide ranges and links to primary experiments. The supplied lecture PDFs remain private source material; no slide images are shipped with the site. cGMP dots and channel states are schematic, not concentration measurements or a kinetic simulation.
+
+Plot legend keys now preserve each curve's color and dash pattern, including isolated M/S cone selections and zero-bend geometry. Coordinate and metadata comparisons do not imply sequential conversion steps.

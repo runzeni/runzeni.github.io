@@ -1,6 +1,4 @@
 <a class="entry-card entry-card--link" href="{{ include.url | relative_url }}">
-  {% if include.preview %}<span class="entry-card__preview" aria-hidden="true">{{ include.preview | escape }}</span>{% endif %}
   {% if include.meta %}<span class="entry-card__meta">{{ include.meta | escape }}</span>{% endif %}
   <h2 class="entry-card__title"><span>{{ include.title | escape }}</span><span class="entry-card__arrow" aria-hidden="true">→</span></h2>
-  {% if include.description %}<p class="entry-card__description">{{ include.description | escape }}</p>{% endif %}
 </a>

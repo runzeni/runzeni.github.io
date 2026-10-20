@@ -5,8 +5,8 @@ slug: index
 permalink: /notes/colorimetry/
 layout: series
 kicker: Color science
-description: Seven chapters on color science for moving images, from vision to ACES.
-updated: 2026-10-13
+description: Seven chapters connecting light, vision, measurement, ACES workflows, and image validation.
+updated: 2026-10-20
 references:
   - title: Series outline
     url: /notes/colorimetry/comprehensive-outline/

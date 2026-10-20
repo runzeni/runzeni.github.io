@@ -1,13 +1,13 @@
 ---
-title: "Module 3: Practice — Bioinformatics"
-short_title: "Practice — Bioinformatics"
+title: "Module 3: Practice: Bioinformatics"
+short_title: "Practice: Bioinformatics"
 series: linux-notes
 module_number: 3
 slug: module-3
 permalink: /notes/linux-notes/module-3/
 date: 2026-02-23
 updated: 2026-10-13
-description: "Proteomics analysis in Python — environment setup, key libraries, and sample workflows for class."
+description: "Proteomics analysis in Python: environment setup, key libraries, and sample workflows for class."
 ---
 
 A small proteomics workflow: isolate the environment, inspect spectra and sequences, and keep identification confidence separate from abundance analysis.

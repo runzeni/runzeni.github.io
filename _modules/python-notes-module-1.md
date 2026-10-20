@@ -94,7 +94,7 @@ def mean_observed(values: Iterable[float | None]) -> float | None:
     return mean(observed) if observed else None
 ```
 
-Avoid mutable default arguments. The default object is created once, when Python defines the function—not once per call.
+Avoid mutable default arguments. The default object is created once, when Python defines the function, not once per call.
 
 ```python
 def add_flag(flag: str, flags: list[str] | None = None) -> list[str]:
@@ -247,7 +247,7 @@ Use `print()` for the result a user asked to see. Use logging for progress and d
 
 - [The Python tutorial: data structures](https://docs.python.org/3/tutorial/datastructures.html)
 - [The Python tutorial: errors and exceptions](https://docs.python.org/3/tutorial/errors.html)
-- [`pathlib` — object-oriented filesystem paths](https://docs.python.org/3/library/pathlib.html)
-- [`csv` — CSV file reading and writing](https://docs.python.org/3/library/csv.html)
+- [`pathlib`: object-oriented filesystem paths](https://docs.python.org/3/library/pathlib.html)
+- [`csv`: CSV file reading and writing](https://docs.python.org/3/library/csv.html)
 - [The `argparse` tutorial](https://docs.python.org/3/howto/argparse.html)
 - [The logging HOWTO](https://docs.python.org/3/howto/logging.html)

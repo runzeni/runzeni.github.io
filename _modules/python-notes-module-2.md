@@ -220,14 +220,14 @@ summary = (
 )
 ```
 
-Long form—one observation per row—is usually easiest for joining, grouping, and plotting. Convert to a matrix only when an algorithm genuinely requires one, and assert that the row/column key is unique before calling `pivot()`.
+Long form (one observation per row) is usually easiest for joining, grouping, and plotting. Convert to a matrix only when an algorithm genuinely requires one, and assert that the row/column key is unique before calling `pivot()`.
 
 ## Statistics: encode the design before calling a test
 
 The function call is the last step. First write down:
 
 1. the experimental unit and whether observations are independent, paired, nested, or repeated;
-2. the estimand—what difference or association is being quantified;
+2. the estimand: what difference or association is being quantified;
 3. the model or test and its assumptions;
 4. exclusions and transformations decided before viewing the result;
 5. how multiplicity will be handled.
@@ -256,7 +256,7 @@ if valid.any():
 
 Report why any features lack a finite p-value; filtering must not be chosen to improve significance.
 
-For small samples or a statistic with a poor asymptotic approximation, a permutation test may be more appropriate if its exchangeability assumption matches the design. Choose `permutation_type` to reflect independent samples, paired sample labels, or pairings—not whichever option gives a smaller p-value.
+For small samples or a statistic with a poor asymptotic approximation, a permutation test may be more appropriate if its exchangeability assumption matches the design. Choose `permutation_type` to reflect independent samples, paired sample labels, or pairings, not whichever option gives a smaller p-value.
 
 ## Figures: use the object-oriented interface
 
@@ -340,7 +340,7 @@ Reproducibility is not “I saved the notebook.” It is the ability to start fr
 
 ## Sources and next references
 
-- [`venv` — creation of virtual environments](https://docs.python.org/3/library/venv.html)
+- [`venv`: creation of virtual environments](https://docs.python.org/3/library/venv.html)
 - [The `pyproject.toml` specification](https://packaging.python.org/en/latest/specifications/pyproject-toml/)
 - [NumPy: the absolute basics](https://numpy.org/doc/stable/user/absolute_beginners.html)
 - [pandas: indexing and selecting data](https://pandas.pydata.org/docs/user_guide/indexing.html)

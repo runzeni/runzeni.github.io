@@ -388,10 +388,10 @@
     window.addEventListener('resize', schedule, { passive: true });
     if (desktopOutline.addEventListener) desktopOutline.addEventListener('change', syncMode);
     else desktopOutline.addListener(syncMode);
-    links.forEach((link, index) => link.addEventListener('click', () => {
-      setActive(index);
-      if (!desktopOutline.matches) details.open = false;
-    }));
+    links.forEach((link, index) => link.addEventListener('click', () => setActive(index)));
+    outline.addEventListener('click', (event) => {
+      if (!desktopOutline.matches && event.target.closest('a')) details.open = false;
+    });
     document.addEventListener('click', (event) => {
       if (!desktopOutline.matches && details.open && !outline.contains(event.target)) details.open = false;
     });

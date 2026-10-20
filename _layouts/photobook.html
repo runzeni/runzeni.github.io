@@ -8,11 +8,10 @@ layout: default
 {% assign image_count = 0 %}
 
 <header class="gallery-header photobook-header">
-  <p class="gallery-kicker">Photo archive</p>
   <h1 class="gallery-title">{{ page.title }}</h1>
   <div class="gallery-header__meta">
     <p class="gallery-meta">{{ page.year }} <span aria-hidden="true">·</span> {{ page.camera }} <span aria-hidden="true">·</span> {{ roll_files | size }} photographs</p>
-    <a href="{{ '/fotos/archive/' | relative_url }}" class="gallery-archive-link"><span aria-hidden="true">←</span> All rolls</a>
+    <a href="{{ '/fotos/archive/' | relative_url }}" class="utility-link gallery-archive-link"><span aria-hidden="true">←</span> All rolls</a>
   </div>
 </header>
 
@@ -22,7 +21,7 @@ layout: default
       {% assign image_count = image_count | plus: 1 %}
       {% assign image_loading = 'lazy' %}
       {% if image_count == 1 %}{% assign image_loading = 'eager' %}{% endif %}
-      {% capture alt %}{{ page.film }} photograph from {{ page.location }} — frame {{ image_count }}{% endcapture %}
+      {% capture alt %}{{ page.film }} photograph from {{ page.location }}, frame {{ image_count }}{% endcapture %}
       <a class="contact-sheet-item" href="{{ photo.src | relative_url }}" data-gallery-trigger data-pswp-width="{{ photo.width }}" data-pswp-height="{{ photo.height }}">
         {% include photo.html photo=photo alt=alt loading=image_loading %}
       </a>

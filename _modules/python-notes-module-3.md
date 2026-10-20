@@ -82,7 +82,7 @@ Do not split complex biological formats with ad hoc string code when a maintaine
 | Rectangular metadata | CSV, TSV, Parquet | pandas | Sample sheets and analysis tables |
 | Single-cell matrices | H5AD / AnnData | AnnData and Scanpy | Matrix plus cell and feature metadata |
 
-Validate the parser output on a few records before scaling. Print keys, types, units, and representative identifiers—not entire spectra or a million-row table.
+Validate the parser output on a few records before scaling. Print keys, types, units, and representative identifiers, not entire spectra or a million-row table.
 
 ## Stream records; materialize summaries
 
@@ -115,7 +115,7 @@ def summarize_fasta(path: Path) -> dict[str, float | int]:
 
 The GC example counts G and C against all sequence symbols, including ambiguous bases; it assumes nucleotide input. For GC among only A/C/G/T, change the denominator explicitly.
 
-Do not assume a FASTA description is a stable identifier. Decide whether the key is an accession, accession plus version, gene ID, transcript ID, protein isoform, or a locally assigned ID—and retain the original header for traceability.
+Do not assume a FASTA description is a stable identifier. Decide whether the key is an accession, accession plus version, gene ID, transcript ID, protein isoform, or a locally assigned ID, and retain the original header for traceability.
 
 ### BAM or CRAM with pysam
 

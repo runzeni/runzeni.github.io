@@ -28,7 +28,7 @@ git diff --check
   automatically in ascending numeric order.
 - `_photobook/` holds minimal roll metadata. `_data/photos.yml` is generated locally and is never edited or committed.
 - `_data/cocktails.json` is the single source for the server-rendered, searchable Protocols collection.
-- `_notes/` holds Markdown-first articles; `_modules/` holds longer Notes series. The two Colorimetry widgets are intentionally small, source-defined studies rather than image simulations.
+- `_notes/` holds Markdown-first articles; `_modules/` holds longer Notes series. Colorimetry and the Signal transduction study share static figure generation and progressive enhancement; numerical plots and qualitative pathway diagrams state their limits.
 
 ## Editing Protocols
 
@@ -131,4 +131,6 @@ or replace keyboard/touch browser testing. CI uses the same build entry point.
 
 ### Colorimetry figures
 
-The 26 figures use native SVG/HTML and a shared formula module. Static includes are checked in; Pages builds require no Node or plotting plugin. After editing `assets/js/colorimetry-models.mjs`, run `node scripts/build-colorimetry.mjs` and `node scripts/check-colorimetry.mjs`, then the usual Jekyll build and site checker. Dataset provenance is in `assets/data/README-colorimetry.md`. Browser controls initialize near the viewport; each figure remains readable without JavaScript.
+The 32 figures use native SVG/HTML and a shared formula module. Static includes are checked in; Pages builds require no Node or plotting plugin. After editing `assets/js/colorimetry-models.mjs`, run `node scripts/build-colorimetry.mjs` and `node scripts/check-colorimetry.mjs`, then the usual Jekyll build and site checker. Dataset provenance is in `assets/data/README-colorimetry.md`. Browser controls initialize near the viewport; each figure remains readable without JavaScript.
+
+For display mathematics, use a blank-line-delimited `$$` block. Jekyll/Kramdown emits `\[ ... \]`; the shared MathJax configuration recognizes both forms. Verify whole equations in the browser, including surrounding operators and matrix entries.

@@ -1,27 +1,11 @@
-<footer class="site-footer">
+<footer class="site-footer" id="site-footer">
   <div class="footer-content">
-    <div class="footer-grid">
-      <section class="footer-section" aria-labelledby="footer-explore">
-        <h2 id="footer-explore">Explore</h2>
-        <ul>
-          {% for link in site.data.navigation %}
-            {% unless link.title == 'Home' %}<li><a href="{{ link.url | relative_url }}">{{ link.title }}</a></li>{% endunless %}
-          {% endfor %}
-        </ul>
-      </section>
-      <section class="footer-section" aria-labelledby="footer-connect">
-        <h2 id="footer-connect">Connect</h2>
-        <ul>
-          <li><button type="button" class="footer-email-button" data-copy-email data-copy-value="{{ site.data.profile.email }}">Email</button></li>
-          <li><a href="{{ site.data.profile.links.scholar }}" target="_blank" rel="noopener noreferrer">Google Scholar</a></li>
-          <li><a href="{{ site.data.profile.links.github }}" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-          <li><a href="{{ site.data.profile.links.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-        </ul>
-      </section>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; {{ 'now' | date: '%Y' }} {{ site.data.profile.name }}.</p>
-      <p>{{ site.data.profile.location }}</p>
-    </div>
+    <p>&copy; {{ 'now' | date: '%Y' }} {{ site.data.profile.name | escape }}</p>
+    <nav aria-label="Contact links">
+      <button type="button" class="utility-link" data-copy-email data-copy-value="{{ site.data.profile.email | escape }}">Email</button>
+      <a class="utility-link" href="{{ site.data.profile.links.scholar }}" target="_blank" rel="noopener noreferrer">Scholar</a>
+      <a class="utility-link" href="{{ site.data.profile.links.github }}" target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a class="utility-link" href="{{ site.data.profile.links.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </nav>
   </div>
 </footer>

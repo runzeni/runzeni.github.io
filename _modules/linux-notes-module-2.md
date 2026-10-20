@@ -17,7 +17,7 @@ A compact reference for navigating files, finding text, and connecting commands.
 Linux uses a hierarchical tree structure starting at the root (`/`).
 
 ```bash
-# Print working directory — where am I?
+# Print working directory (where am I?)
 pwd
 
 # List files
@@ -88,7 +88,7 @@ tail file.txt           # last 10 lines
 tail -f logfile.log     # follow a log file in real-time
 ```
 
-### grep — The Search Tool
+### grep: The Search Tool
 
 `grep` filters input line-by-line. Essential for bioinformatics (finding specific sequences, counting FASTA records, etc.).
 

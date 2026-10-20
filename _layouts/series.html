@@ -7,7 +7,6 @@ layout: default
 <div class="series-landing">
 <header class="gallery-header series-landing__header">
   <h1 class="gallery-title">{{ page.title }}</h1>
-  {% if page.description %}<p class="gallery-subtitle">{{ page.description }}</p>{% endif %}
 </header>
 
 {% assign introduction = content | strip %}
@@ -20,10 +19,10 @@ layout: default
     {% for item in series_items %}
       {% assign module_title = item.short_title | default: item.title %}
       {% capture module_number %}Module {{ item.module_number }}{% endcapture %}
-      <li>{% include entry-card.html url=item.url title=module_title description=item.description meta=module_number %}</li>
+      <li>{% include entry-card.html url=item.url title=module_title meta=module_number %}</li>
     {% endfor %}
     {% for reference in page.references %}
-      <li>{% include entry-card.html url=reference.url title=reference.title description=reference.description meta='Reference' %}</li>
+      <li>{% include entry-card.html url=reference.url title=reference.title meta='Reference' %}</li>
     {% endfor %}
   </ol>
 </nav>

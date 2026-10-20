@@ -50,7 +50,7 @@ The durable interpretation rules are more important than the package list:
 5. Report a confounded acquisition order as a design limitation; do not add an unidentifiable covariate to make the model look more elaborate.
 6. Use ranked, threshold-free statistics for GSEA and use the tested identifier universe for over-representation analysis.
 
-For pathway work, the current scripts use `fgsea` with MSigDB sets from `msigdbr`, and `clusterProfiler` with organism annotation plus live KEGG queries. The mapping table, database species, release, tested universe, and excluded identifiers remain part of the result—not disposable setup.
+For pathway work, the current scripts use `fgsea` with MSigDB sets from `msigdbr`, and `clusterProfiler` with organism annotation plus live KEGG queries. The mapping table, database species, release, tested universe, and excluded identifiers remain part of the result, not disposable setup.
 
 ## RN13: bulk RNA-seq
 
@@ -75,7 +75,7 @@ The analysis contract is:
 - inspect MultiQC and per-sample metrics before exclusion, and record every retained concern or removed sample;
 - use `fgsea`/`msigdbr` for ranked pathway analysis and `clusterProfiler` for GO and KEGG over-representation with a declared universe;
 - treat PLS-DA or OPLS-DA as exploratory diagnostics in small cohorts, not replacements for DESeq2;
-- analyze each species natively, then compare high-confidence orthologs or pathway ranks—never merge mouse and pig count matrices.
+- analyze each species natively, then compare high-confidence orthologs or pathway ranks. Never merge mouse and pig count matrices.
 
 Python supports this chain by building sample sheets, validating FASTQ/reference pairs, summarizing MultiQC tables, and checking cross-species joins. R/Bioconductor owns the inferential model. That division keeps the code small and the method legible.
 

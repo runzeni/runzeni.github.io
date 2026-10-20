@@ -47,7 +47,7 @@
     {% if page.math %}
       <script>
         window.MathJax = {
-          tex: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']], processEscapes: true },
+          tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']], processEscapes: true },
           options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
         };
       </script>
@@ -116,6 +116,10 @@
             </summary>
             <div class="notes-outline-panel">
               <a class="notes-outline-back" href="{{ notes_parent_url | relative_url }}"><span aria-hidden="true">←</span> {{ notes_parent_label }}</a>
+              <nav class="notes-outline-jumps" aria-label="Page position">
+                <a class="utility-link" href="#main-content">Top</a>
+                <a class="utility-link" href="#site-footer">Bottom</a>
+              </nav>
               <p class="notes-outline-label">On this page</p>
               <ol class="notes-outline-list" id="notes-outline-list"></ol>
             </div>

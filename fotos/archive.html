@@ -11,11 +11,10 @@ permalink: /fotos/archive/
 {% assign sorted_rolls = chronological_rolls | reverse %}
 
 <header class="gallery-header archive-header">
-  <p class="gallery-kicker">Fotos</p>
   <h1 class="gallery-title">Full archive</h1>
   <div class="gallery-header__meta">
     <p class="gallery-meta">{{ sorted_rolls | size }} rolls <span aria-hidden="true">·</span> {{ first_roll.year }}–{{ last_roll.year }}</p>
-    <a href="{{ '/fotos/' | relative_url }}" class="gallery-archive-link"><span aria-hidden="true">←</span> Selected works</a>
+    <a href="{{ '/fotos/' | relative_url }}" class="utility-link gallery-archive-link"><span aria-hidden="true">←</span> Selected works</a>
   </div>
 </header>
 
